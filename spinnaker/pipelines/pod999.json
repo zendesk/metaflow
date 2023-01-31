@@ -1,0 +1,280 @@
+{
+  "application": "default-bootstrap-project",
+  "keepWaitingPipelines": false,
+  "limitConcurrent": true,
+  "name": "pod999",
+  "notifications": [],
+  "parameterConfig": [
+    {
+      "default": "",
+      "description": "Version of the App to deploy e.g. \"v23\". To deploy your branch use branch name without \"-deploy\" suffix e.g. \"jdoe.feature-branch-name\"",
+      "hasOptions": false,
+      "name": "gitRef",
+      "pinned": true,
+      "required": true
+    },
+    {
+      "default": "false",
+      "description": "Rollback mode will skip some of the stages like interface stage to speed up the rollback.",
+      "hasOptions": true,
+      "name": "rollback",
+      "options": [
+        {
+          "value": "true"
+        },
+        {
+          "value": "false"
+        }
+      ],
+      "pinned": true,
+      "required": false
+    },
+    {
+      "default": "false",
+      "description": "Force interface stage to apply changes from service yml even if there is no change",
+      "hasOptions": true,
+      "label": "forceApplyInterface",
+      "name": "forceApplyInterface",
+      "options": [
+        {
+          "value": "true"
+        },
+        {
+          "value": "false"
+        }
+      ],
+      "pinned": true,
+      "required": false
+    }
+  ],
+  "stages": [
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "name": "Create GitHub Deployment",
+      "parameters": {
+        "autoMerge": "false",
+        "description": "Deploy to pod999",
+        "environment": "pod999",
+        "gitReference": "${ parameters.gitRef }",
+        "organization": "zendesk",
+        "payload": "{\n  \"applicationName\": \"${ execution.application }\",\n\"githubActor\": \"${ trigger?.parentExecution?.trigger?.parameters?.githubActor ?: \"\" }\",\n\"manualActor\": \"${ trigger?.parentExecution?.trigger?.type != 'webhook' ? (trigger?.parentExecution?.trigger?.user ?: trigger.user) : '' }\",\n\"version\": \"${ parameters?.version ?: parameters?.gitRef }\"\n}\n",
+        "project": "default-bootstrap-project",
+        "requiredContexts": "[]"
+      },
+      "refId": "create-github-deployment",
+      "type": "createGithubDeploymentJob"
+    },
+    {
+      "comments": "${#stage('Self-Service Interface').context.jobStatus.jobState == 'Succeeded' ? '- Change id: '.concat(#stage('Self-Service Interface').context.change_ids) : ''}\n${#stage('Self-Service Interface').context.jobStatus.jobState == 'Succeeded' ? '- \u003ca href=\"'.concat(#stage('Self-Service Interface').context.status_ui_url).concat('\" target=\"_blank\"\u003eStatus from Interface UI\u003c/a\u003e') : ''}",
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "name": "Self-Service Interface",
+      "parameters": {
+        "deployGroups": "\"pod999\"",
+        "description": "${ parameters.gitRef }",
+        "forceApply": "${ parameters.forceApplyInterface }",
+        "gitCommit": "${ parameters.gitRef }",
+        "gitRepo": "git@github.com:zendesk/default-bootstrap-project.git",
+        "project": "${ execution.application }"
+      },
+      "refId": "self-service-interface",
+      "requisiteStageRefIds": [
+        "create-github-deployment"
+      ],
+      "stageEnabled": {
+        "expression": "${ parameters.rollback != 'true' }",
+        "type": "expression"
+      },
+      "type": "interfaceStagingJob"
+    },
+    {
+      "account": "pod999",
+      "application": "default-bootstrap-project",
+      "cloudProvider": "kubernetes",
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": true,
+      "failPipeline": false,
+      "location": "default-bootstrap-project",
+      "manifestName": "configMap deployed-version",
+      "mode": "static",
+      "name": "Read version",
+      "refId": "read-version",
+      "requisiteStageRefIds": [
+        "self-service-interface"
+      ],
+      "type": "findArtifactsFromResource"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "name": "Set deployment in progress",
+      "parameters": {
+        "deploymentId": "${ #stage( 'Create GitHub Deployment' ).context.id }",
+        "description": "Deployment in progress",
+        "environment": "pod999",
+        "environmentURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }",
+        "organization": "zendesk",
+        "project": "default-bootstrap-project",
+        "state": "in_progress",
+        "targetURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }"
+      },
+      "refId": "set-deployment-in-progress",
+      "requisiteStageRefIds": [
+        "read-version"
+      ],
+      "type": "updateGithubDeploymentStatusJob"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": false,
+      "name": "Deploy Succeeded",
+      "preconditions": [
+        {
+          "context": {
+            "expression": "${  }",
+            "failureMessage": "One of the previous steps failed"
+          },
+          "failPipeline": true,
+          "type": "expression"
+        }
+      ],
+      "refId": "deploy-succeeded",
+      "requisiteStageRefIds": [],
+      "type": "checkPreconditions"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": false,
+      "name": "Deploy Failed",
+      "preconditions": [
+        {
+          "context": {
+            "expression": "${  }",
+            "failureMessage": "One of the previous steps failed"
+          },
+          "failPipeline": false,
+          "type": "expression"
+        }
+      ],
+      "refId": "deploy-failed",
+      "requisiteStageRefIds": [],
+      "type": "checkPreconditions"
+    },
+    {
+      "account": "pod999",
+      "cloudProvider": "kubernetes",
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "manifests": [
+        {
+          "apiVersion": "v1",
+          "data": {
+            "gitRef": "${ parameters.gitRef + \"-deploy\" }",
+            "version": "${ parameters.gitRef }"
+          },
+          "kind": "ConfigMap",
+          "metadata": {
+            "annotations": {
+              "strategy.spinnaker.io/versioned": "false"
+            },
+            "name": "deployed-version"
+          }
+        }
+      ],
+      "moniker": {
+        "app": "default-bootstrap-project",
+        "detail": "/#/applications/${execution['application']}/executions/${execution['id']}"
+      },
+      "name": "Record version",
+      "namespaceOverride": "default-bootstrap-project",
+      "refId": "record-version",
+      "requisiteStageRefIds": [
+        "deploy-succeeded"
+      ],
+      "skipExpressionEvaluation": false,
+      "source": "text",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": false,
+          "services": []
+        }
+      },
+      "type": "deployManifest"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "name": "GitHub Deployment Success",
+      "parameters": {
+        "deploymentId": "${ #stage( 'Create GitHub Deployment' ).context.id }",
+        "description": "See Spinnaker for deployment details",
+        "environment": "pod999",
+        "environmentURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }",
+        "organization": "zendesk",
+        "project": "default-bootstrap-project",
+        "state": "success",
+        "targetURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }"
+      },
+      "refId": "github-deployment-success",
+      "requisiteStageRefIds": [
+        "deploy-succeeded"
+      ],
+      "type": "updateGithubDeploymentStatusJob"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": true,
+      "failPipeline": false,
+      "name": "GitHub Deployment Failure",
+      "parameters": {
+        "deploymentId": "${ #stage( 'Create GitHub Deployment' ).context.id }",
+        "description": "See Spinnaker for deployment details",
+        "environment": "pod999",
+        "environmentURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }",
+        "organization": "zendesk",
+        "project": "default-bootstrap-project",
+        "state": "failure",
+        "targetURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }"
+      },
+      "refId": "github-deployment-failure",
+      "requisiteStageRefIds": [
+        "deploy-failed"
+      ],
+      "type": "updateGithubDeploymentStatusJob"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "name": "Signal Execution Failure",
+      "preconditions": [
+        {
+          "context": {
+            "expression": "false",
+            "failureMessage": "This stage failed in order to inform you that an error has occurred during\npipeline execution; see execution details for further information\n"
+          },
+          "failPipeline": true,
+          "type": "expression"
+        }
+      ],
+      "refId": "signal-execution-failure",
+      "requisiteStageRefIds": [
+        "github-deployment-failure"
+      ],
+      "stageEnabled": {
+        "expression": "#stage('Deploy Failed')['status'] == 'SUCCEEDED'",
+        "type": "expression"
+      },
+      "type": "checkPreconditions"
+    }
+  ]
+}

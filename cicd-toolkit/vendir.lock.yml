@@ -1,0 +1,17 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - git:
+      commitTitle: 'fix: use ecr url for vault-pki-auth-manager sidecar (#1637)'
+      sha: 7c6eb07e314c45cb04b587f67b5089e54856699e
+      tags:
+      - v8.222.1
+    path: cicd-toolkit
+  path: vendor
+- contents:
+  - git:
+      commitTitle: 'FSEC-4811: CNA Staging account metadata (#1923)'
+      sha: d377a7e1682e5b1b087478ebc2010695d982d7ef
+    path: zendesk/config-service-data
+  path: vendor/github.com
+kind: LockConfig

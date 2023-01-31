@@ -1,0 +1,157 @@
+# ------------------------------------------------------------------------------------------------------------
+# NOTE: THIS FILE IS AUTO GENERATED AND MANAGED BY https://github.com/zendesk/cicd-toolkit
+#
+# You can regenerate the content by running `make` in the 'cicd-toolkit' directory.
+#
+# MANUAL CHANGES TO THIS FILE MAY RESULT IN INCORRECT BEHAVIOUR, AND WILL BE LOST IF THE CODE IS REGENERATED.
+# ------------------------------------------------------------------------------------------------------------
+name: Trigger release deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to deploy (the tag where manifests are found)'
+        required: true
+      sha:
+        required: false
+        default: ''
+  workflow_run:
+    workflows: ['Create project release']
+    types: [completed]
+
+env:
+  AWS_PROFILE: "ecr-publish"
+  ARTIFACT_NAME: "release"
+
+jobs:
+  deploy:
+    name: Trigger release deploy
+    runs-on: ["self-hosted", "zendesk-stable"]
+    steps:
+      - name: Checkout
+        uses: zendesk/checkout@v3
+
+# cicd-toolkit preamble begin
+      - name: bootstrap cicd-toolkit
+        env:
+          APPCONFIG_DOCKER_IMAGE: 713408432298.dkr.ecr.us-west-2.amazonaws.com/zendesk/appconfig:v1.5.0
+        run: |
+          cid=$(docker create "$APPCONFIG_DOCKER_IMAGE")
+          sudo docker cp $cid:/bin/appconfig /usr/local/bin
+
+          echo >&2 "appconfig version"
+          echo >&2 "==="
+          appconfig version
+          echo >&2 "==="
+
+          echo >&2 "vendir version"
+          echo >&2 "==="
+          vendir version
+          echo >&2 "==="
+
+          echo >&2 "kbld version"
+          echo >&2 "==="
+          kbld version
+          echo >&2 "==="
+
+      - name: cache vendor dependencies
+        uses: zendesk/cache@v3
+        id: cicd-cache-vendor
+        with:
+          path: cicd-toolkit/vendor
+          key: ${{ runner.os }}-${{ hashFiles('cicd-toolkit/vendir.lock.yml') }}
+
+      - name: install dependencies
+        if: steps.cicd-cache-vendor.cache-hit != 'true'
+        env:
+          APPLICATION_ROOT_DIR: "cicd-toolkit"
+        run: |
+          ORG_BASIC_AUTH="$(echo -n 'x-access-token:${{ secrets.ORG_GITHUB_TOKEN }}' | base64)"
+          echo "::add-mask::$ORG_BASIC_AUTH"
+          env \
+            GIT_CONFIG_COUNT=2 \
+            GIT_CONFIG_KEY_0='http.https://github.com/.extraheader' \
+            GIT_CONFIG_VALUE_0='' \
+            GIT_CONFIG_KEY_1='http.https://github.com/.extraheader' \
+            GIT_CONFIG_VALUE_1="Authorization: basic $ORG_BASIC_AUTH" \
+            vendir sync --chdir "$APPLICATION_ROOT_DIR" --locked
+
+          echo >&2 "Checking for differences in vendored dependencies lock file ..."
+
+          if ! git diff --exit-code "$APPLICATION_ROOT_DIR/vendir.lock.yml"; then
+            echo >&2 "==="
+            echo >&2 "Notice: Found above differences in vendir.lock.yml file..."
+            echo >&2 "==="
+          else
+            echo >&2 "No differences found."
+          fi
+
+      - name: extract actions if not present
+        env:
+          APPLICATION_ROOT_DIR: "cicd-toolkit"
+        run: |
+          # extract actions unless present already
+          if [ ! -d "$APPLICATION_ROOT_DIR/actions" ]; then
+            (cd $APPLICATION_ROOT_DIR && \
+              appconfig run boilerplate:github-actions) | \
+                appconfig manifest --state-file /dev/null
+          fi
+
+# cicd-toolkit preamble end
+
+
+      - name: setup env vars from project metadata
+        uses: ./cicd-toolkit/actions/env-vars-from-project-metadata
+        with:
+          application_root_dir: "cicd-toolkit"
+
+      - name: Download release artifact
+        if: github.event_name == 'workflow_run'
+        uses: ./cicd-toolkit/actions/download-named-artifact-from-url
+        id: download-trigger-artifact
+        with:
+          url: ${{ github.event.workflow_run.artifacts_url }}
+          name: ${{ env.ARTIFACT_NAME }}
+
+      - name: Determine trigger tag
+        if: github.event_name == 'workflow_run'
+        id: set-trigger-tag
+        env:
+          ARTIFACT_DIR: ${{ steps.download-trigger-artifact.outputs.dir }}
+        run: |
+          set -x
+
+          case "$ARTIFACT_NAME" in
+            release)
+              tag=$(cat "$ARTIFACT_DIR/release.json" | jq -r '.tag')
+              sha=$(cat "$ARTIFACT_DIR/release.json" | jq -r '.commit')
+            ;;
+            trigger)
+              tag=$(cat "$ARTIFACT_DIR/trigger.json" | jq -r '.release.ref')
+            ;;
+            *)
+              echo >&2 "Unknown artifact name: $ARTIFACT_NAME -- aborting!"
+              exit 1
+            ;;
+          esac
+
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+      - name: Normalize references
+        id: normalize_refs
+        uses: ./cicd-toolkit/actions/normalize-refs
+        with:
+          tag: ${{ github.event.inputs.tag || steps.set-trigger-tag.outputs.tag }}
+          # pass empty sha to return the resolved tag name from the action
+          sha: ${{ github.event.inputs.sha || steps.set-trigger-tag.outputs.sha }}
+
+      - name: Trigger deploy
+        if: env.SPINNAKER_WEBHOOK_STAGING != ''
+        uses: ./cicd-toolkit/actions/trigger-spinnaker-webhook-deploy
+        with:
+          git_ref: ${{ steps.normalize_refs.outputs.ref }}
+          git_commit: ${{ steps.normalize_refs.outputs.sha }}
+          api_endpoint: ${{ env.SPINNAKER_API_ENDPOINT }}
+          webhook_name: ${{ env.SPINNAKER_WEBHOOK_STAGING }}

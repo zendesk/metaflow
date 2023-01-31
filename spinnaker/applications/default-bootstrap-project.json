@@ -1,0 +1,35 @@
+{
+  "cloudProviders": "kubernetes",
+  "dataSources": {
+    "disabled": [],
+    "enabled": [
+      "canaryConfigs",
+      "executions",
+      "loadBalancers",
+      "securityGroups",
+      "serverGroups"
+    ]
+  },
+  "description": "default-bootstrap-project",
+  "email": "default-team@zendesk.com",
+  "enableRerunActiveExecutions": false,
+  "enableRestartRunningExecutions": false,
+  "instancePort": 80,
+  "name": "default-bootstrap-project",
+  "permissions": {
+    "EXECUTE": [
+      "okta:role:default-bootstrap-project"
+    ],
+    "READ": [
+      "okta:role:read-only",
+      "okta:role:default-bootstrap-project"
+    ],
+    "WRITE": [
+      "okta:role:default-bootstrap-project"
+    ]
+  },
+  "repoProjectKey": "zendesk",
+  "repoSlug": "default-bootstrap-project",
+  "repoType": "github",
+  "trafficGuards": []
+}

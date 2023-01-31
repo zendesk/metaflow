@@ -1,0 +1,10 @@
+# ------------------------------------------------------------------------------------------------------------
+# NOTE: THIS FILE IS AUTO GENERATED AND MANAGED BY https://github.com/zendesk/cicd-toolkit
+#
+# You can regenerate the content by running `make` in the 'cicd-toolkit' directory.
+#
+# MANUAL CHANGES TO THIS FILE MAY RESULT IN INCORRECT BEHAVIOUR, AND WILL BE LOST IF THE CODE IS REGENERATED.
+# ------------------------------------------------------------------------------------------------------------
+actions/*
+generated/github-actions/*
+vendor/*

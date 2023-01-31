@@ -1,2 +1,0 @@
-# ml-training-pipelines
-metaflow

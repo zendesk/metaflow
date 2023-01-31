@@ -1,0 +1,39 @@
+apiVersion: simopolis.xyz/v1alpha1
+kind: StateConfig
+target:
+  cicd-toolkit/generated/update-boilerplate:
+    files:
+    - Path: ../.github/workflows/.gitattributes
+    - Path: ../.github/workflows/cicd-cleanup-deploy-branch.yml
+    - Path: ../.github/workflows/cicd-create-deployment-artifacts-for-branch.yml
+    - Path: ../.github/workflows/cicd-create-deployment-artifacts-for-release.yml
+    - Path: ../.github/workflows/cicd-create-project-release.yml
+    - Path: ../.github/workflows/cicd-deployment-boilerplate-check.yml
+    - Path: ../.github/workflows/cicd-trigger-branch-deploy.yml
+    - Path: ../.github/workflows/cicd-trigger-release-deploy.yml
+    - Path: ../kubernetes/manifests/.gitattributes
+    - Path: ../spinnaker/.gitattributes
+    - Path: ../spinnaker/applications/default-bootstrap-project.json
+    - Path: ../spinnaker/pipelines/pod13.json
+    - Path: ../spinnaker/pipelines/pod15.json
+    - Path: ../spinnaker/pipelines/pod17.json
+    - Path: ../spinnaker/pipelines/pod18.json
+    - Path: ../spinnaker/pipelines/pod19.json
+    - Path: ../spinnaker/pipelines/pod20.json
+    - Path: ../spinnaker/pipelines/pod23.json
+    - Path: ../spinnaker/pipelines/pod25.json
+    - Path: ../spinnaker/pipelines/pod26.json
+    - Path: ../spinnaker/pipelines/pod27.json
+    - Path: ../spinnaker/pipelines/pod28.json
+    - Path: ../spinnaker/pipelines/pod29.json
+    - Path: ../spinnaker/pipelines/pod998.json
+    - Path: ../spinnaker/pipelines/pod999.json
+    - Path: ../spinnaker/pipelines/production-rollback.json
+    - Path: ../spinnaker/pipelines/production.json
+    - Path: ../spinnaker/pipelines/staging-deploy-pod998-lockable.json
+    - Path: ../spinnaker/pipelines/staging-deploy-pod998.json
+    - Path: ../spinnaker/pipelines/staging-deploy-pod999.json
+    - Path: ../spinnaker/pipelines/staging.json
+    - Path: .gitattributes
+    - Path: .gitignore
+    - Path: lib/shared-env-groups.libsonnet

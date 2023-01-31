@@ -1,0 +1,129 @@
+# ------------------------------------------------------------------------------------------------------------
+# NOTE: THIS FILE IS AUTO GENERATED AND MANAGED BY https://github.com/zendesk/cicd-toolkit
+#
+# You can regenerate the content by running `make` in the 'cicd-toolkit' directory.
+#
+# MANUAL CHANGES TO THIS FILE MAY RESULT IN INCORRECT BEHAVIOUR, AND WILL BE LOST IF THE CODE IS REGENERATED.
+# ------------------------------------------------------------------------------------------------------------
+name: Deployment boilerplate check
+
+'on':
+  push:
+    branches: 'default-branch'
+  pull_request:
+
+env:
+  AWS_PROFILE: "ecr-publish"
+
+jobs:
+  cicd-toolkit-updated:
+    name: Check cicd-toolkit changes are committed
+    runs-on: ["self-hosted", "zendesk-stable"]
+    steps:
+      - name: Detect token to use
+        env:
+          ORG_GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          token="$ORG_GITHUB_TOKEN"
+          if [ -z "$token" ]; then
+            token="$GITHUB_TOKEN"
+            # if we're falling back to the read-only token we can't do
+            # automatic fixups of PRs
+            echo >&2 "Disabling auto push on changes to PRs due to read-only token"
+            echo "AUTO_PUSH_CHANGES_ON_PULL_REQUEST=false" >> "$GITHUB_ENV"
+          else
+            echo >&2 "Using org secret ORG_GITHUB_TOKEN as GITHUB_CHECKOUT_TOKEN"
+            echo >&2
+
+            echo >&2 "If this workflow fails, you may need to add the `zendesk-ops-ci` user as a collaborator "
+            echo >&2 "with write access to your project to allow updating the PR inline."
+          fi
+
+          echo "GITHUB_CHECKOUT_TOKEN=$token" >> "$GITHUB_ENV"
+
+      - name: Checkout
+        uses: zendesk/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+          token: ${{ env.GITHUB_CHECKOUT_TOKEN }}
+
+# cicd-toolkit preamble begin
+      - name: bootstrap cicd-toolkit
+        env:
+          APPCONFIG_DOCKER_IMAGE: 713408432298.dkr.ecr.us-west-2.amazonaws.com/zendesk/appconfig:v1.5.0
+        run: |
+          cid=$(docker create "$APPCONFIG_DOCKER_IMAGE")
+          sudo docker cp $cid:/bin/appconfig /usr/local/bin
+
+          echo >&2 "appconfig version"
+          echo >&2 "==="
+          appconfig version
+          echo >&2 "==="
+
+          echo >&2 "vendir version"
+          echo >&2 "==="
+          vendir version
+          echo >&2 "==="
+
+          echo >&2 "kbld version"
+          echo >&2 "==="
+          kbld version
+          echo >&2 "==="
+
+      - name: cache vendor dependencies
+        uses: zendesk/cache@v3
+        id: cicd-cache-vendor
+        with:
+          path: cicd-toolkit/vendor
+          key: ${{ runner.os }}-${{ hashFiles('cicd-toolkit/vendir.lock.yml') }}
+
+      - name: install dependencies
+        if: steps.cicd-cache-vendor.cache-hit != 'true'
+        env:
+          APPLICATION_ROOT_DIR: "cicd-toolkit"
+        run: |
+          ORG_BASIC_AUTH="$(echo -n 'x-access-token:${{ secrets.ORG_GITHUB_TOKEN }}' | base64)"
+          echo "::add-mask::$ORG_BASIC_AUTH"
+          env \
+            GIT_CONFIG_COUNT=2 \
+            GIT_CONFIG_KEY_0='http.https://github.com/.extraheader' \
+            GIT_CONFIG_VALUE_0='' \
+            GIT_CONFIG_KEY_1='http.https://github.com/.extraheader' \
+            GIT_CONFIG_VALUE_1="Authorization: basic $ORG_BASIC_AUTH" \
+            vendir sync --chdir "$APPLICATION_ROOT_DIR" --locked
+
+          echo >&2 "Checking for differences in vendored dependencies lock file ..."
+
+          if ! git diff --exit-code "$APPLICATION_ROOT_DIR/vendir.lock.yml"; then
+            echo >&2 "==="
+            echo >&2 "Notice: Found above differences in vendir.lock.yml file..."
+            echo >&2 "==="
+          else
+            echo >&2 "No differences found."
+          fi
+
+      - name: extract actions if not present
+        env:
+          APPLICATION_ROOT_DIR: "cicd-toolkit"
+        run: |
+          # extract actions unless present already
+          if [ ! -d "$APPLICATION_ROOT_DIR/actions" ]; then
+            (cd $APPLICATION_ROOT_DIR && \
+              appconfig run boilerplate:github-actions) | \
+                appconfig manifest --state-file /dev/null
+          fi
+
+# cicd-toolkit preamble end
+
+
+      - name: setup env vars from project metadata
+        uses: ./cicd-toolkit/actions/env-vars-from-project-metadata
+        with:
+          application_root_dir: "cicd-toolkit"
+
+      - name: Check / push boilerplate changes
+        uses: ./cicd-toolkit/actions/check-boilerplate-changes
+        with:
+          auto_push_changes: ${{ env.AUTO_PUSH_CHANGES_ON_PULL_REQUEST }}
+          application_root_dir: ${{ env.APPLICATION_ROOT_DIR }}

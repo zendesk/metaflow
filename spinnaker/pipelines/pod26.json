@@ -1,0 +1,360 @@
+{
+  "application": "default-bootstrap-project",
+  "keepWaitingPipelines": false,
+  "limitConcurrent": true,
+  "name": "pod26",
+  "notifications": [],
+  "parameterConfig": [
+    {
+      "default": "",
+      "description": "Version of the App to deploy e.g. \"v23\". To deploy your branch use branch name without \"-deploy\" suffix e.g. \"jdoe.feature-branch-name\"",
+      "hasOptions": false,
+      "name": "gitRef",
+      "pinned": true,
+      "required": true
+    },
+    {
+      "default": "false",
+      "description": "Rollback mode will skip some of the stages like interface stage to speed up the rollback.",
+      "hasOptions": true,
+      "name": "rollback",
+      "options": [
+        {
+          "value": "true"
+        },
+        {
+          "value": "false"
+        }
+      ],
+      "pinned": true,
+      "required": false
+    },
+    {
+      "default": "true",
+      "description": "Skip the child pipeline deployment if the currently deployed is the same as the version to be deployed.",
+      "hasOptions": true,
+      "name": "skipSameVersion",
+      "options": [
+        {
+          "value": "true"
+        },
+        {
+          "value": "false"
+        }
+      ],
+      "pinned": true,
+      "required": false
+    },
+    {
+      "default": "false",
+      "description": "Force interface stage to apply changes from service yml even if there is no change",
+      "hasOptions": true,
+      "label": "forceApplyInterface",
+      "name": "forceApplyInterface",
+      "options": [
+        {
+          "value": "true"
+        },
+        {
+          "value": "false"
+        }
+      ],
+      "pinned": true,
+      "required": false
+    }
+  ],
+  "stages": [
+    {
+      "account": "pod26",
+      "application": "default-bootstrap-project",
+      "cloudProvider": "kubernetes",
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": true,
+      "failPipeline": false,
+      "location": "default-bootstrap-project",
+      "manifestName": "configMap deployed-version",
+      "mode": "static",
+      "name": "Read version",
+      "refId": "read-version",
+      "requisiteStageRefIds": [
+        "buddy"
+      ],
+      "type": "findArtifactsFromResource"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": false,
+      "name": "Check version",
+      "namespaceOverride": "default-bootstrap-project",
+      "preconditions": [
+        {
+          "context": {
+            "expression": "parameters.skipSameVersion == \"false\" || #stage(\"Read version\").status == \"FAILED_CONTINUE\" || #stage(\"Read version\").status == \"SKIPPED\" || ( #stage(\"Read version\").context.manifest.data.version != parameters.gitRef )",
+            "failureMessage": "same version already deployed"
+          },
+          "failPipeline": false,
+          "type": "expression"
+        }
+      ],
+      "refId": "check-version",
+      "requisiteStageRefIds": [
+        "read-version"
+      ],
+      "type": "checkPreconditions"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "gitRef": "${parameters.gitRef}",
+      "instructions": "This is a buddy check. It requires user approval for the pipeline to continue.\n\nThis pipeline will deploy \u003cb\u003e${ trigger['parameters']['gitRef'] }\u003c/b\u003e\n\n\u003ca href=${ trigger['parameters']['gitRef'] == \"master\" || trigger['parameters']['gitRef'] == \"main\" ? \"https://github.com/zendesk/default-bootstrap-project\" : trigger['parameters']['gitRef'] matches \"v(\\d+)[\\.\\d+]*\" ? \"https://github.com/zendesk/default-bootstrap-project/releases/${trigger['parameters']['gitRef']}\" : \"https://github.com/zendesk/default-bootstrap-project/commits/${trigger['parameters']['gitRef']}\"}\u003e View ${trigger['parameters']['gitRef']}\u003c/a\u003e\n",
+      "name": "Buddy",
+      "refId": "buddy",
+      "sendNotifications": true,
+      "type": "buddy"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "name": "Create GitHub Deployment",
+      "parameters": {
+        "autoMerge": "false",
+        "description": "Deploy to pod26",
+        "environment": "pod26 #production",
+        "gitReference": "${ parameters.gitRef }",
+        "organization": "zendesk",
+        "payload": "{\n  \"applicationName\": \"${ execution.application }\",\n\"buddy\": \"${ trigger?.parentExecution?.stages == null ? #stage('Buddy')?.context?.lastModifiedBy : ( trigger?.parentExecution?.stages[0]?.context?.lastModifiedBy == '' ? #stage('Buddy')?.context?.lastModifiedBy : trigger.parentExecution.stages[0].context.lastModifiedBy ) }\",\n\"githubActor\": \"${ trigger?.parentExecution?.trigger?.parameters?.githubActor ?: \"\" }\",\n\"manualActor\": \"${ trigger?.parentExecution?.trigger?.type != 'webhook' ? (trigger?.parentExecution?.trigger?.user ?: trigger.user) : '' }\",\n\"version\": \"${ parameters?.version ?: parameters?.gitRef }\"\n}\n",
+        "project": "default-bootstrap-project",
+        "requiredContexts": "[]"
+      },
+      "refId": "create-github-deployment",
+      "requisiteStageRefIds": [
+        "check-version"
+      ],
+      "type": "createGithubDeploymentJob"
+    },
+    {
+      "comments": "${#stage('Self-Service Interface').context.jobStatus.jobState == 'Succeeded' ? '- Change id: '.concat(#stage('Self-Service Interface').context.change_ids) : ''}\n${#stage('Self-Service Interface').context.jobStatus.jobState == 'Succeeded' ? '- \u003ca href=\"'.concat(#stage('Self-Service Interface').context.status_ui_url).concat('\" target=\"_blank\"\u003eStatus from Interface UI\u003c/a\u003e') : ''}",
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "name": "Self-Service Interface",
+      "parameters": {
+        "deployGroups": "\"pod26\"",
+        "description": "${ parameters.gitRef }",
+        "forceApply": "${ parameters.forceApplyInterface }",
+        "gitCommit": "${ parameters.gitRef }",
+        "gitRepo": "git@github.com:zendesk/default-bootstrap-project.git",
+        "project": "${ execution.application }"
+      },
+      "refId": "self-service-interface",
+      "requisiteStageRefIds": [
+        "create-github-deployment"
+      ],
+      "stageEnabled": {
+        "expression": "${ parameters.rollback != 'true' }",
+        "type": "expression"
+      },
+      "type": "interfaceProductionJob"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "name": "Set deployment in progress",
+      "parameters": {
+        "deploymentId": "${ #stage( 'Create GitHub Deployment' ).context.id }",
+        "description": "Deployment in progress",
+        "environment": "pod26",
+        "environmentURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }",
+        "organization": "zendesk",
+        "project": "default-bootstrap-project",
+        "state": "in_progress",
+        "targetURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }"
+      },
+      "refId": "set-deployment-in-progress",
+      "requisiteStageRefIds": [
+        "self-service-interface"
+      ],
+      "type": "updateGithubDeploymentStatusJob"
+    },
+    {
+      "autoAdvance": true,
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "instructions": "This stage runs through your Smoke Tests. At present, it will retrieve the results for the tests tagged as product:default-product in Datadog.\nSmoke Tests run every 15 minutes (default assumption). Please allow 20-30 minutes for all results.\n",
+      "monitorQueries": [
+        {
+          "tags": [
+            "product:default-product",
+            "type:smoketest",
+            "env:canary"
+          ]
+        }
+      ],
+      "name": "Canary Smoke Test",
+      "product": "default-product",
+      "refId": "canary-smoke-test",
+      "requisiteStageRefIds": [],
+      "stageEnabled": {
+        "expression": "${ parameters.rollback != 'true' }",
+        "type": "expression"
+      },
+      "type": "smokeTest"
+    },
+    {
+      "account": "pod26",
+      "cloudProvider": "kubernetes",
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "manifests": [
+        {
+          "apiVersion": "v1",
+          "data": {
+            "gitRef": "${ parameters.gitRef + \"-deploy\" }",
+            "version": "${ parameters.gitRef }"
+          },
+          "kind": "ConfigMap",
+          "metadata": {
+            "annotations": {
+              "strategy.spinnaker.io/versioned": "false"
+            },
+            "name": "deployed-version"
+          }
+        }
+      ],
+      "moniker": {
+        "app": "default-bootstrap-project",
+        "detail": "/#/applications/${execution['application']}/executions/${execution['id']}"
+      },
+      "name": "Record version",
+      "namespaceOverride": "default-bootstrap-project",
+      "refId": "record-version",
+      "requisiteStageRefIds": [
+        "canary-smoke-test"
+      ],
+      "skipExpressionEvaluation": false,
+      "source": "text",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": false,
+          "services": []
+        }
+      },
+      "type": "deployManifest"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "name": "GitHub Deployment Success",
+      "parameters": {
+        "deploymentId": "${ #stage( 'Create GitHub Deployment' ).context.id }",
+        "description": "See Spinnaker for deployment details",
+        "environment": "pod26",
+        "environmentURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }",
+        "organization": "zendesk",
+        "project": "default-bootstrap-project",
+        "state": "success",
+        "targetURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }"
+      },
+      "refId": "github-deployment-success",
+      "requisiteStageRefIds": [
+        "canary-smoke-test"
+      ],
+      "stageEnabled": {
+        "expression": "(#stage('Canary Smoke Test')['status'] == 'SUCCEEDED' || #stage('Canary Smoke Test')['status'] == 'SKIPPED')",
+        "type": "expression"
+      },
+      "type": "updateGithubDeploymentStatusJob"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": true,
+      "failPipeline": false,
+      "name": "GitHub Deployment Failure",
+      "parameters": {
+        "deploymentId": "${ #stage( 'Create GitHub Deployment' ).context.id }",
+        "description": "See Spinnaker for deployment details",
+        "environment": "pod26",
+        "environmentURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }",
+        "organization": "zendesk",
+        "project": "default-bootstrap-project",
+        "state": "failure",
+        "targetURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }"
+      },
+      "refId": "github-deployment-failure",
+      "requisiteStageRefIds": [
+        "canary-smoke-test"
+      ],
+      "stageEnabled": {
+        "expression": "(#stage('Canary Smoke Test')['status'] == 'FAILED_CONTINUE' || #stage('Canary Smoke Test')['status'] == 'TERMINAL')",
+        "type": "expression"
+      },
+      "type": "updateGithubDeploymentStatusJob"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "name": "Signal Execution Failure",
+      "preconditions": [
+        {
+          "context": {
+            "expression": "false",
+            "failureMessage": "This stage failed in order to inform you that an error has occurred during\npipeline execution; see execution details for further information\n"
+          },
+          "failPipeline": true,
+          "type": "expression"
+        }
+      ],
+      "refId": "signal-execution-failure",
+      "requisiteStageRefIds": [
+        "github-deployment-failure"
+      ],
+      "stageEnabled": {
+        "expression": "#stage('Canary Smoke Test')['status'] == 'FAILED_CONTINUE' || #stage('Canary Smoke Test')['status'] == 'TERMINAL'",
+        "type": "expression"
+      },
+      "type": "checkPreconditions"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "name": "Terminate Pipeline",
+      "preconditions": [
+        {
+          "context": {
+            "stageName": "Canary Smoke Test",
+            "stageStatus": "FAILED_CONTINUE"
+          },
+          "failPipeline": true,
+          "type": "stageStatus"
+        },
+        {
+          "context": {
+            "stageName": "Canary Smoke Test",
+            "stageStatus": "TERMINAL"
+          },
+          "failPipeline": true,
+          "type": "stageStatus"
+        }
+      ],
+      "refId": "terminate-pipeline",
+      "requisiteStageRefIds": [
+        "signal-execution-failure"
+      ],
+      "stageEnabled": {
+        "expression": "#stage('Canary Smoke Test')['status'] == 'FAILED_CONTINUE' || #stage('Canary Smoke Test')['status'] == 'TERMINAL'",
+        "type": "expression"
+      },
+      "type": "checkPreconditions"
+    }
+  ]
+}

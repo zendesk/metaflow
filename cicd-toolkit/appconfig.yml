@@ -1,0 +1,30 @@
+# ------------------------------------------------------------------------------------------------------------
+# NOTE: THIS FILE WAS GENERATED ON INITIAL BOOTSTRAP by https://github.com/zendesk/cicd-toolkit
+#
+# MANUALLY CHANGING THIS FILE IS ALLOWED, BUT POTENTIALLY MAKES UPGRADES MORE DIFFICULT.
+# ------------------------------------------------------------------------------------------------------------
+appconfig:
+  version:
+    semver:
+      constraints: ^1.2
+env: staging
+environments-file: lib/environments.libsonnet
+filesets:
+- kubernetes=kubernetes/roles
+- resources=kubernetes/resources
+- environments=environments
+- project=project
+- spinnaker=spinnaker
+- lib=lib
+- foundation=..
+- application=.
+filetrees:
+- openapi=../openapi
+jsonnet-path:
+- vendor
+- vendor/cicd-toolkit/jsonnet
+- lib
+- ../kubernetes
+run: |
+  import 'lib/run.libsonnet'
+version: v1

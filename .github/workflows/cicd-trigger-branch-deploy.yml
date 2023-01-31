@@ -1,0 +1,202 @@
+# ------------------------------------------------------------------------------------------------------------
+# NOTE: THIS FILE IS AUTO GENERATED AND MANAGED BY https://github.com/zendesk/cicd-toolkit
+#
+# You can regenerate the content by running `make` in the 'cicd-toolkit' directory.
+#
+# MANUAL CHANGES TO THIS FILE MAY RESULT IN INCORRECT BEHAVIOUR, AND WILL BE LOST IF THE CODE IS REGENERATED.
+# ------------------------------------------------------------------------------------------------------------
+name: Trigger branch deploy
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request:
+    types: [labeled, opened, synchronize, reopened]
+
+env:
+  AWS_PROFILE: "ecr-publish"
+  PULL_REQUEST_COMMENT_UPDATES_ENABLED: "true"
+  ADD_UPDATE_MANIFESTS_LABEL: "true"
+
+jobs:
+  meet-and-greet:
+    name: New PR
+    if: github.event_name == 'pull_request' && github.event.action == 'opened' && !contains(github.event.pull_request.labels.*.name, 'update manifests')
+    runs-on: ["self-hosted", "zendesk-stable"]
+    steps:
+      - name: Trigger branch deploy instructions
+        uses: zendesk/github-script@v6.3.3
+        if: env.PULL_REQUEST_COMMENT_UPDATES_ENABLED == 'true'
+        with:
+          script: |
+            const CICD_TOOLKIT_COMMENT_MARKER = '<!-- [CICD_TOOLKIT_PR_COMMENT] -->';
+
+            var body = `${CICD_TOOLKIT_COMMENT_MARKER}
+            This PR can be deployed with [cicd-toolkit](https://github.com/zendesk/cicd-toolkit): Generate deployment config by commenting \`/update manifests\` on this PR for one time generation.`
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            })
+
+      - name: Add update manifests label to PR
+        if: env.ADD_UPDATE_MANIFESTS_LABEL == 'true'
+        env:
+          # use org token, to trigger downstream gh workflows
+          GITHUB_TOKEN: ${{ secrets.ORG_GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          # create "update manifests" label in repository if it doesn't exist
+          # ignore failure if it already exists
+          gh api repos/$GITHUB_REPOSITORY/labels -f name="update manifests" -f color="63d8a6" || :
+
+          # we don't know if this is already set or not, but by adding it unconditionally
+          # we ensure manifests gets rendered in case it was not set
+          gh pr edit "$PR_NUMBER" --add-label "update manifests"
+
+  deploy-pull-request:
+    name: Deploy pull request
+    if: startsWith(github.event.comment.body, '/deploy') || contains(github.event.pull_request.labels.*.name, 'deploy')
+    runs-on: ["self-hosted", "zendesk-stable"]
+    steps:
+      - name: Checkout
+        uses: zendesk/checkout@v3
+
+# cicd-toolkit preamble begin
+      - name: bootstrap cicd-toolkit
+        env:
+          APPCONFIG_DOCKER_IMAGE: 713408432298.dkr.ecr.us-west-2.amazonaws.com/zendesk/appconfig:v1.5.0
+        run: |
+          cid=$(docker create "$APPCONFIG_DOCKER_IMAGE")
+          sudo docker cp $cid:/bin/appconfig /usr/local/bin
+
+          echo >&2 "appconfig version"
+          echo >&2 "==="
+          appconfig version
+          echo >&2 "==="
+
+          echo >&2 "vendir version"
+          echo >&2 "==="
+          vendir version
+          echo >&2 "==="
+
+          echo >&2 "kbld version"
+          echo >&2 "==="
+          kbld version
+          echo >&2 "==="
+
+      - name: cache vendor dependencies
+        uses: zendesk/cache@v3
+        id: cicd-cache-vendor
+        with:
+          path: cicd-toolkit/vendor
+          key: ${{ runner.os }}-${{ hashFiles('cicd-toolkit/vendir.lock.yml') }}
+
+      - name: install dependencies
+        if: steps.cicd-cache-vendor.cache-hit != 'true'
+        env:
+          APPLICATION_ROOT_DIR: "cicd-toolkit"
+        run: |
+          ORG_BASIC_AUTH="$(echo -n 'x-access-token:${{ secrets.ORG_GITHUB_TOKEN }}' | base64)"
+          echo "::add-mask::$ORG_BASIC_AUTH"
+          env \
+            GIT_CONFIG_COUNT=2 \
+            GIT_CONFIG_KEY_0='http.https://github.com/.extraheader' \
+            GIT_CONFIG_VALUE_0='' \
+            GIT_CONFIG_KEY_1='http.https://github.com/.extraheader' \
+            GIT_CONFIG_VALUE_1="Authorization: basic $ORG_BASIC_AUTH" \
+            vendir sync --chdir "$APPLICATION_ROOT_DIR" --locked
+
+          echo >&2 "Checking for differences in vendored dependencies lock file ..."
+
+          if ! git diff --exit-code "$APPLICATION_ROOT_DIR/vendir.lock.yml"; then
+            echo >&2 "==="
+            echo >&2 "Notice: Found above differences in vendir.lock.yml file..."
+            echo >&2 "==="
+          else
+            echo >&2 "No differences found."
+          fi
+
+      - name: extract actions if not present
+        env:
+          APPLICATION_ROOT_DIR: "cicd-toolkit"
+        run: |
+          # extract actions unless present already
+          if [ ! -d "$APPLICATION_ROOT_DIR/actions" ]; then
+            (cd $APPLICATION_ROOT_DIR && \
+              appconfig run boilerplate:github-actions) | \
+                appconfig manifest --state-file /dev/null
+          fi
+
+# cicd-toolkit preamble end
+
+
+      - name: setup env vars from project metadata
+        uses: ./cicd-toolkit/actions/env-vars-from-project-metadata
+        with:
+          application_root_dir: "cicd-toolkit"
+
+      - name: Rocket reaction reply
+        uses: zendesk/github-script@v6.3.3
+        if: github.event_name == 'issue_comment' && github.event.issue.pull_request
+        id: issue_comment_pr
+        with:
+          script: |
+            const { data: pr } = await github.request(context.payload.issue.pull_request.url)
+            if (pr) {
+              core.setOutput('ref', pr.head.ref)
+              core.setOutput('sha', pr.head.sha)
+              core.setOutput('number', pr.number)
+
+              github.rest.reactions.createForIssueComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: context.payload.comment.id,
+                content: 'rocket',
+              })
+            }
+
+      - name: Normalize references
+        id: normalize_refs
+        uses: ./cicd-toolkit/actions/normalize-refs
+        with:
+          tag: ${{ github.event.pull_request.head.ref || steps.issue_comment_pr.outputs.ref }}
+          sha: ${{ github.event.issue.pull_request.head.sha || steps.issue_comment_pr.outputs.sha }}
+
+      - name: Add update manifests label to PR
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number || steps.issue_comment_pr.outputs.number }}
+        run: |
+          # create "update manifests" label in repository if it doesn't exist
+          # ignore failure if it already exists
+          gh api repos/$GITHUB_REPOSITORY/labels -f name="update manifests" -f color="63d8a6" || :
+
+          # we don't know if this is already set or not, but by adding it unconditionally
+          # we ensure manifests gets rendered in case it was not set
+          gh pr edit "$PR_NUMBER" --add-label "update manifests"
+
+      - name: Trigger branch deploy
+        if: env.SPINNAKER_WEBHOOK_BRANCH != ''
+        id: trigger-branch-deploy
+        uses: ./cicd-toolkit/actions/trigger-spinnaker-webhook-deploy
+        with:
+          git_ref: ${{ steps.normalize_refs.outputs.ref }}
+          api_endpoint: ${{ env.SPINNAKER_API_ENDPOINT }}
+          webhook_name: ${{ env.SPINNAKER_WEBHOOK_BRANCH }}
+
+      - name: Post deployment triggered comment
+        if: env.SPINNAKER_WEBHOOK_BRANCH != ''
+        uses: zendesk/github-script@v6.3.3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '[Deployment triggered](${{ env.SPINNAKER_WEB_ENDPOINT }}/#/applications/${{ env.PROJECT_NAME }}/executions) via webhook [${{ env.SPINNAKER_WEBHOOK_BRANCH }}](${{ env.SPINNAKER_API_ENDPOINT }}/applications/${{ env.PROJECT_NAME }}/executions/search?triggerTypes=webhook&eventId=${{ steps.trigger-branch-deploy.outputs.spinnaker_event_id }}) of ${{ steps.normalize_refs.outputs.sha }} on event: `${{ github.event_name }}`'
+            })

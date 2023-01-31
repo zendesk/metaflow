@@ -1,0 +1,135 @@
+{
+  "application": "default-bootstrap-project",
+  "keepWaitingPipelines": false,
+  "limitConcurrent": true,
+  "name": "staging-deploy-pod999",
+  "notifications": [],
+  "parameterConfig": [
+    {
+      "default": "false",
+      "description": "Force interface stage to apply changes from service yml even if there is no change",
+      "hasOptions": true,
+      "label": "forceApplyInterface",
+      "name": "forceApplyInterface",
+      "options": [
+        {
+          "value": "true"
+        },
+        {
+          "value": "false"
+        }
+      ],
+      "pinned": true,
+      "required": false
+    },
+    {
+      "default": "",
+      "description": "Version of the App to deploy e.g. \"v23\". To deploy your branch use branch name without \"-deploy\" suffix e.g. \"jdoe.feature-branch-name\"",
+      "hasOptions": false,
+      "name": "gitRef",
+      "pinned": true,
+      "required": true
+    },
+    {
+      "default": "true",
+      "description": "Skip the child pipeline deployment if the currently deployed is the same as the version to be deployed.",
+      "hasOptions": true,
+      "name": "skipSameVersion",
+      "options": [
+        {
+          "value": "true"
+        },
+        {
+          "value": "false"
+        }
+      ],
+      "pinned": true,
+      "required": false
+    }
+  ],
+  "stages": [
+    {
+      "application": "default-bootstrap-project",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Adefault-bootstrap-project%2Ckube_cluster_name%3Apod999\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": true,
+      "failPipeline": false,
+      "name": "pod999",
+      "pipeline": "${#pipelineId(\"pod999\")}",
+      "pipelineParameters": {
+        "forceApplyInterface": "${ trigger.parameters.forceApplyInterface }",
+        "gitRef": "${ trigger.parameters.gitRef }",
+        "skipSameVersion": "${ trigger.parameters.skipSameVersion }"
+      },
+      "refId": "pod999",
+      "requisiteStageRefIds": [],
+      "skipDownstreamOutput": true,
+      "type": "pipeline",
+      "waitForCompletion": true
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": false,
+      "name": "Phase Succeeded",
+      "preconditions": [
+        {
+          "context": {
+            "expression": "${ #stageByRefId(\"pod999\").status == \"SUCCEEDED\" }",
+            "failureMessage": "One of the previous steps failed"
+          },
+          "failPipeline": true,
+          "type": "expression"
+        }
+      ],
+      "refId": "successful-phase-deploy-pod999",
+      "requisiteStageRefIds": [
+        "pod999"
+      ],
+      "type": "checkPreconditions"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": false,
+      "name": "Phase Failed",
+      "preconditions": [
+        {
+          "context": {
+            "expression": "${ #stageByRefId(\"pod999\").status == \"FAILED_CONTINUE\" }",
+            "failureMessage": "One of the previous steps failed"
+          },
+          "failPipeline": false,
+          "type": "expression"
+        }
+      ],
+      "refId": "failed-phase-deploy-pod999",
+      "requisiteStageRefIds": [
+        "pod999"
+      ],
+      "type": "checkPreconditions"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "name": "Report Failure",
+      "preconditions": [
+        {
+          "context": {
+            "expression": "false",
+            "failureMessage": "Pipeline execution halted at deploy-pod999 ; see execution details for further information\n"
+          },
+          "failPipeline": true,
+          "type": "expression"
+        }
+      ],
+      "refId": "report-failure-deploy-pod999",
+      "requisiteStageRefIds": [
+        "failed-phase-deploy-pod999"
+      ],
+      "type": "checkPreconditions"
+    }
+  ],
+  "triggers": []
+}
