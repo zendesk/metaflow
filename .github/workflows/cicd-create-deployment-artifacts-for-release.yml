@@ -22,7 +22,7 @@ on:
 
 env:
   AWS_PROFILE: "ecr-publish"
-  DOCKER_IMAGE: "gcr.io/docker-images-180022/apps/default-bootstrap-project"
+  DOCKER_IMAGE: "713408432298.dkr.ecr.us-west-2.amazonaws.com/prod/zendesk/ml-training-pipelines"
   ECR_IMAGE_PREFIX: "prod"
 
 jobs:

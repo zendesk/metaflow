@@ -1,8 +1,10 @@
-# ------------------------------------------------------------------------------------------------------------
-# NOTE: THIS FILE WAS GENERATED ON INITIAL BOOTSTRAP by https://github.com/zendesk/cicd-toolkit
-#
-# MANUALLY CHANGING THIS FILE IS ALLOWED, BUT POTENTIALLY MAKES UPGRADES MORE DIFFICULT.
-# ------------------------------------------------------------------------------------------------------------
+
+> NOTE: THIS FILE IS GENERATED ON SELF-UPDATE BY https://github.com/zendesk/cicd-toolkit
+>
+> You can regenerate the content by running `make self-update` in the 'cicd-toolkit' directory.
+>
+> MANUAL CHANGES TO THIS FILE MAY RESULT IN INCORRECT BEHAVIOUR, AND WILL BE LOST IF THE CODE IS REGENERATED.
+
 # cicd-toolkit -- getting started guide
 
 cicd-toolkit is a toolkit for assisting in generating the deployment artifacts that are required

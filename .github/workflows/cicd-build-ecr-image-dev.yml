@@ -1,0 +1,26 @@
+# ------------------------------------------------------------------------------------------------------------
+# NOTE: THIS FILE IS AUTO GENERATED AND MANAGED BY https://github.com/zendesk/cicd-toolkit
+#
+# You can regenerate the content by running `make` in the 'cicd-toolkit' directory.
+#
+# MANUAL CHANGES TO THIS FILE MAY RESULT IN INCORRECT BEHAVIOUR, AND WILL BE LOST IF THE CODE IS REGENERATED.
+# ------------------------------------------------------------------------------------------------------------
+name: Build ml-training-pipelines dev Image
+
+on:
+  push:
+    branches-ignore:
+      - "main"
+
+jobs:
+  build-image:
+    uses: zendesk/build-image/.github/workflows/build.yml@v2
+    secrets: inherit
+    with:
+      image-name: ""
+      image-type: "dev"
+      dockerfile: "./src/Dockerfile"
+      docker-args: ""
+      working-directory: "."
+      additional-tag: ""
+      architectures: "[\"amd64\"]"

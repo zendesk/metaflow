@@ -1,5 +1,5 @@
 {
-  "application": "default-bootstrap-project",
+  "application": "ml-training-pipelines",
   "keepWaitingPipelines": false,
   "limitConcurrent": true,
   "name": "pod23",
@@ -66,12 +66,12 @@
   "stages": [
     {
       "account": "pod23",
-      "application": "default-bootstrap-project",
+      "application": "ml-training-pipelines",
       "cloudProvider": "kubernetes",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,
-      "location": "default-bootstrap-project",
+      "location": "ml-training-pipelines",
       "manifestName": "configMap deployed-version",
       "mode": "static",
       "name": "Read version",
@@ -86,7 +86,7 @@
       "continuePipeline": false,
       "failPipeline": false,
       "name": "Check version",
-      "namespaceOverride": "default-bootstrap-project",
+      "namespaceOverride": "ml-training-pipelines",
       "preconditions": [
         {
           "context": {
@@ -108,7 +108,7 @@
       "continuePipeline": false,
       "failPipeline": true,
       "gitRef": "${parameters.gitRef}",
-      "instructions": "This is a buddy check. It requires user approval for the pipeline to continue.\n\nThis pipeline will deploy \u003cb\u003e${ trigger['parameters']['gitRef'] }\u003c/b\u003e\n\n\u003ca href=${ trigger['parameters']['gitRef'] == \"master\" || trigger['parameters']['gitRef'] == \"main\" ? \"https://github.com/zendesk/default-bootstrap-project\" : trigger['parameters']['gitRef'] matches \"v(\\d+)[\\.\\d+]*\" ? \"https://github.com/zendesk/default-bootstrap-project/releases/${trigger['parameters']['gitRef']}\" : \"https://github.com/zendesk/default-bootstrap-project/commits/${trigger['parameters']['gitRef']}\"}\u003e View ${trigger['parameters']['gitRef']}\u003c/a\u003e\n",
+      "instructions": "This is a buddy check. It requires user approval for the pipeline to continue.\n\nThis pipeline will deploy \u003cb\u003e${ trigger['parameters']['gitRef'] }\u003c/b\u003e\n\n\u003ca href=${ trigger['parameters']['gitRef'] == \"master\" || trigger['parameters']['gitRef'] == \"main\" ? \"https://github.com/zendesk/ml-training-pipelines\" : trigger['parameters']['gitRef'] matches \"v(\\d+)[\\.\\d+]*\" ? \"https://github.com/zendesk/ml-training-pipelines/releases/${trigger['parameters']['gitRef']}\" : \"https://github.com/zendesk/ml-training-pipelines/commits/${trigger['parameters']['gitRef']}\"}\u003e View ${trigger['parameters']['gitRef']}\u003c/a\u003e\n",
       "name": "Buddy",
       "refId": "buddy",
       "sendNotifications": true,
@@ -126,7 +126,7 @@
         "gitReference": "${ parameters.gitRef }",
         "organization": "zendesk",
         "payload": "{\n  \"applicationName\": \"${ execution.application }\",\n\"buddy\": \"${ trigger?.parentExecution?.stages == null ? #stage('Buddy')?.context?.lastModifiedBy : ( trigger?.parentExecution?.stages[0]?.context?.lastModifiedBy == '' ? #stage('Buddy')?.context?.lastModifiedBy : trigger.parentExecution.stages[0].context.lastModifiedBy ) }\",\n\"githubActor\": \"${ trigger?.parentExecution?.trigger?.parameters?.githubActor ?: \"\" }\",\n\"manualActor\": \"${ trigger?.parentExecution?.trigger?.type != 'webhook' ? (trigger?.parentExecution?.trigger?.user ?: trigger.user) : '' }\",\n\"version\": \"${ parameters?.version ?: parameters?.gitRef }\"\n}\n",
-        "project": "default-bootstrap-project",
+        "project": "ml-training-pipelines",
         "requiredContexts": "[]"
       },
       "refId": "create-github-deployment",
@@ -146,7 +146,7 @@
         "description": "${ parameters.gitRef }",
         "forceApply": "${ parameters.forceApplyInterface }",
         "gitCommit": "${ parameters.gitRef }",
-        "gitRepo": "git@github.com:zendesk/default-bootstrap-project.git",
+        "gitRepo": "git@github.com:zendesk/ml-training-pipelines.git",
         "project": "${ execution.application }"
       },
       "refId": "self-service-interface",
@@ -170,7 +170,7 @@
         "environment": "pod23",
         "environmentURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }",
         "organization": "zendesk",
-        "project": "default-bootstrap-project",
+        "project": "ml-training-pipelines",
         "state": "in_progress",
         "targetURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }"
       },
@@ -181,6 +181,46 @@
       "type": "updateGithubDeploymentStatusJob"
     },
     {
+      "account": "pod23",
+      "cloudProvider": "kubernetes",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eLogs\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/logs/livetail?query=service%3Aml-training-pipelines+%40kubernetes.labels.track%3A${execution.id}+%40kubernetes.labels.role%3Ahello-world\"\u003eDatadog hello-world Logs\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": true,
+      "failPipeline": false,
+      "manifestArtifact": {
+        "artifactAccount": "github_spin_acct7",
+        "id": "hello-world.yml",
+        "name": "hello-world.yml",
+        "reference": "https://api.github.com/repos/zendesk/ml-training-pipelines/contents/kubernetes/manifests/production/pod23/hello-world.yml",
+        "type": "github/file",
+        "version": "${ parameters.gitRef + \"-deploy\" }"
+      },
+      "moniker": {
+        "app": "ml-training-pipelines",
+        "detail": "/#/applications/${execution['application']}/executions/${execution['id']}"
+      },
+      "name": "Deploy hello-world.yml",
+      "refId": "deploy-hello-world.yml",
+      "requisiteStageRefIds": [
+        "set-deployment-in-progress"
+      ],
+      "skipExpressionEvaluation": false,
+      "source": "artifact",
+      "stageEnabled": {
+        "expression": "#stage('Read version')['status'] != 'SKIPPED'",
+        "type": "expression"
+      },
+      "stageTimeoutMs": 900000,
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": false,
+          "services": []
+        }
+      },
+      "type": "deployManifest"
+    },
+    {
       "completeOtherBranchesThenFail": false,
       "continuePipeline": false,
       "failPipeline": false,
@@ -188,7 +228,7 @@
       "preconditions": [
         {
           "context": {
-            "expression": "${  }",
+            "expression": "${ #stageByRefId(\"deploy-hello-world.yml\").status == \"SUCCEEDED\" }",
             "failureMessage": "One of the previous steps failed"
           },
           "failPipeline": true,
@@ -196,7 +236,9 @@
         }
       ],
       "refId": "deploy-succeeded",
-      "requisiteStageRefIds": [],
+      "requisiteStageRefIds": [
+        "deploy-hello-world.yml"
+      ],
       "type": "checkPreconditions"
     },
     {
@@ -207,7 +249,7 @@
       "preconditions": [
         {
           "context": {
-            "expression": "${  }",
+            "expression": "${ #stageByRefId(\"deploy-hello-world.yml\").status == \"FAILED_CONTINUE\" }",
             "failureMessage": "One of the previous steps failed"
           },
           "failPipeline": false,
@@ -215,8 +257,49 @@
         }
       ],
       "refId": "deploy-failed",
-      "requisiteStageRefIds": [],
+      "requisiteStageRefIds": [
+        "deploy-hello-world.yml"
+      ],
       "type": "checkPreconditions"
+    },
+    {
+      "account": "pod23",
+      "cloudProvider": "kubernetes",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eLogs\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/logs/livetail?query=service%3Aml-training-pipelines+%40kubernetes.labels.track%3A${execution.id}+%40kubernetes.labels.role%3Ahello-world\"\u003eDatadog hello-world Logs\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": true,
+      "failPipeline": false,
+      "manifestArtifact": {
+        "artifactAccount": "github_spin_acct7",
+        "id": "previous-hello-world.yml",
+        "name": "Previous hello-world.yml",
+        "reference": "https://api.github.com/repos/zendesk/ml-training-pipelines/contents/kubernetes/manifests/production/pod23/hello-world.yml",
+        "type": "github/file",
+        "version": "${ #stage('Read version').context.manifest.data.gitRef }"
+      },
+      "moniker": {
+        "app": "ml-training-pipelines",
+        "detail": "/#/applications/${execution['application']}/executions/${execution['id']}"
+      },
+      "name": "Deploy previous hello-world.yml",
+      "refId": "deploy-previous-hello-world.yml",
+      "requisiteStageRefIds": [
+        "deploy-failed"
+      ],
+      "skipExpressionEvaluation": false,
+      "source": "artifact",
+      "stageEnabled": {
+        "expression": "#stage('Read version')['status'] == 'SUCCEEDED'",
+        "type": "expression"
+      },
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": false,
+          "services": []
+        }
+      },
+      "type": "deployManifest"
     },
     {
       "account": "pod23",
@@ -241,11 +324,11 @@
         }
       ],
       "moniker": {
-        "app": "default-bootstrap-project",
+        "app": "ml-training-pipelines",
         "detail": "/#/applications/${execution['application']}/executions/${execution['id']}"
       },
       "name": "Record version",
-      "namespaceOverride": "default-bootstrap-project",
+      "namespaceOverride": "ml-training-pipelines",
       "refId": "record-version",
       "requisiteStageRefIds": [
         "deploy-succeeded"
@@ -272,7 +355,7 @@
         "environment": "pod23",
         "environmentURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }",
         "organization": "zendesk",
-        "project": "default-bootstrap-project",
+        "project": "ml-training-pipelines",
         "state": "success",
         "targetURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }"
       },
@@ -293,7 +376,7 @@
         "environment": "pod23",
         "environmentURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }",
         "organization": "zendesk",
-        "project": "default-bootstrap-project",
+        "project": "ml-training-pipelines",
         "state": "failure",
         "targetURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }"
       },
@@ -320,6 +403,7 @@
       ],
       "refId": "signal-execution-failure",
       "requisiteStageRefIds": [
+        "deploy-previous-hello-world.yml",
         "github-deployment-failure"
       ],
       "stageEnabled": {

@@ -7,23 +7,31 @@ local libprojectmetadata = import 'github.com/zendesk/cicd-toolkit/lib/project-m
 
 libprojectmetadata.v1 {
   project+: {
-    name: 'default-bootstrap-project',
+    name: 'ml-training-pipelines',
   },
   team+: {
-    name: 'default-team',
-    region: 'EMEA',
+    name: 'ml-apac-trisolaris',
+    region: 'APAC',
   },
   product+: {
-    name: 'default-product',
+    name: 'ml-training-pipelines',
   },
   repository+: {
-    defaultBranch: 'default-branch',
+    defaultBranch: 'main',
   },
   githubWorkflows+: {
     buildAndRelease+: {
       buildEcrImages+: {
         # 2022-09: this feature is experimental and subject to changes in near future due to upcoming image retention policy
-        enabled: false, 
+        enabled: true, 
+        buildConfigs+: {
+          'prod/zendesk/ml-training-pipelines'+: {
+            dockerfile: './src/Dockerfile'
+          },
+          'dev/zendesk/ml-training-pipelines'+: {
+            dockerfile: './src/Dockerfile'
+          },
+        },
       },
       createAndDeployRelease+: {
         enabled: true,

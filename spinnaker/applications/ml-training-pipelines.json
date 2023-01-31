@@ -10,26 +10,26 @@
       "serverGroups"
     ]
   },
-  "description": "default-bootstrap-project",
-  "email": "default-team@zendesk.com",
+  "description": "ml-training-pipelines",
+  "email": "ml-apac-trisolaris@zendesk.com",
   "enableRerunActiveExecutions": false,
   "enableRestartRunningExecutions": false,
   "instancePort": 80,
-  "name": "default-bootstrap-project",
+  "name": "ml-training-pipelines",
   "permissions": {
     "EXECUTE": [
-      "okta:role:default-bootstrap-project"
+      "okta:role:ml-training-pipelines"
     ],
     "READ": [
       "okta:role:read-only",
-      "okta:role:default-bootstrap-project"
+      "okta:role:ml-training-pipelines"
     ],
     "WRITE": [
-      "okta:role:default-bootstrap-project"
+      "okta:role:ml-training-pipelines"
     ]
   },
   "repoProjectKey": "zendesk",
-  "repoSlug": "default-bootstrap-project",
+  "repoSlug": "ml-training-pipelines",
   "repoType": "github",
   "trafficGuards": []
 }

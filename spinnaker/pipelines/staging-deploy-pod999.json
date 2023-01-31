@@ -1,5 +1,5 @@
 {
-  "application": "default-bootstrap-project",
+  "application": "ml-training-pipelines",
   "keepWaitingPipelines": false,
   "limitConcurrent": true,
   "name": "staging-deploy-pod999",
@@ -49,8 +49,8 @@
   ],
   "stages": [
     {
-      "application": "default-bootstrap-project",
-      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Adefault-bootstrap-project%2Ckube_cluster_name%3Apod999\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "application": "ml-training-pipelines",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Aml-training-pipelines%2Ckube_cluster_name%3Apod999\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,

@@ -14,11 +14,11 @@ name: Create project release
 concurrency: project-release
 
 on:
-  # This workflow is triggered when a commit is pushed to 'default-branch' branch. This is
+  # This workflow is triggered when a commit is pushed to 'main' branch. This is
   # typically when a PR is merged, since no one is pushing commits directly.
   push:
     branches:
-      - 'default-branch'
+      - 'main'
 
   # we add a manual trigger to allow for creation of releases in case automation fails
   workflow_dispatch:
@@ -128,7 +128,7 @@ jobs:
           version_scheme: ${{ env.RELEASE_VERSION_SCHEME }}
           version_type: ${{ steps.release_type.outputs.version-type }}
           # pass the branch to only fetch tags on the given release branch
-          branch: 'default-branch'
+          branch: 'main'
 
       - name: Create source code release
         id: create_source_release

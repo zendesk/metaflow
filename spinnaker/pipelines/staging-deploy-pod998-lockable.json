@@ -1,12 +1,12 @@
 {
-  "application": "default-bootstrap-project",
+  "application": "ml-training-pipelines",
   "keepWaitingPipelines": false,
   "limitConcurrent": true,
   "name": "staging-deploy-pod998-lockable",
   "notifications": [],
   "parameterConfig": [
     {
-      "default": "default-branch",
+      "default": "main",
       "description": "Version of the App to deploy e.g. \"v23\". To deploy your branch use branch name without \"-deploy\" suffix e.g. \"jdoe.feature-branch-name\"",
       "hasOptions": false,
       "name": "gitRef",
@@ -64,7 +64,7 @@
     }
   ],
   "roles": [
-    "okta:role:default-bootstrap-project"
+    "okta:role:ml-training-pipelines"
   ],
   "stages": [
     {
@@ -75,7 +75,7 @@
       "parameters": {
         "commit": "${ parameters.gitRef }",
         "organization": "zendesk",
-        "project": "default-bootstrap-project"
+        "project": "ml-training-pipelines"
       },
       "refId": "preflight-resolve-git-ref",
       "requisiteStageRefIds": [],
@@ -85,8 +85,8 @@
     {
       "account": "internaltools-staging-use1-chef",
       "alias": "runJob",
-      "application": "default-bootstrap-project",
-      "applicationName": "default-bootstrap-project",
+      "application": "ml-training-pipelines",
+      "applicationName": "ml-training-pipelines",
       "cloudProvider": "kubernetes",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": false,
@@ -98,18 +98,18 @@
           "annotations": {
             "moniker.spinnaker.io/cluster": "internaltools-staging-use1-chef",
             "moniker.spinnaker.io/detail": "${ parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\") }",
-            "moniker.spinnaker.io/stack": "default-bootstrap-project-cicd-toolkit-preflight",
+            "moniker.spinnaker.io/stack": "ml-training-pipelines-cicd-toolkit-preflight",
             "sidecar.istio.io/inject": "false"
           },
-          "generateName": "cicd-toolkit-preflight-default-bootstrap-project-",
+          "generateName": "cicd-toolkit-preflight-ml-training-pipelines-",
           "labels": {
             "branch": "unknown",
             "deploy_id": "unknown",
-            "product": "default-product",
-            "project": "default-bootstrap-project",
+            "product": "ml-training-pipelines",
+            "project": "ml-training-pipelines",
             "role": "cicd-toolkit-preflight",
             "sidecar.istio.io/inject": "false",
-            "team": "default-team",
+            "team": "ml-apac-trisolaris",
             "track": "unknown"
           },
           "namespace": "cicd-toolkit"
@@ -122,7 +122,7 @@
               "annotations": {
                 "moniker.spinnaker.io/cluster": "internaltools-staging-use1-chef",
                 "moniker.spinnaker.io/detail": "${ parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\") }",
-                "moniker.spinnaker.io/stack": "default-bootstrap-project-cicd-toolkit-preflight",
+                "moniker.spinnaker.io/stack": "ml-training-pipelines-cicd-toolkit-preflight",
                 "secret/GCLOUD_IMAGE_PULL_PASSWORD": "global/cicd-toolkit/global/gcloud_image_pull_password",
                 "secret/GCLOUD_IMAGE_PULL_USERNAME": "global/cicd-toolkit/global/gcloud_image_pull_username",
                 "secret/GITHUB_TOKEN": "staging/cicd-toolkit/global/github_token",
@@ -132,13 +132,13 @@
                 "branch": "unknown",
                 "deploy_group": "internaltools-staging-use1-chef",
                 "deploy_id": "unknown",
-                "product": "default-product",
-                "project": "default-bootstrap-project",
+                "product": "ml-training-pipelines",
+                "project": "ml-training-pipelines",
                 "revision": "${ #stage(\"preflight-resolve-git-ref\").context.sha }",
                 "role": "cicd-toolkit-preflight",
                 "sidecar.istio.io/inject": "false",
                 "tag": "${ parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\") }",
-                "team": "default-team",
+                "team": "ml-apac-trisolaris",
                 "track": "unknown"
               }
             },
@@ -203,7 +203,7 @@
                     },
                     {
                       "name": "PROJECT",
-                      "value": "default-bootstrap-project"
+                      "value": "ml-training-pipelines"
                     },
                     {
                       "name": "REVISION",
@@ -219,7 +219,7 @@
                     },
                     {
                       "name": "PROJECT_NAME",
-                      "value": "default-bootstrap-project"
+                      "value": "ml-training-pipelines"
                     },
                     {
                       "name": "DEPLOY_TARGETS",
@@ -231,7 +231,7 @@
                     },
                     {
                       "name": "GITHUB_REPOSITORY",
-                      "value": "zendesk/default-bootstrap-project"
+                      "value": "zendesk/ml-training-pipelines"
                     },
                     {
                       "name": "GIT_TAG",
@@ -426,7 +426,7 @@
       "type": "runJobManifest"
     },
     {
-      "application": "default-bootstrap-project",
+      "application": "ml-training-pipelines",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": false,
       "failPipeline": true,
@@ -460,7 +460,7 @@
     {
       "enabled": true,
       "payloadConstraints": {},
-      "source": "default-bootstrap-project-staging-deploy-pod998-lockable",
+      "source": "ml-training-pipelines-staging-deploy-pod998-lockable",
       "type": "webhook"
     }
   ]

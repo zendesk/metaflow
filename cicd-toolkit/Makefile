@@ -1,7 +1,9 @@
 # ------------------------------------------------------------------------------------------------------------
-# NOTE: THIS FILE WAS GENERATED ON INITIAL BOOTSTRAP by https://github.com/zendesk/cicd-toolkit
+# NOTE: THIS FILE IS GENERATED ON SELF-UPDATE BY https://github.com/zendesk/cicd-toolkit
 #
-# MANUALLY CHANGING THIS FILE IS ALLOWED, BUT POTENTIALLY MAKES UPGRADES MORE DIFFICULT.
+# You can regenerate the content by running `make self-update` in the 'cicd-toolkit' directory.
+#
+# MANUAL CHANGES TO THIS FILE MAY RESULT IN INCORRECT BEHAVIOUR, AND WILL BE LOST IF THE CODE IS REGENERATED.
 # ------------------------------------------------------------------------------------------------------------
 export PROJECT_ROOT := ..
 export APPLICATION_ROOT_DIR := cicd-toolkit

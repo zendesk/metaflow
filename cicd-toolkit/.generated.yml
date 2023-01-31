@@ -4,6 +4,8 @@ target:
   cicd-toolkit/generated/update-boilerplate:
     files:
     - Path: ../.github/workflows/.gitattributes
+    - Path: ../.github/workflows/cicd-build-ecr-image-dev.yml
+    - Path: ../.github/workflows/cicd-build-ecr-image-prod.yml
     - Path: ../.github/workflows/cicd-cleanup-deploy-branch.yml
     - Path: ../.github/workflows/cicd-create-deployment-artifacts-for-branch.yml
     - Path: ../.github/workflows/cicd-create-deployment-artifacts-for-release.yml
@@ -12,8 +14,23 @@ target:
     - Path: ../.github/workflows/cicd-trigger-branch-deploy.yml
     - Path: ../.github/workflows/cicd-trigger-release-deploy.yml
     - Path: ../kubernetes/manifests/.gitattributes
+    - Path: ../kubernetes/manifests/development/scooter-pod1/hello-world.yml
+    - Path: ../kubernetes/manifests/production/pod13/hello-world.yml
+    - Path: ../kubernetes/manifests/production/pod15/hello-world.yml
+    - Path: ../kubernetes/manifests/production/pod17/hello-world.yml
+    - Path: ../kubernetes/manifests/production/pod18/hello-world.yml
+    - Path: ../kubernetes/manifests/production/pod19/hello-world.yml
+    - Path: ../kubernetes/manifests/production/pod20/hello-world.yml
+    - Path: ../kubernetes/manifests/production/pod23/hello-world.yml
+    - Path: ../kubernetes/manifests/production/pod25/hello-world.yml
+    - Path: ../kubernetes/manifests/production/pod26/hello-world.yml
+    - Path: ../kubernetes/manifests/production/pod27/hello-world.yml
+    - Path: ../kubernetes/manifests/production/pod28/hello-world.yml
+    - Path: ../kubernetes/manifests/production/pod29/hello-world.yml
+    - Path: ../kubernetes/manifests/staging/pod998/hello-world.yml
+    - Path: ../kubernetes/manifests/staging/pod999/hello-world.yml
     - Path: ../spinnaker/.gitattributes
-    - Path: ../spinnaker/applications/default-bootstrap-project.json
+    - Path: ../spinnaker/applications/ml-training-pipelines.json
     - Path: ../spinnaker/pipelines/pod13.json
     - Path: ../spinnaker/pipelines/pod15.json
     - Path: ../spinnaker/pipelines/pod17.json
@@ -37,3 +54,11 @@ target:
     - Path: .gitattributes
     - Path: .gitignore
     - Path: lib/shared-env-groups.libsonnet
+  generated/self-update:
+    files:
+    - Path: Makefile
+    - Path: README.md
+    - Path: appconfig.yml
+    - Path: render
+    - Path: scripts/apply-update.sh
+    - Path: scripts/self-update.sh

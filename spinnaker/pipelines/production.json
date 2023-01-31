@@ -1,5 +1,5 @@
 {
-  "application": "default-bootstrap-project",
+  "application": "ml-training-pipelines",
   "keepWaitingPipelines": false,
   "limitConcurrent": true,
   "name": "production",
@@ -49,8 +49,8 @@
   ],
   "stages": [
     {
-      "application": "default-bootstrap-project",
-      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Adefault-bootstrap-project%2Ckube_cluster_name%3Apod26\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "application": "ml-training-pipelines",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Aml-training-pipelines%2Ckube_cluster_name%3Apod26\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,
@@ -137,7 +137,7 @@
       "continuePipeline": false,
       "failPipeline": true,
       "gitRef": "${parameters.gitRef}",
-      "instructions": "This is a buddy check. It requires user approval for the pipeline to continue.\n\nThis pipeline will deploy \u003cb\u003e${ trigger['parameters']['gitRef'] }\u003c/b\u003e\n\n\u003ca href=${ trigger['parameters']['gitRef'] == \"master\" || trigger['parameters']['gitRef'] == \"main\" ? \"https://github.com/zendesk/default-bootstrap-project\" : trigger['parameters']['gitRef'] matches \"v(\\d+)[\\.\\d+]*\" ? \"https://github.com/zendesk/default-bootstrap-project/releases/${trigger['parameters']['gitRef']}\" : \"https://github.com/zendesk/default-bootstrap-project/commits/${trigger['parameters']['gitRef']}\"}\u003e View ${trigger['parameters']['gitRef']}\u003c/a\u003e\n",
+      "instructions": "This is a buddy check. It requires user approval for the pipeline to continue.\n\nThis pipeline will deploy \u003cb\u003e${ trigger['parameters']['gitRef'] }\u003c/b\u003e\n\n\u003ca href=${ trigger['parameters']['gitRef'] == \"master\" || trigger['parameters']['gitRef'] == \"main\" ? \"https://github.com/zendesk/ml-training-pipelines\" : trigger['parameters']['gitRef'] matches \"v(\\d+)[\\.\\d+]*\" ? \"https://github.com/zendesk/ml-training-pipelines/releases/${trigger['parameters']['gitRef']}\" : \"https://github.com/zendesk/ml-training-pipelines/commits/${trigger['parameters']['gitRef']}\"}\u003e View ${trigger['parameters']['gitRef']}\u003c/a\u003e\n",
       "name": "Buddy",
       "notifications": [],
       "refId": "buddy",
@@ -146,8 +146,8 @@
       "type": "buddy"
     },
     {
-      "application": "default-bootstrap-project",
-      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Adefault-bootstrap-project%2Ckube_cluster_name%3Apod15\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "application": "ml-training-pipelines",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Aml-training-pipelines%2Ckube_cluster_name%3Apod15\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,
@@ -167,8 +167,8 @@
       "waitForCompletion": true
     },
     {
-      "application": "default-bootstrap-project",
-      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Adefault-bootstrap-project%2Ckube_cluster_name%3Apod27\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "application": "ml-training-pipelines",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Aml-training-pipelines%2Ckube_cluster_name%3Apod27\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,
@@ -268,8 +268,8 @@
       "type": "manualJudgment"
     },
     {
-      "application": "default-bootstrap-project",
-      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Adefault-bootstrap-project%2Ckube_cluster_name%3Apod19\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "application": "ml-training-pipelines",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Aml-training-pipelines%2Ckube_cluster_name%3Apod19\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,
@@ -289,8 +289,8 @@
       "waitForCompletion": true
     },
     {
-      "application": "default-bootstrap-project",
-      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Adefault-bootstrap-project%2Ckube_cluster_name%3Apod25\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "application": "ml-training-pipelines",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Aml-training-pipelines%2Ckube_cluster_name%3Apod25\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,
@@ -390,8 +390,8 @@
       "type": "manualJudgment"
     },
     {
-      "application": "default-bootstrap-project",
-      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://app.datadoghq.eu/orchestration/overview/deployment?tags=kube_app_name%3Adefault-bootstrap-project%2Ckube_cluster_name%3Apod18\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "application": "ml-training-pipelines",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://app.datadoghq.eu/orchestration/overview/deployment?tags=kube_app_name%3Aml-training-pipelines%2Ckube_cluster_name%3Apod18\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,
@@ -411,8 +411,8 @@
       "waitForCompletion": true
     },
     {
-      "application": "default-bootstrap-project",
-      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Adefault-bootstrap-project%2Ckube_cluster_name%3Apod20\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "application": "ml-training-pipelines",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Aml-training-pipelines%2Ckube_cluster_name%3Apod20\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,
@@ -432,8 +432,8 @@
       "waitForCompletion": true
     },
     {
-      "application": "default-bootstrap-project",
-      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://app.datadoghq.eu/orchestration/overview/deployment?tags=kube_app_name%3Adefault-bootstrap-project%2Ckube_cluster_name%3Apod29\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "application": "ml-training-pipelines",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://app.datadoghq.eu/orchestration/overview/deployment?tags=kube_app_name%3Aml-training-pipelines%2Ckube_cluster_name%3Apod29\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,
@@ -535,8 +535,8 @@
       "type": "manualJudgment"
     },
     {
-      "application": "default-bootstrap-project",
-      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Adefault-bootstrap-project%2Ckube_cluster_name%3Apod13\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "application": "ml-training-pipelines",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Aml-training-pipelines%2Ckube_cluster_name%3Apod13\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,
@@ -556,8 +556,8 @@
       "waitForCompletion": true
     },
     {
-      "application": "default-bootstrap-project",
-      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://app.datadoghq.eu/orchestration/overview/deployment?tags=kube_app_name%3Adefault-bootstrap-project%2Ckube_cluster_name%3Apod17\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "application": "ml-training-pipelines",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://app.datadoghq.eu/orchestration/overview/deployment?tags=kube_app_name%3Aml-training-pipelines%2Ckube_cluster_name%3Apod17\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,
@@ -577,8 +577,8 @@
       "waitForCompletion": true
     },
     {
-      "application": "default-bootstrap-project",
-      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Adefault-bootstrap-project%2Ckube_cluster_name%3Apod23\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "application": "ml-training-pipelines",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Aml-training-pipelines%2Ckube_cluster_name%3Apod23\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,
@@ -598,8 +598,8 @@
       "waitForCompletion": true
     },
     {
-      "application": "default-bootstrap-project",
-      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://app.datadoghq.eu/orchestration/overview/deployment?tags=kube_app_name%3Adefault-bootstrap-project%2Ckube_cluster_name%3Apod28\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "application": "ml-training-pipelines",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://app.datadoghq.eu/orchestration/overview/deployment?tags=kube_app_name%3Aml-training-pipelines%2Ckube_cluster_name%3Apod28\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,

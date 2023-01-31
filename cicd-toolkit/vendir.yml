@@ -1,35 +1,21 @@
-# ------------------------------------------------------------------------------------------------------------
-# NOTE: THIS FILE WAS GENERATED ON INITIAL BOOTSTRAP by https://github.com/zendesk/cicd-toolkit
-#
-# MANUALLY CHANGING THIS FILE IS ALLOWED, BUT POTENTIALLY MAKES UPGRADES MORE DIFFICULT.
-# ------------------------------------------------------------------------------------------------------------
-# vendir configuration
-#
-# This config manages which version of cicd-toolkit your project is using
-# and which shared config files, that you're pulling into the project.
-#
 apiVersion: vendir.k14s.io/v1alpha1
-kind: Config
 directories:
-- path: vendor
-  contents:
-  - path: cicd-toolkit
-    git:
-      url: https://github.com/zendesk/cicd-toolkit
-      ref: master
+- contents:
+  - git:
       depth: 1
+      ref: v8.222.1
+      url: https://github.com/zendesk/cicd-toolkit
     includePaths:
     - jsonnet/**/*
-- path: vendor/github.com
-  contents:
-  # Pull in shared environment variable groups, from config-service-data repo.
-  #
-  # After an update of this file, either run `vendir sync -d vendor/github.com/zendesk/config-service-data`, or `./scripts/self-update.sh` to update
-  # the cicd-toolkit upstream version, and write out the required boilerplate for consuming the new configurations.
-  - path: zendesk/config-service-data
-    git:
-      url: https://github.com/zendesk/config-service-data
+    path: cicd-toolkit
+  path: vendor
+- contents:
+  - git:
       ref: master
+      url: https://github.com/zendesk/config-service-data
     includePaths:
     - data/shared_env_groups/statsd_kubernetes.json
     - data/shared_env_groups/zendesk_pod_id.json
+    path: zendesk/config-service-data
+  path: vendor/github.com
+kind: Config

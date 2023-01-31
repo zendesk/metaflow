@@ -1,0 +1,9 @@
+version: "1.0"
+name: service-name
+team: team-name
+product: product-name
+description: some-description
+
+ecrRepositories:
+  - type: dev
+  - type: prod
