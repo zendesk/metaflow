@@ -14,4 +14,12 @@ directories:
       sha: d377a7e1682e5b1b087478ebc2010695d982d7ef
     path: zendesk/config-service-data
   path: vendor/github.com
+- contents:
+  - git:
+      commitTitle: bump version to 2.3.5
+      sha: e4d7b543e67d524abe23051e19e6a833ff638393
+      tags:
+      - v2.3.5
+    path: Netflix/metaflow-service
+  path: vendor/netflix
 kind: LockConfig
