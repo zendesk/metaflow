@@ -3,7 +3,8 @@ ADD /cicd-toolkit/vendor/netflix/Netflix/metaflow-service/services/__init__.py /
 ADD /cicd-toolkit/vendor/netflix/Netflix/metaflow-service/services/data /root/services/data
 ADD /cicd-toolkit/vendor/netflix/Netflix/metaflow-service/services/utils /root/services/utils
 ADD /cicd-toolkit/vendor/netflix/Netflix/metaflow-service/services/metadata_service /root/services/metadata_service
-ADD /cicd-toolkit/vendor/netflix/Netflix/metaflow-service/setup.py setup.cfg /root/
+ADD /cicd-toolkit/vendor/netflix/Netflix/metaflow-service/setup.py /root/
+ADD /cicd-toolkit/vendor/netflix/Netflix/metaflow-service/setup.cfg /root/
 WORKDIR /root
 RUN pip install --editable .
 CMD metadata_service
