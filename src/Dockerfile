@@ -1,5 +1,6 @@
 FROM python:3.7
 WORKDIR /build
+RUN ls
 ADD /vendor/netflix/Netflix/metaflow-service/services/__init__.py /root/services/
 ADD /vendor/netflix/Netflix/metaflow-service/services/data /root/services/data
 ADD /vendor/netflix/Netflix/metaflow-service/services/utils /root/services/utils
