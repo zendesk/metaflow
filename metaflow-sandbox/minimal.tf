@@ -80,6 +80,8 @@ module "metaflow" {
   vpc_id                = module.vpc.vpc_id
   with_public_ip        = "false"
 
+  metadata_service_container_image = "netflixoss/metaflow_metadata_service"
+
   tags = {
     "managedBy" = "terraform"
   }
