@@ -1,0 +1,4448 @@
+[0m# module.metaflow.module.metaflow-step-functions.data.aws_caller_identity.current:
+data "aws_caller_identity" "current" {
+    [1m[0maccount_id[0m[0m = "794874039740"
+    [1m[0marn[0m[0m        = "arn:aws:sts::794874039740:assumed-role/atlantis-role-trisolaris/1676590479435095000"
+    [1m[0mid[0m[0m         = "794874039740"
+    [1m[0muser_id[0m[0m    = "AROA3SERPJW6MSURX5RNN:1676590479435095000"
+}
+
+# module.metaflow.module.metaflow-step-functions.data.aws_iam_policy_document.eventbridge_assume_role_policy:
+data "aws_iam_policy_document" "eventbridge_assume_role_policy" {
+    [1m[0mid[0m[0m      = "2423734833"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "sts:AssumeRole"
+                    Effect    = "Allow"
+                    Principal = {
+                        Service = "events.amazonaws.com"
+                    }
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "sts:AssumeRole",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = []
+
+        principals {
+            [1m[0midentifiers[0m[0m = [
+                "events.amazonaws.com",
+            ]
+            [1m[0mtype[0m[0m        = "Service"
+        }
+    }
+}
+
+# module.metaflow.module.metaflow-step-functions.data.aws_iam_policy_document.eventbridge_step_functions_policy:
+data "aws_iam_policy_document" "eventbridge_step_functions_policy" {
+    [1m[0mid[0m[0m      = "3279905768"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = "states:StartExecution"
+                    Effect   = "Allow"
+                    Resource = "arn:aws:states:ap-southeast-2:794874039740:stateMachine:*"
+                    Sid      = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "states:StartExecution",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "arn:aws:states:ap-southeast-2:794874039740:stateMachine:*",
+        ]
+    }
+}
+
+# module.metaflow.module.metaflow-step-functions.data.aws_iam_policy_document.step_functions_assume_role_policy:
+data "aws_iam_policy_document" "step_functions_assume_role_policy" {
+    [1m[0mid[0m[0m      = "2478221018"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "sts:AssumeRole"
+                    Effect    = "Allow"
+                    Principal = {
+                        Service = "states.amazonaws.com"
+                    }
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "sts:AssumeRole",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = []
+
+        principals {
+            [1m[0midentifiers[0m[0m = [
+                "states.amazonaws.com",
+            ]
+            [1m[0mtype[0m[0m        = "Service"
+        }
+    }
+}
+
+# module.metaflow.module.metaflow-step-functions.data.aws_iam_policy_document.step_functions_batch_policy:
+data "aws_iam_policy_document" "step_functions_batch_policy" {
+    [1m[0mid[0m[0m      = "2819860028"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "batch:TerminateJob",
+                        "batch:RegisterJobDefinition",
+                        "batch:DescribeJobs",
+                        "batch:DescribeJobQueues",
+                        "batch:DescribeJobDefinitions",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "*"
+                    Sid      = ""
+                },
+                {
+                    Action   = "batch:SubmitJob"
+                    Effect   = "Allow"
+                    Resource = [
+                        "arn:aws:batch:ap-southeast-2:794874039740:job-queue/metaflow-q1lkynmm",
+                        "arn:aws:batch:ap-southeast-2:794874039740:job-definition/*",
+                    ]
+                    Sid      = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "batch:DescribeJobDefinitions",
+            "batch:DescribeJobQueues",
+            "batch:DescribeJobs",
+            "batch:RegisterJobDefinition",
+            "batch:TerminateJob",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "*",
+        ]
+    }
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "batch:SubmitJob",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "arn:aws:batch:ap-southeast-2:794874039740:job-definition/*",
+            "arn:aws:batch:ap-southeast-2:794874039740:job-queue/metaflow-q1lkynmm",
+        ]
+    }
+}
+
+# module.metaflow.module.metaflow-step-functions.data.aws_iam_policy_document.step_functions_cloudwatch:
+data "aws_iam_policy_document" "step_functions_cloudwatch" {
+    [1m[0mid[0m[0m      = "3460840654"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "logs:UpdateLogDelivery",
+                        "logs:PutResourcePolicy",
+                        "logs:ListLogDeliveries",
+                        "logs:GetLogDelivery",
+                        "logs:DescribeResourcePolicies",
+                        "logs:DescribeLogGroups",
+                        "logs:DeleteLogDelivery",
+                        "logs:CreateLogDelivery",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "*"
+                    Sid      = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "logs:CreateLogDelivery",
+            "logs:DeleteLogDelivery",
+            "logs:DescribeLogGroups",
+            "logs:DescribeResourcePolicies",
+            "logs:GetLogDelivery",
+            "logs:ListLogDeliveries",
+            "logs:PutResourcePolicy",
+            "logs:UpdateLogDelivery",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "*",
+        ]
+    }
+}
+
+# module.metaflow.module.metaflow-step-functions.data.aws_iam_policy_document.step_functions_dynamodb:
+data "aws_iam_policy_document" "step_functions_dynamodb" {
+    [1m[0mid[0m[0m      = "1066609871"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "dynamodb:UpdateItem",
+                        "dynamodb:PutItem",
+                        "dynamodb:GetItem",
+                    ]
+                    Effect   = "Allow"
+                    Resource = ""
+                    Sid      = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "dynamodb:GetItem",
+            "dynamodb:PutItem",
+            "dynamodb:UpdateItem",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "",
+        ]
+    }
+}
+
+# module.metaflow.module.metaflow-step-functions.data.aws_iam_policy_document.step_functions_eventbridge:
+data "aws_iam_policy_document" "step_functions_eventbridge" {
+    [1m[0mid[0m[0m      = "2504280387"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "events:PutTargets",
+                        "events:DescribeRule",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "arn:aws:events:ap-southeast-2:794874039740:rule/StepFunctionsGetEventsForBatchJobsRule"
+                    Sid      = ""
+                },
+                {
+                    Action    = "events:PutRule"
+                    Condition = {
+                        StringEquals = {
+                            "events:detail-type" = "Batch Job State Change"
+                        }
+                    }
+                    Effect    = "Allow"
+                    Resource  = "arn:aws:events:ap-southeast-2:794874039740:rule/StepFunctionsGetEventsForBatchJobsRule"
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "events:DescribeRule",
+            "events:PutTargets",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "arn:aws:events:ap-southeast-2:794874039740:rule/StepFunctionsGetEventsForBatchJobsRule",
+        ]
+    }
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "events:PutRule",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "arn:aws:events:ap-southeast-2:794874039740:rule/StepFunctionsGetEventsForBatchJobsRule",
+        ]
+
+        condition {
+            [1m[0mtest[0m[0m     = "StringEquals"
+            [1m[0mvalues[0m[0m   = [
+                "Batch Job State Change",
+            ]
+            [1m[0mvariable[0m[0m = "events:detail-type"
+        }
+    }
+}
+
+# module.metaflow.module.metaflow-step-functions.data.aws_iam_policy_document.step_functions_s3:
+data "aws_iam_policy_document" "step_functions_s3" {
+    [1m[0mid[0m[0m      = "3184840052"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = "s3:ListBucket"
+                    Effect   = "Allow"
+                    Resource = "arn:aws:s3:::metaflow-s3-q1lkynmm"
+                    Sid      = ""
+                },
+                {
+                    Action   = "s3:*Object"
+                    Effect   = "Allow"
+                    Resource = [
+                        "arn:aws:s3:::metaflow-s3-q1lkynmm/*",
+                        "arn:aws:s3:::metaflow-s3-q1lkynmm",
+                    ]
+                    Sid      = ""
+                },
+                {
+                    Action   = "kms:Decrypt"
+                    Effect   = "Allow"
+                    Resource = "arn:aws:kms:ap-southeast-2:794874039740:key/85aa9de8-1abf-4dab-a785-019a5a8b2c71"
+                    Sid      = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "s3:ListBucket",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "arn:aws:s3:::metaflow-s3-q1lkynmm",
+        ]
+    }
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "s3:*Object",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "arn:aws:s3:::metaflow-s3-q1lkynmm",
+            "arn:aws:s3:::metaflow-s3-q1lkynmm/*",
+        ]
+    }
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "kms:Decrypt",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "arn:aws:kms:ap-southeast-2:794874039740:key/85aa9de8-1abf-4dab-a785-019a5a8b2c71",
+        ]
+    }
+}
+
+# module.metaflow.module.metaflow-step-functions.data.aws_region.current:
+data "aws_region" "current" {
+    [1m[0mdescription[0m[0m = "Asia Pacific (Sydney)"
+    [1m[0mendpoint[0m[0m    = "ec2.ap-southeast-2.amazonaws.com"
+    [1m[0mid[0m[0m          = "ap-southeast-2"
+    [1m[0mname[0m[0m        = "ap-southeast-2"
+}
+
+
+# module.vpc.aws_eip.nat[0]:
+resource "aws_eip" "nat" {
+    [1m[0mallocation_id[0m[0m        = "eipalloc-0688401af094449a3"
+    [1m[0massociation_id[0m[0m       = "eipassoc-0b79ef52d84b1e374"
+    [1m[0mdomain[0m[0m               = "vpc"
+    [1m[0mid[0m[0m                   = "eipalloc-0688401af094449a3"
+    [1m[0mnetwork_border_group[0m[0m = "ap-southeast-2"
+    [1m[0mnetwork_interface[0m[0m    = "eni-0c4e7a8586ccb41b2"
+    [1m[0mprivate_dns[0m[0m          = "ip-10-10-130-83.ap-southeast-2.compute.internal"
+    [1m[0mprivate_ip[0m[0m           = "10.10.130.83"
+    [1m[0mpublic_dns[0m[0m           = "ec2-13-211-19-5.ap-southeast-2.compute.amazonaws.com"
+    [1m[0mpublic_ip[0m[0m            = "13.211.19.5"
+    [1m[0mpublic_ipv4_pool[0m[0m     = "amazon"
+    [1m[0mtags[0m[0m                 = {
+        "Name" = "metaflow-q1lkynmm-ap-southeast-2a"
+    }
+    [1m[0mtags_all[0m[0m             = {
+        "Name"                  = "metaflow-q1lkynmm-ap-southeast-2a"
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mvpc[0m[0m                  = true
+}
+
+# module.vpc.aws_internet_gateway.this[0]:
+resource "aws_internet_gateway" "this" {
+    [1m[0marn[0m[0m      = "arn:aws:ec2:ap-southeast-2:794874039740:internet-gateway/igw-0fe8557f5a8556708"
+    [1m[0mid[0m[0m       = "igw-0fe8557f5a8556708"
+    [1m[0mowner_id[0m[0m = "794874039740"
+    [1m[0mtags[0m[0m     = {
+        "Name" = "metaflow-q1lkynmm"
+    }
+    [1m[0mtags_all[0m[0m = {
+        "Name"                  = "metaflow-q1lkynmm"
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mvpc_id[0m[0m   = "vpc-0d593e7740dd43cb4"
+}
+
+# module.vpc.aws_nat_gateway.this[0]:
+resource "aws_nat_gateway" "this" {
+    [1m[0mallocation_id[0m[0m        = "eipalloc-0688401af094449a3"
+    [1m[0mconnectivity_type[0m[0m    = "public"
+    [1m[0mid[0m[0m                   = "nat-05e2d6eafb068a55f"
+    [1m[0mnetwork_interface_id[0m[0m = "eni-0c4e7a8586ccb41b2"
+    [1m[0mprivate_ip[0m[0m           = "10.10.130.83"
+    [1m[0mpublic_ip[0m[0m            = "13.211.19.5"
+    [1m[0msubnet_id[0m[0m            = "subnet-0bec9f6877b7c21dc"
+    [1m[0mtags[0m[0m                 = {
+        "Name" = "metaflow-q1lkynmm-ap-southeast-2a"
+    }
+    [1m[0mtags_all[0m[0m             = {
+        "Name"                  = "metaflow-q1lkynmm-ap-southeast-2a"
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+}
+
+# module.vpc.aws_route.private_nat_gateway[0]:
+resource "aws_route" "private_nat_gateway" {
+    [1m[0mdestination_cidr_block[0m[0m = "0.0.0.0/0"
+    [1m[0mid[0m[0m                     = "r-rtb-0f742afe8d508b2161080289494"
+    [1m[0mnat_gateway_id[0m[0m         = "nat-05e2d6eafb068a55f"
+    [1m[0morigin[0m[0m                 = "CreateRoute"
+    [1m[0mroute_table_id[0m[0m         = "rtb-0f742afe8d508b216"
+    [1m[0mstate[0m[0m                  = "active"
+
+    timeouts {
+        [1m[0mcreate[0m[0m = "5m"
+    }
+}
+
+# module.vpc.aws_route.public_internet_gateway[0]:
+resource "aws_route" "public_internet_gateway" {
+    [1m[0mdestination_cidr_block[0m[0m = "0.0.0.0/0"
+    [1m[0mgateway_id[0m[0m             = "igw-0fe8557f5a8556708"
+    [1m[0mid[0m[0m                     = "r-rtb-0b9a4605d825e97b11080289494"
+    [1m[0morigin[0m[0m                 = "CreateRoute"
+    [1m[0mroute_table_id[0m[0m         = "rtb-0b9a4605d825e97b1"
+    [1m[0mstate[0m[0m                  = "active"
+
+    timeouts {
+        [1m[0mcreate[0m[0m = "5m"
+    }
+}
+
+# module.vpc.aws_route_table.private[0]:
+resource "aws_route_table" "private" {
+    [1m[0marn[0m[0m              = "arn:aws:ec2:ap-southeast-2:794874039740:route-table/rtb-0f742afe8d508b216"
+    [1m[0mid[0m[0m               = "rtb-0f742afe8d508b216"
+    [1m[0mowner_id[0m[0m         = "794874039740"
+    [1m[0mpropagating_vgws[0m[0m = []
+    [1m[0mroute[0m[0m            = [
+        {
+            carrier_gateway_id         = ""
+            cidr_block                 = "0.0.0.0/0"
+            destination_prefix_list_id = ""
+            egress_only_gateway_id     = ""
+            gateway_id                 = ""
+            instance_id                = ""
+            ipv6_cidr_block            = ""
+            local_gateway_id           = ""
+            nat_gateway_id             = "nat-05e2d6eafb068a55f"
+            network_interface_id       = ""
+            transit_gateway_id         = ""
+            vpc_endpoint_id            = ""
+            vpc_peering_connection_id  = ""
+        },
+    ]
+    [1m[0mtags[0m[0m             = {
+        "Name" = "metaflow-q1lkynmm-private"
+    }
+    [1m[0mtags_all[0m[0m         = {
+        "Name"                  = "metaflow-q1lkynmm-private"
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mvpc_id[0m[0m           = "vpc-0d593e7740dd43cb4"
+}
+
+# module.vpc.aws_route_table.public[0]:
+resource "aws_route_table" "public" {
+    [1m[0marn[0m[0m              = "arn:aws:ec2:ap-southeast-2:794874039740:route-table/rtb-0b9a4605d825e97b1"
+    [1m[0mid[0m[0m               = "rtb-0b9a4605d825e97b1"
+    [1m[0mowner_id[0m[0m         = "794874039740"
+    [1m[0mpropagating_vgws[0m[0m = []
+    [1m[0mroute[0m[0m            = [
+        {
+            carrier_gateway_id         = ""
+            cidr_block                 = "0.0.0.0/0"
+            destination_prefix_list_id = ""
+            egress_only_gateway_id     = ""
+            gateway_id                 = "igw-0fe8557f5a8556708"
+            instance_id                = ""
+            ipv6_cidr_block            = ""
+            local_gateway_id           = ""
+            nat_gateway_id             = ""
+            network_interface_id       = ""
+            transit_gateway_id         = ""
+            vpc_endpoint_id            = ""
+            vpc_peering_connection_id  = ""
+        },
+    ]
+    [1m[0mtags[0m[0m             = {
+        "Name" = "metaflow-q1lkynmm-public"
+    }
+    [1m[0mtags_all[0m[0m         = {
+        "Name"                  = "metaflow-q1lkynmm-public"
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mvpc_id[0m[0m           = "vpc-0d593e7740dd43cb4"
+}
+
+# module.vpc.aws_route_table_association.private[2]:
+resource "aws_route_table_association" "private" {
+    [1m[0mid[0m[0m             = "rtbassoc-090b2baefbd742c6a"
+    [1m[0mroute_table_id[0m[0m = "rtb-0f742afe8d508b216"
+    [1m[0msubnet_id[0m[0m      = "subnet-02f22e1be3a40904a"
+}
+
+# module.vpc.aws_route_table_association.private[0]:
+resource "aws_route_table_association" "private" {
+    [1m[0mid[0m[0m             = "rtbassoc-06955c4d269065846"
+    [1m[0mroute_table_id[0m[0m = "rtb-0f742afe8d508b216"
+    [1m[0msubnet_id[0m[0m      = "subnet-0b8ba1fd4533555c9"
+}
+
+# module.vpc.aws_route_table_association.private[1]:
+resource "aws_route_table_association" "private" {
+    [1m[0mid[0m[0m             = "rtbassoc-02e3b8bd37b58f30d"
+    [1m[0mroute_table_id[0m[0m = "rtb-0f742afe8d508b216"
+    [1m[0msubnet_id[0m[0m      = "subnet-0e7cab9d93dd51435"
+}
+
+# module.vpc.aws_route_table_association.public[0]:
+resource "aws_route_table_association" "public" {
+    [1m[0mid[0m[0m             = "rtbassoc-0b24ab8fe3a53d605"
+    [1m[0mroute_table_id[0m[0m = "rtb-0b9a4605d825e97b1"
+    [1m[0msubnet_id[0m[0m      = "subnet-0bec9f6877b7c21dc"
+}
+
+# module.vpc.aws_route_table_association.public[1]:
+resource "aws_route_table_association" "public" {
+    [1m[0mid[0m[0m             = "rtbassoc-0f3ed4e6998d343ea"
+    [1m[0mroute_table_id[0m[0m = "rtb-0b9a4605d825e97b1"
+    [1m[0msubnet_id[0m[0m      = "subnet-0878ad52456311c33"
+}
+
+# module.vpc.aws_route_table_association.public[2]:
+resource "aws_route_table_association" "public" {
+    [1m[0mid[0m[0m             = "rtbassoc-0a6f0b7a80aea27a5"
+    [1m[0mroute_table_id[0m[0m = "rtb-0b9a4605d825e97b1"
+    [1m[0msubnet_id[0m[0m      = "subnet-0082121c86188c05d"
+}
+
+# module.vpc.aws_subnet.private[0]:
+resource "aws_subnet" "private" {
+    [1m[0marn[0m[0m                                            = "arn:aws:ec2:ap-southeast-2:794874039740:subnet/subnet-0b8ba1fd4533555c9"
+    [1m[0massign_ipv6_address_on_creation[0m[0m                = false
+    [1m[0mavailability_zone[0m[0m                              = "ap-southeast-2a"
+    [1m[0mavailability_zone_id[0m[0m                           = "apse2-az3"
+    [1m[0mcidr_block[0m[0m                                     = "10.10.8.0/21"
+    [1m[0menable_dns64[0m[0m                                   = false
+    [1m[0menable_resource_name_dns_a_record_on_launch[0m[0m    = false
+    [1m[0menable_resource_name_dns_aaaa_record_on_launch[0m[0m = false
+    [1m[0mid[0m[0m                                             = "subnet-0b8ba1fd4533555c9"
+    [1m[0mipv6_native[0m[0m                                    = false
+    [1m[0mmap_customer_owned_ip_on_launch[0m[0m                = false
+    [1m[0mmap_public_ip_on_launch[0m[0m                        = false
+    [1m[0mowner_id[0m[0m                                       = "794874039740"
+    [1m[0mprivate_dns_hostname_type_on_launch[0m[0m            = "ip-name"
+    [1m[0mtags[0m[0m                                           = {
+        "Name" = "metaflow-q1lkynmm-private-ap-southeast-2a"
+    }
+    [1m[0mtags_all[0m[0m                                       = {
+        "Name"                  = "metaflow-q1lkynmm-private-ap-southeast-2a"
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mvpc_id[0m[0m                                         = "vpc-0d593e7740dd43cb4"
+}
+
+# module.vpc.aws_subnet.private[1]:
+resource "aws_subnet" "private" {
+    [1m[0marn[0m[0m                                            = "arn:aws:ec2:ap-southeast-2:794874039740:subnet/subnet-0e7cab9d93dd51435"
+    [1m[0massign_ipv6_address_on_creation[0m[0m                = false
+    [1m[0mavailability_zone[0m[0m                              = "ap-southeast-2b"
+    [1m[0mavailability_zone_id[0m[0m                           = "apse2-az1"
+    [1m[0mcidr_block[0m[0m                                     = "10.10.16.0/21"
+    [1m[0menable_dns64[0m[0m                                   = false
+    [1m[0menable_resource_name_dns_a_record_on_launch[0m[0m    = false
+    [1m[0menable_resource_name_dns_aaaa_record_on_launch[0m[0m = false
+    [1m[0mid[0m[0m                                             = "subnet-0e7cab9d93dd51435"
+    [1m[0mipv6_native[0m[0m                                    = false
+    [1m[0mmap_customer_owned_ip_on_launch[0m[0m                = false
+    [1m[0mmap_public_ip_on_launch[0m[0m                        = false
+    [1m[0mowner_id[0m[0m                                       = "794874039740"
+    [1m[0mprivate_dns_hostname_type_on_launch[0m[0m            = "ip-name"
+    [1m[0mtags[0m[0m                                           = {
+        "Name" = "metaflow-q1lkynmm-private-ap-southeast-2b"
+    }
+    [1m[0mtags_all[0m[0m                                       = {
+        "Name"                  = "metaflow-q1lkynmm-private-ap-southeast-2b"
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mvpc_id[0m[0m                                         = "vpc-0d593e7740dd43cb4"
+}
+
+# module.vpc.aws_subnet.private[2]:
+resource "aws_subnet" "private" {
+    [1m[0marn[0m[0m                                            = "arn:aws:ec2:ap-southeast-2:794874039740:subnet/subnet-02f22e1be3a40904a"
+    [1m[0massign_ipv6_address_on_creation[0m[0m                = false
+    [1m[0mavailability_zone[0m[0m                              = "ap-southeast-2c"
+    [1m[0mavailability_zone_id[0m[0m                           = "apse2-az2"
+    [1m[0mcidr_block[0m[0m                                     = "10.10.24.0/21"
+    [1m[0menable_dns64[0m[0m                                   = false
+    [1m[0menable_resource_name_dns_a_record_on_launch[0m[0m    = false
+    [1m[0menable_resource_name_dns_aaaa_record_on_launch[0m[0m = false
+    [1m[0mid[0m[0m                                             = "subnet-02f22e1be3a40904a"
+    [1m[0mipv6_native[0m[0m                                    = false
+    [1m[0mmap_customer_owned_ip_on_launch[0m[0m                = false
+    [1m[0mmap_public_ip_on_launch[0m[0m                        = false
+    [1m[0mowner_id[0m[0m                                       = "794874039740"
+    [1m[0mprivate_dns_hostname_type_on_launch[0m[0m            = "ip-name"
+    [1m[0mtags[0m[0m                                           = {
+        "Name" = "metaflow-q1lkynmm-private-ap-southeast-2c"
+    }
+    [1m[0mtags_all[0m[0m                                       = {
+        "Name"                  = "metaflow-q1lkynmm-private-ap-southeast-2c"
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mvpc_id[0m[0m                                         = "vpc-0d593e7740dd43cb4"
+}
+
+# module.vpc.aws_subnet.public[0]:
+resource "aws_subnet" "public" {
+    [1m[0marn[0m[0m                                            = "arn:aws:ec2:ap-southeast-2:794874039740:subnet/subnet-0bec9f6877b7c21dc"
+    [1m[0massign_ipv6_address_on_creation[0m[0m                = false
+    [1m[0mavailability_zone[0m[0m                              = "ap-southeast-2a"
+    [1m[0mavailability_zone_id[0m[0m                           = "apse2-az3"
+    [1m[0mcidr_block[0m[0m                                     = "10.10.128.0/21"
+    [1m[0menable_dns64[0m[0m                                   = false
+    [1m[0menable_resource_name_dns_a_record_on_launch[0m[0m    = false
+    [1m[0menable_resource_name_dns_aaaa_record_on_launch[0m[0m = false
+    [1m[0mid[0m[0m                                             = "subnet-0bec9f6877b7c21dc"
+    [1m[0mipv6_native[0m[0m                                    = false
+    [1m[0mmap_customer_owned_ip_on_launch[0m[0m                = false
+    [1m[0mmap_public_ip_on_launch[0m[0m                        = true
+    [1m[0mowner_id[0m[0m                                       = "794874039740"
+    [1m[0mprivate_dns_hostname_type_on_launch[0m[0m            = "ip-name"
+    [1m[0mtags[0m[0m                                           = {
+        "Name" = "metaflow-q1lkynmm-public-ap-southeast-2a"
+    }
+    [1m[0mtags_all[0m[0m                                       = {
+        "Name"                  = "metaflow-q1lkynmm-public-ap-southeast-2a"
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mvpc_id[0m[0m                                         = "vpc-0d593e7740dd43cb4"
+}
+
+# module.vpc.aws_subnet.public[1]:
+resource "aws_subnet" "public" {
+    [1m[0marn[0m[0m                                            = "arn:aws:ec2:ap-southeast-2:794874039740:subnet/subnet-0878ad52456311c33"
+    [1m[0massign_ipv6_address_on_creation[0m[0m                = false
+    [1m[0mavailability_zone[0m[0m                              = "ap-southeast-2b"
+    [1m[0mavailability_zone_id[0m[0m                           = "apse2-az1"
+    [1m[0mcidr_block[0m[0m                                     = "10.10.136.0/21"
+    [1m[0menable_dns64[0m[0m                                   = false
+    [1m[0menable_resource_name_dns_a_record_on_launch[0m[0m    = false
+    [1m[0menable_resource_name_dns_aaaa_record_on_launch[0m[0m = false
+    [1m[0mid[0m[0m                                             = "subnet-0878ad52456311c33"
+    [1m[0mipv6_native[0m[0m                                    = false
+    [1m[0mmap_customer_owned_ip_on_launch[0m[0m                = false
+    [1m[0mmap_public_ip_on_launch[0m[0m                        = true
+    [1m[0mowner_id[0m[0m                                       = "794874039740"
+    [1m[0mprivate_dns_hostname_type_on_launch[0m[0m            = "ip-name"
+    [1m[0mtags[0m[0m                                           = {
+        "Name" = "metaflow-q1lkynmm-public-ap-southeast-2b"
+    }
+    [1m[0mtags_all[0m[0m                                       = {
+        "Name"                  = "metaflow-q1lkynmm-public-ap-southeast-2b"
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mvpc_id[0m[0m                                         = "vpc-0d593e7740dd43cb4"
+}
+
+# module.vpc.aws_subnet.public[2]:
+resource "aws_subnet" "public" {
+    [1m[0marn[0m[0m                                            = "arn:aws:ec2:ap-southeast-2:794874039740:subnet/subnet-0082121c86188c05d"
+    [1m[0massign_ipv6_address_on_creation[0m[0m                = false
+    [1m[0mavailability_zone[0m[0m                              = "ap-southeast-2c"
+    [1m[0mavailability_zone_id[0m[0m                           = "apse2-az2"
+    [1m[0mcidr_block[0m[0m                                     = "10.10.144.0/21"
+    [1m[0menable_dns64[0m[0m                                   = false
+    [1m[0menable_resource_name_dns_a_record_on_launch[0m[0m    = false
+    [1m[0menable_resource_name_dns_aaaa_record_on_launch[0m[0m = false
+    [1m[0mid[0m[0m                                             = "subnet-0082121c86188c05d"
+    [1m[0mipv6_native[0m[0m                                    = false
+    [1m[0mmap_customer_owned_ip_on_launch[0m[0m                = false
+    [1m[0mmap_public_ip_on_launch[0m[0m                        = true
+    [1m[0mowner_id[0m[0m                                       = "794874039740"
+    [1m[0mprivate_dns_hostname_type_on_launch[0m[0m            = "ip-name"
+    [1m[0mtags[0m[0m                                           = {
+        "Name" = "metaflow-q1lkynmm-public-ap-southeast-2c"
+    }
+    [1m[0mtags_all[0m[0m                                       = {
+        "Name"                  = "metaflow-q1lkynmm-public-ap-southeast-2c"
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mvpc_id[0m[0m                                         = "vpc-0d593e7740dd43cb4"
+}
+
+# module.vpc.aws_vpc.this[0]:
+resource "aws_vpc" "this" {
+    [1m[0marn[0m[0m                              = "arn:aws:ec2:ap-southeast-2:794874039740:vpc/vpc-0d593e7740dd43cb4"
+    [1m[0massign_generated_ipv6_cidr_block[0m[0m = false
+    [1m[0mcidr_block[0m[0m                       = "10.10.0.0/16"
+    [1m[0mdefault_network_acl_id[0m[0m           = "acl-02b19cf1361fba424"
+    [1m[0mdefault_route_table_id[0m[0m           = "rtb-0f993431ca7c38845"
+    [1m[0mdefault_security_group_id[0m[0m        = "sg-05295bbbe5e866d5c"
+    [1m[0mdhcp_options_id[0m[0m                  = "dopt-543e6333"
+    [1m[0menable_classiclink[0m[0m               = false
+    [1m[0menable_classiclink_dns_support[0m[0m   = false
+    [1m[0menable_dns_hostnames[0m[0m             = true
+    [1m[0menable_dns_support[0m[0m               = true
+    [1m[0mid[0m[0m                               = "vpc-0d593e7740dd43cb4"
+    [1m[0minstance_tenancy[0m[0m                 = "default"
+    [1m[0mipv6_netmask_length[0m[0m              = 0
+    [1m[0mmain_route_table_id[0m[0m              = "rtb-0f993431ca7c38845"
+    [1m[0mowner_id[0m[0m                         = "794874039740"
+    [1m[0mtags[0m[0m                             = {
+        "Name" = "metaflow-q1lkynmm"
+    }
+    [1m[0mtags_all[0m[0m                         = {
+        "Name"                  = "metaflow-q1lkynmm"
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+}
+
+
+# data.aws_availability_zones.available:
+data "aws_availability_zones" "available" {
+    [1m[0mgroup_names[0m[0m = [
+        "ap-southeast-2",
+    ]
+    [1m[0mid[0m[0m          = "ap-southeast-2"
+    [1m[0mnames[0m[0m       = [
+        "ap-southeast-2a",
+        "ap-southeast-2b",
+        "ap-southeast-2c",
+    ]
+    [1m[0mzone_ids[0m[0m    = [
+        "apse2-az3",
+        "apse2-az1",
+        "apse2-az2",
+    ]
+}
+
+# local_file.metaflow_config:
+resource "local_file" "metaflow_config" {
+    [1m[0mcontent[0m[0m              = jsonencode(
+        {
+            METAFLOW_BATCH_JOB_QUEUE            = "arn:aws:batch:ap-southeast-2:794874039740:job-queue/metaflow-q1lkynmm"
+            METAFLOW_DATASTORE_SYSROOT_S3       = "s3://metaflow-s3-q1lkynmm/metaflow"
+            METAFLOW_DATATOOLS_S3ROOT           = "s3://metaflow-s3-q1lkynmm/data"
+            METAFLOW_DEFAULT_DATASTORE          = "s3"
+            METAFLOW_DEFAULT_METADATA           = "service"
+            METAFLOW_ECS_S3_ACCESS_IAM_ROLE     = "arn:aws:iam::794874039740:role/metaflow-batch_s3_task_role-q1lkynmm"
+            METAFLOW_EVENTS_SFN_ACCESS_IAM_ROLE = ""
+            METAFLOW_SERVICE_AUTH_KEY           = "## Replace with output from 'aws apigateway get-api-key --api-key zxt9z7k8of --include-value | grep value' ##"
+            METAFLOW_SERVICE_INTERNAL_URL       = "http://metaflow-nlb-q1lkynmm-f6ce26dfade3c9b8.elb.ap-southeast-2.amazonaws.com/"
+            METAFLOW_SERVICE_URL                = "https://n9y423tgzd.execute-api.ap-southeast-2.amazonaws.com/api/"
+            METAFLOW_SFN_DYNAMO_DB_TABLE        = ""
+            METAFLOW_SFN_IAM_ROLE               = ""
+            METAFLOW_SFN_STATE_MACHINE_PREFIX   = "metaflow-q1lkynmm"
+        }
+    )
+    [1m[0mdirectory_permission[0m[0m = "0777"
+    [1m[0mfile_permission[0m[0m      = "0777"
+    [1m[0mfilename[0m[0m             = "./metaflow_profile.json"
+    [1m[0mid[0m[0m                   = "786d7e96860726f5e1b5edeffb3717c6c67f739c"
+}
+
+# random_string.suffix:
+resource "random_string" "suffix" {
+    [1m[0mid[0m[0m          = "q1lkynmm"
+    [1m[0mlength[0m[0m      = 8
+    [1m[0mlower[0m[0m       = true
+    [1m[0mmin_lower[0m[0m   = 0
+    [1m[0mmin_numeric[0m[0m = 0
+    [1m[0mmin_special[0m[0m = 0
+    [1m[0mmin_upper[0m[0m   = 0
+    [1m[0mnumber[0m[0m      = true
+    [1m[0mnumeric[0m[0m     = true
+    [1m[0mresult[0m[0m      = "q1lkynmm"
+    [1m[0mspecial[0m[0m     = false
+    [1m[0mupper[0m[0m       = false
+}
+
+
+# module.metaflow.aws_iam_role.batch_s3_task_role:
+resource "aws_iam_role" "batch_s3_task_role" {
+    [1m[0marn[0m[0m                   = "arn:aws:iam::794874039740:role/metaflow-batch_s3_task_role-q1lkynmm"
+    [1m[0massume_role_policy[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "sts:AssumeRole"
+                    Effect    = "Allow"
+                    Principal = {
+                        Service = "ecs-tasks.amazonaws.com"
+                    }
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mcreate_date[0m[0m           = "2023-02-14T06:01:44Z"
+    [1m[0mdescription[0m[0m           = "Role for AWS Batch to Access Amazon S3 [METAFLOW_ECS_S3_ACCESS_IAM_ROLE]"
+    [1m[0mforce_detach_policies[0m[0m = false
+    [1m[0mid[0m[0m                    = "metaflow-batch_s3_task_role-q1lkynmm"
+    [1m[0mmanaged_policy_arns[0m[0m   = []
+    [1m[0mmax_session_duration[0m[0m  = 3600
+    [1m[0mname[0m[0m                  = "metaflow-batch_s3_task_role-q1lkynmm"
+    [1m[0mpath[0m[0m                  = "/"
+    [1m[0mtags[0m[0m                  = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m              = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0munique_id[0m[0m             = "AROA3SERPJW6E4GW4IH5T"
+
+    inline_policy {
+        [1m[0mname[0m[0m   = "cloudwatch"
+        [1m[0mpolicy[0m[0m = jsonencode(
+            {
+                Statement = [
+                    {
+                        Action   = [
+                            "logs:PutLogEvents",
+                            "logs:CreateLogStream",
+                        ]
+                        Effect   = "Allow"
+                        Resource = "*"
+                        Sid      = "AllowPutLogs"
+                    },
+                ]
+                Version   = "2012-10-17"
+            }
+        )
+    }
+    inline_policy {
+        [1m[0mname[0m[0m   = "custom_s3"
+        [1m[0mpolicy[0m[0m = jsonencode(
+            {
+                Statement = [
+                    {
+                        Action   = [
+                            "s3:PutObject",
+                            "s3:GetObject",
+                            "s3:DeleteObject",
+                        ]
+                        Effect   = "Allow"
+                        Resource = "arn:aws:s3:::metaflow-s3-q1lkynmm/*"
+                        Sid      = "ObjectAccessBatch"
+                    },
+                ]
+                Version   = "2012-10-17"
+            }
+        )
+    }
+    inline_policy {
+        [1m[0mname[0m[0m   = "deny_presigned"
+        [1m[0mpolicy[0m[0m = jsonencode(
+            {
+                Statement = [
+                    {
+                        Action    = "s3:*"
+                        Condition = {
+                            StringNotEquals = {
+                                "s3:authType" = "REST-HEADER"
+                            }
+                        }
+                        Effect    = "Deny"
+                        Resource  = "*"
+                        Sid       = "DenyPresignedBatch"
+                    },
+                ]
+                Version   = "2012-10-17"
+            }
+        )
+    }
+    inline_policy {
+        [1m[0mname[0m[0m   = "iam_pass_role"
+        [1m[0mpolicy[0m[0m = jsonencode(
+            {
+                Statement = [
+                    {
+                        Action    = "iam:PassRole"
+                        Condition = {
+                            StringEquals = {
+                                "iam:PassedToService" = "sagemaker.amazonaws.com"
+                            }
+                        }
+                        Effect    = "Allow"
+                        Resource  = "*"
+                        Sid       = "AllowPassRole"
+                    },
+                ]
+                Version   = "2012-10-17"
+            }
+        )
+    }
+    inline_policy {
+        [1m[0mname[0m[0m   = "s3_kms"
+        [1m[0mpolicy[0m[0m = jsonencode(
+            {
+                Statement = [
+                    {
+                        Action   = [
+                            "kms:GenerateDataKey",
+                            "kms:Encrypt",
+                            "kms:Decrypt",
+                        ]
+                        Effect   = "Allow"
+                        Resource = "arn:aws:kms:ap-southeast-2:794874039740:key/85aa9de8-1abf-4dab-a785-019a5a8b2c71"
+                        Sid      = ""
+                    },
+                ]
+                Version   = "2012-10-17"
+            }
+        )
+    }
+    inline_policy {
+        [1m[0mname[0m[0m   = "s3_list"
+        [1m[0mpolicy[0m[0m = jsonencode(
+            {
+                Statement = [
+                    {
+                        Action   = "s3:ListBucket"
+                        Effect   = "Allow"
+                        Resource = "arn:aws:s3:::metaflow-s3-q1lkynmm"
+                        Sid      = "BucketAccessBatch"
+                    },
+                ]
+                Version   = "2012-10-17"
+            }
+        )
+    }
+    inline_policy {
+        [1m[0mname[0m[0m   = "sagemaker"
+        [1m[0mpolicy[0m[0m = jsonencode(
+            {
+                Statement = [
+                    {
+                        Action   = "sagemaker:CreateTrainingJob"
+                        Effect   = "Allow"
+                        Resource = "arn:aws:sagemaker:ap-southeast-2:794874039740:training-job/*"
+                        Sid      = "AllowSagemakerCreate"
+                    },
+                    {
+                        Action   = "sagemaker:DescribeTrainingJob"
+                        Effect   = "Allow"
+                        Resource = "arn:aws:sagemaker:ap-southeast-2:794874039740:training-job/*"
+                        Sid      = "AllowSagemakerDescribe"
+                    },
+                    {
+                        Action   = [
+                            "sagemaker:InvokeEndpoint",
+                            "sagemaker:DescribeModel",
+                            "sagemaker:DescribeEndpoint",
+                            "sagemaker:CreateModel",
+                            "sagemaker:CreateEndpointConfig",
+                            "sagemaker:CreateEndpoint",
+                        ]
+                        Effect   = "Allow"
+                        Resource = [
+                            "arn:aws:sagemaker:ap-southeast-2:794874039740:model/*",
+                            "arn:aws:sagemaker:ap-southeast-2:794874039740:endpoint/*",
+                            "arn:aws:sagemaker:ap-southeast-2:794874039740:endpoint-config/*",
+                        ]
+                        Sid      = "AllowSagemakerDeploy"
+                    },
+                ]
+                Version   = "2012-10-17"
+            }
+        )
+    }
+}
+
+# module.metaflow.aws_iam_role_policy.grant_allow_sagemaker:
+resource "aws_iam_role_policy" "grant_allow_sagemaker" {
+    [1m[0mid[0m[0m     = "metaflow-batch_s3_task_role-q1lkynmm:sagemaker"
+    [1m[0mname[0m[0m   = "sagemaker"
+    [1m[0mpolicy[0m[0m = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = "sagemaker:CreateTrainingJob"
+                    Effect   = "Allow"
+                    Resource = "arn:aws:sagemaker:ap-southeast-2:794874039740:training-job/*"
+                    Sid      = "AllowSagemakerCreate"
+                },
+                {
+                    Action   = "sagemaker:DescribeTrainingJob"
+                    Effect   = "Allow"
+                    Resource = "arn:aws:sagemaker:ap-southeast-2:794874039740:training-job/*"
+                    Sid      = "AllowSagemakerDescribe"
+                },
+                {
+                    Action   = [
+                        "sagemaker:InvokeEndpoint",
+                        "sagemaker:DescribeModel",
+                        "sagemaker:DescribeEndpoint",
+                        "sagemaker:CreateModel",
+                        "sagemaker:CreateEndpointConfig",
+                        "sagemaker:CreateEndpoint",
+                    ]
+                    Effect   = "Allow"
+                    Resource = [
+                        "arn:aws:sagemaker:ap-southeast-2:794874039740:model/*",
+                        "arn:aws:sagemaker:ap-southeast-2:794874039740:endpoint/*",
+                        "arn:aws:sagemaker:ap-southeast-2:794874039740:endpoint-config/*",
+                    ]
+                    Sid      = "AllowSagemakerDeploy"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mrole[0m[0m   = "metaflow-batch_s3_task_role-q1lkynmm"
+}
+
+# module.metaflow.aws_iam_role_policy.grant_cloudwatch:
+resource "aws_iam_role_policy" "grant_cloudwatch" {
+    [1m[0mid[0m[0m     = "metaflow-batch_s3_task_role-q1lkynmm:cloudwatch"
+    [1m[0mname[0m[0m   = "cloudwatch"
+    [1m[0mpolicy[0m[0m = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "logs:PutLogEvents",
+                        "logs:CreateLogStream",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "*"
+                    Sid      = "AllowPutLogs"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mrole[0m[0m   = "metaflow-batch_s3_task_role-q1lkynmm"
+}
+
+# module.metaflow.aws_iam_role_policy.grant_custom_s3_batch:
+resource "aws_iam_role_policy" "grant_custom_s3_batch" {
+    [1m[0mid[0m[0m     = "metaflow-batch_s3_task_role-q1lkynmm:custom_s3"
+    [1m[0mname[0m[0m   = "custom_s3"
+    [1m[0mpolicy[0m[0m = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "s3:PutObject",
+                        "s3:GetObject",
+                        "s3:DeleteObject",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "arn:aws:s3:::metaflow-s3-q1lkynmm/*"
+                    Sid      = "ObjectAccessBatch"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mrole[0m[0m   = "metaflow-batch_s3_task_role-q1lkynmm"
+}
+
+# module.metaflow.aws_iam_role_policy.grant_custom_s3_list_batch:
+resource "aws_iam_role_policy" "grant_custom_s3_list_batch" {
+    [1m[0mid[0m[0m     = "metaflow-batch_s3_task_role-q1lkynmm:s3_list"
+    [1m[0mname[0m[0m   = "s3_list"
+    [1m[0mpolicy[0m[0m = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = "s3:ListBucket"
+                    Effect   = "Allow"
+                    Resource = "arn:aws:s3:::metaflow-s3-q1lkynmm"
+                    Sid      = "BucketAccessBatch"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mrole[0m[0m   = "metaflow-batch_s3_task_role-q1lkynmm"
+}
+
+# module.metaflow.aws_iam_role_policy.grant_deny_presigned_batch:
+resource "aws_iam_role_policy" "grant_deny_presigned_batch" {
+    [1m[0mid[0m[0m     = "metaflow-batch_s3_task_role-q1lkynmm:deny_presigned"
+    [1m[0mname[0m[0m   = "deny_presigned"
+    [1m[0mpolicy[0m[0m = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "s3:*"
+                    Condition = {
+                        StringNotEquals = {
+                            "s3:authType" = "REST-HEADER"
+                        }
+                    }
+                    Effect    = "Deny"
+                    Resource  = "*"
+                    Sid       = "DenyPresignedBatch"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mrole[0m[0m   = "metaflow-batch_s3_task_role-q1lkynmm"
+}
+
+# module.metaflow.aws_iam_role_policy.grant_iam_pass_role:
+resource "aws_iam_role_policy" "grant_iam_pass_role" {
+    [1m[0mid[0m[0m     = "metaflow-batch_s3_task_role-q1lkynmm:iam_pass_role"
+    [1m[0mname[0m[0m   = "iam_pass_role"
+    [1m[0mpolicy[0m[0m = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "iam:PassRole"
+                    Condition = {
+                        StringEquals = {
+                            "iam:PassedToService" = "sagemaker.amazonaws.com"
+                        }
+                    }
+                    Effect    = "Allow"
+                    Resource  = "*"
+                    Sid       = "AllowPassRole"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mrole[0m[0m   = "metaflow-batch_s3_task_role-q1lkynmm"
+}
+
+# module.metaflow.aws_iam_role_policy.grant_s3_kms:
+resource "aws_iam_role_policy" "grant_s3_kms" {
+    [1m[0mid[0m[0m     = "metaflow-batch_s3_task_role-q1lkynmm:s3_kms"
+    [1m[0mname[0m[0m   = "s3_kms"
+    [1m[0mpolicy[0m[0m = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "kms:GenerateDataKey",
+                        "kms:Encrypt",
+                        "kms:Decrypt",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "arn:aws:kms:ap-southeast-2:794874039740:key/85aa9de8-1abf-4dab-a785-019a5a8b2c71"
+                    Sid      = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mrole[0m[0m   = "metaflow-batch_s3_task_role-q1lkynmm"
+}
+
+# module.metaflow.data.aws_caller_identity.current:
+data "aws_caller_identity" "current" {
+    [1m[0maccount_id[0m[0m = "794874039740"
+    [1m[0marn[0m[0m        = "arn:aws:sts::794874039740:assumed-role/atlantis-role-trisolaris/1676590479435095000"
+    [1m[0mid[0m[0m         = "794874039740"
+    [1m[0muser_id[0m[0m    = "AROA3SERPJW6MSURX5RNN:1676590479435095000"
+}
+
+# module.metaflow.data.aws_iam_policy_document.allow_sagemaker:
+data "aws_iam_policy_document" "allow_sagemaker" {
+    [1m[0mid[0m[0m      = "1833419307"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = "sagemaker:CreateTrainingJob"
+                    Effect   = "Allow"
+                    Resource = "arn:aws:sagemaker:ap-southeast-2:794874039740:training-job/*"
+                    Sid      = "AllowSagemakerCreate"
+                },
+                {
+                    Action   = "sagemaker:DescribeTrainingJob"
+                    Effect   = "Allow"
+                    Resource = "arn:aws:sagemaker:ap-southeast-2:794874039740:training-job/*"
+                    Sid      = "AllowSagemakerDescribe"
+                },
+                {
+                    Action   = [
+                        "sagemaker:InvokeEndpoint",
+                        "sagemaker:DescribeModel",
+                        "sagemaker:DescribeEndpoint",
+                        "sagemaker:CreateModel",
+                        "sagemaker:CreateEndpointConfig",
+                        "sagemaker:CreateEndpoint",
+                    ]
+                    Effect   = "Allow"
+                    Resource = [
+                        "arn:aws:sagemaker:ap-southeast-2:794874039740:model/*",
+                        "arn:aws:sagemaker:ap-southeast-2:794874039740:endpoint/*",
+                        "arn:aws:sagemaker:ap-southeast-2:794874039740:endpoint-config/*",
+                    ]
+                    Sid      = "AllowSagemakerDeploy"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "sagemaker:CreateTrainingJob",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "arn:aws:sagemaker:ap-southeast-2:794874039740:training-job/*",
+        ]
+        [1m[0msid[0m[0m           = "AllowSagemakerCreate"
+    }
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "sagemaker:DescribeTrainingJob",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "arn:aws:sagemaker:ap-southeast-2:794874039740:training-job/*",
+        ]
+        [1m[0msid[0m[0m           = "AllowSagemakerDescribe"
+    }
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "sagemaker:CreateEndpoint",
+            "sagemaker:CreateEndpointConfig",
+            "sagemaker:CreateModel",
+            "sagemaker:DescribeEndpoint",
+            "sagemaker:DescribeModel",
+            "sagemaker:InvokeEndpoint",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "arn:aws:sagemaker:ap-southeast-2:794874039740:endpoint-config/*",
+            "arn:aws:sagemaker:ap-southeast-2:794874039740:endpoint/*",
+            "arn:aws:sagemaker:ap-southeast-2:794874039740:model/*",
+        ]
+        [1m[0msid[0m[0m           = "AllowSagemakerDeploy"
+    }
+}
+
+# module.metaflow.data.aws_iam_policy_document.batch_s3_task_role_assume_role:
+data "aws_iam_policy_document" "batch_s3_task_role_assume_role" {
+    [1m[0mid[0m[0m      = "320642683"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "sts:AssumeRole"
+                    Effect    = "Allow"
+                    Principal = {
+                        Service = "ecs-tasks.amazonaws.com"
+                    }
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "sts:AssumeRole",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = []
+
+        principals {
+            [1m[0midentifiers[0m[0m = [
+                "ecs-tasks.amazonaws.com",
+            ]
+            [1m[0mtype[0m[0m        = "Service"
+        }
+    }
+}
+
+# module.metaflow.data.aws_iam_policy_document.cloudwatch:
+data "aws_iam_policy_document" "cloudwatch" {
+    [1m[0mid[0m[0m      = "2969033355"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "logs:PutLogEvents",
+                        "logs:CreateLogStream",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "*"
+                    Sid      = "AllowPutLogs"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "logs:CreateLogStream",
+            "logs:PutLogEvents",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "*",
+        ]
+        [1m[0msid[0m[0m           = "AllowPutLogs"
+    }
+}
+
+# module.metaflow.data.aws_iam_policy_document.custom_s3_batch:
+data "aws_iam_policy_document" "custom_s3_batch" {
+    [1m[0mid[0m[0m      = "540242155"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "s3:PutObject",
+                        "s3:GetObject",
+                        "s3:DeleteObject",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "arn:aws:s3:::metaflow-s3-q1lkynmm/*"
+                    Sid      = "ObjectAccessBatch"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "s3:DeleteObject",
+            "s3:GetObject",
+            "s3:PutObject",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "arn:aws:s3:::metaflow-s3-q1lkynmm/*",
+        ]
+        [1m[0msid[0m[0m           = "ObjectAccessBatch"
+    }
+}
+
+# module.metaflow.data.aws_iam_policy_document.custom_s3_list_batch:
+data "aws_iam_policy_document" "custom_s3_list_batch" {
+    [1m[0mid[0m[0m      = "1287174954"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = "s3:ListBucket"
+                    Effect   = "Allow"
+                    Resource = "arn:aws:s3:::metaflow-s3-q1lkynmm"
+                    Sid      = "BucketAccessBatch"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "s3:ListBucket",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "arn:aws:s3:::metaflow-s3-q1lkynmm",
+        ]
+        [1m[0msid[0m[0m           = "BucketAccessBatch"
+    }
+}
+
+# module.metaflow.data.aws_iam_policy_document.deny_presigned_batch:
+data "aws_iam_policy_document" "deny_presigned_batch" {
+    [1m[0mid[0m[0m      = "1087333182"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "s3:*"
+                    Condition = {
+                        StringNotEquals = {
+                            "s3:authType" = "REST-HEADER"
+                        }
+                    }
+                    Effect    = "Deny"
+                    Resource  = "*"
+                    Sid       = "DenyPresignedBatch"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "s3:*",
+        ]
+        [1m[0meffect[0m[0m        = "Deny"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "*",
+        ]
+        [1m[0msid[0m[0m           = "DenyPresignedBatch"
+
+        condition {
+            [1m[0mtest[0m[0m     = "StringNotEquals"
+            [1m[0mvalues[0m[0m   = [
+                "REST-HEADER",
+            ]
+            [1m[0mvariable[0m[0m = "s3:authType"
+        }
+    }
+}
+
+# module.metaflow.data.aws_iam_policy_document.dynamodb:
+data "aws_iam_policy_document" "dynamodb" {
+    [1m[0mid[0m[0m      = "1114654658"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "dynamodb:UpdateItem",
+                        "dynamodb:PutItem",
+                        "dynamodb:GetItem",
+                    ]
+                    Effect   = "Allow"
+                    Resource = ""
+                    Sid      = "Items"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "dynamodb:GetItem",
+            "dynamodb:PutItem",
+            "dynamodb:UpdateItem",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "",
+        ]
+        [1m[0msid[0m[0m           = "Items"
+    }
+}
+
+# module.metaflow.data.aws_iam_policy_document.iam_pass_role:
+data "aws_iam_policy_document" "iam_pass_role" {
+    [1m[0mid[0m[0m      = "1925298741"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "iam:PassRole"
+                    Condition = {
+                        StringEquals = {
+                            "iam:PassedToService" = "sagemaker.amazonaws.com"
+                        }
+                    }
+                    Effect    = "Allow"
+                    Resource  = "*"
+                    Sid       = "AllowPassRole"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "iam:PassRole",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "*",
+        ]
+        [1m[0msid[0m[0m           = "AllowPassRole"
+
+        condition {
+            [1m[0mtest[0m[0m     = "StringEquals"
+            [1m[0mvalues[0m[0m   = [
+                "sagemaker.amazonaws.com",
+            ]
+            [1m[0mvariable[0m[0m = "iam:PassedToService"
+        }
+    }
+}
+
+# module.metaflow.data.aws_iam_policy_document.s3_kms:
+data "aws_iam_policy_document" "s3_kms" {
+    [1m[0mid[0m[0m      = "3388776064"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "kms:GenerateDataKey",
+                        "kms:Encrypt",
+                        "kms:Decrypt",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "arn:aws:kms:ap-southeast-2:794874039740:key/85aa9de8-1abf-4dab-a785-019a5a8b2c71"
+                    Sid      = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "kms:Decrypt",
+            "kms:Encrypt",
+            "kms:GenerateDataKey",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "arn:aws:kms:ap-southeast-2:794874039740:key/85aa9de8-1abf-4dab-a785-019a5a8b2c71",
+        ]
+    }
+}
+
+# module.metaflow.data.aws_region.current:
+data "aws_region" "current" {
+    [1m[0mdescription[0m[0m = "Asia Pacific (Sydney)"
+    [1m[0mendpoint[0m[0m    = "ec2.ap-southeast-2.amazonaws.com"
+    [1m[0mid[0m[0m          = "ap-southeast-2"
+    [1m[0mname[0m[0m        = "ap-southeast-2"
+}
+
+
+# module.metaflow.module.metaflow-computation.aws_batch_compute_environment.this:
+resource "aws_batch_compute_environment" "this" {
+    [1m[0marn[0m[0m                             = "arn:aws:batch:ap-southeast-2:794874039740:compute-environment/metaflow-cpu-q1lkynmm20230214060204151800000003"
+    [1m[0mcompute_environment_name[0m[0m        = "metaflow-cpu-q1lkynmm20230214060204151800000003"
+    [1m[0mcompute_environment_name_prefix[0m[0m = "metaflow-cpu-q1lkynmm"
+    [1m[0mecs_cluster_arn[0m[0m                 = "arn:aws:ecs:ap-southeast-2:794874039740:cluster/metaflow-cpu-q1lkynmm20230214060204151800000003_Batch_1e9a6005-2bc7-309d-8eb1-589dd036480d"
+    [1m[0mid[0m[0m                              = "metaflow-cpu-q1lkynmm20230214060204151800000003"
+    [1m[0mservice_role[0m[0m                    = "arn:aws:iam::794874039740:role/metaflow-batch-execution-role-q1lkynmm"
+    [1m[0mstate[0m[0m                           = "ENABLED"
+    [1m[0mstatus[0m[0m                          = "VALID"
+    [1m[0mstatus_reason[0m[0m                   = "ComputeEnvironment Healthy"
+    [1m[0mtags[0m[0m                            = {}
+    [1m[0mtags_all[0m[0m                        = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mtype[0m[0m                            = "MANAGED"
+
+    compute_resources {
+        [1m[0mallocation_strategy[0m[0m = "BEST_FIT"
+        [1m[0mbid_percentage[0m[0m      = 0
+        [1m[0mdesired_vcpus[0m[0m       = 8
+        [1m[0minstance_role[0m[0m       = "arn:aws:iam::794874039740:instance-profile/metaflow-ecs-iam-role-q1lkynmm"
+        [1m[0minstance_type[0m[0m       = [
+            "c4.2xlarge",
+            "c4.4xlarge",
+            "c4.8xlarge",
+            "c4.large",
+            "c4.xlarge",
+        ]
+        [1m[0mmax_vcpus[0m[0m           = 64
+        [1m[0mmin_vcpus[0m[0m           = 8
+        [1m[0msecurity_group_ids[0m[0m  = [
+            "sg-0379b2540f81ec887",
+        ]
+        [1m[0msubnets[0m[0m             = [
+            "subnet-0878ad52456311c33",
+            "subnet-0bec9f6877b7c21dc",
+        ]
+        [1m[0mtags[0m[0m                = {
+            "managedBy" = "terraform"
+        }
+        [1m[0mtype[0m[0m                = "EC2"
+
+        ec2_configuration {
+            [1m[0mimage_type[0m[0m = "ECS_AL2"
+        }
+
+        launch_template {
+            [1m[0mlaunch_template_id[0m[0m = "lt-0d94e84d90f24a5df"
+            [1m[0mversion[0m[0m            = "1"
+        }
+    }
+}
+
+# module.metaflow.module.metaflow-computation.aws_batch_job_queue.this:
+resource "aws_batch_job_queue" "this" {
+    [1m[0marn[0m[0m                  = "arn:aws:batch:ap-southeast-2:794874039740:job-queue/metaflow-q1lkynmm"
+    [1m[0mcompute_environments[0m[0m = [
+        "arn:aws:batch:ap-southeast-2:794874039740:compute-environment/metaflow-cpu-q1lkynmm20230214060204151800000003",
+    ]
+    [1m[0mid[0m[0m                   = "arn:aws:batch:ap-southeast-2:794874039740:job-queue/metaflow-q1lkynmm"
+    [1m[0mname[0m[0m                 = "metaflow-q1lkynmm"
+    [1m[0mpriority[0m[0m             = 1
+    [1m[0mstate[0m[0m                = "ENABLED"
+    [1m[0mtags[0m[0m                 = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m             = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+}
+
+# module.metaflow.module.metaflow-computation.aws_iam_instance_profile.ecs_instance_role:
+resource "aws_iam_instance_profile" "ecs_instance_role" {
+    [1m[0marn[0m[0m         = "arn:aws:iam::794874039740:instance-profile/metaflow-ecs-iam-role-q1lkynmm"
+    [1m[0mcreate_date[0m[0m = "2023-02-14T06:01:46Z"
+    [1m[0mid[0m[0m          = "metaflow-ecs-iam-role-q1lkynmm"
+    [1m[0mname[0m[0m        = "metaflow-ecs-iam-role-q1lkynmm"
+    [1m[0mpath[0m[0m        = "/"
+    [1m[0mrole[0m[0m        = "metaflow-ecs-iam-role-q1lkynmm"
+    [1m[0mtags[0m[0m        = {}
+    [1m[0mtags_all[0m[0m    = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0munique_id[0m[0m   = "AIPA3SERPJW6G7QFZKZWW"
+}
+
+# module.metaflow.module.metaflow-computation.aws_iam_role.batch_execution_role:
+resource "aws_iam_role" "batch_execution_role" {
+    [1m[0marn[0m[0m                   = "arn:aws:iam::794874039740:role/metaflow-batch-execution-role-q1lkynmm"
+    [1m[0massume_role_policy[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "sts:AssumeRole"
+                    Effect    = "Allow"
+                    Principal = {
+                        Service = "batch.amazonaws.com"
+                    }
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mcreate_date[0m[0m           = "2023-02-14T06:01:40Z"
+    [1m[0mdescription[0m[0m           = "This role is passed to AWS Batch as a `service_role`. This allows AWS Batch to make calls to other AWS services on our behalf."
+    [1m[0mforce_detach_policies[0m[0m = false
+    [1m[0mid[0m[0m                    = "metaflow-batch-execution-role-q1lkynmm"
+    [1m[0mmanaged_policy_arns[0m[0m   = []
+    [1m[0mmax_session_duration[0m[0m  = 3600
+    [1m[0mname[0m[0m                  = "metaflow-batch-execution-role-q1lkynmm"
+    [1m[0mpath[0m[0m                  = "/"
+    [1m[0mtags[0m[0m                  = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m              = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0munique_id[0m[0m             = "AROA3SERPJW6LTQWL5AR7"
+
+    inline_policy {
+        [1m[0mname[0m[0m   = "custom_access"
+        [1m[0mpolicy[0m[0m = jsonencode(
+            {
+                Statement = [
+                    {
+                        Action   = [
+                            "logs:PutLogEvents",
+                            "logs:DescribeLogGroups",
+                            "logs:CreateLogStream",
+                            "logs:CreateLogGroup",
+                            "iam:GetRole",
+                            "iam:GetInstanceProfile",
+                            "ecs:UpdateContainerAgent",
+                            "ecs:StopTask",
+                            "ecs:StartTask",
+                            "ecs:RunTask",
+                            "ecs:RegisterTaskDefinition",
+                            "ecs:ListTasks",
+                            "ecs:ListTaskDefinitions",
+                            "ecs:ListTaskDefinitionFamilies",
+                            "ecs:ListContainerInstances",
+                            "ecs:ListClusters",
+                            "ecs:DescribeTasks",
+                            "ecs:DescribeTaskDefinition",
+                            "ecs:DescribeContainerInstances",
+                            "ecs:DescribeClusters",
+                            "ecs:DeregisterTaskDefinition",
+                            "ecs:DeregisterContainerInstance",
+                            "ecs:DeleteCluster",
+                            "ecs:CreateCluster",
+                            "ec2:TerminateInstances",
+                            "ec2:RunInstances",
+                            "ec2:RequestSpotFleet",
+                            "ec2:ModifySpotFleetRequest",
+                            "ec2:DescribeVpcClassicLink",
+                            "ec2:DescribeSubnets",
+                            "ec2:DescribeSpotPriceHistory",
+                            "ec2:DescribeSpotInstanceRequests",
+                            "ec2:DescribeSpotFleetRequests",
+                            "ec2:DescribeSpotFleetInstances",
+                            "ec2:DescribeSecurityGroups",
+                            "ec2:DescribeLaunchTemplateVersions",
+                            "ec2:DescribeKeyPairs",
+                            "ec2:DescribeInstances",
+                            "ec2:DescribeInstanceStatus",
+                            "ec2:DescribeInstanceAttribute",
+                            "ec2:DescribeImages",
+                            "ec2:DescribeImageAttribute",
+                            "ec2:DescribeAccountAttributes",
+                            "ec2:DeleteLaunchTemplate",
+                            "ec2:CreateLaunchTemplate",
+                            "ec2:CancelSpotFleetRequests",
+                            "autoscaling:UpdateAutoScalingGroup",
+                            "autoscaling:TerminateInstanceInAutoScalingGroup",
+                            "autoscaling:SuspendProcesses",
+                            "autoscaling:SetDesiredCapacity",
+                            "autoscaling:PutNotificationConfiguration",
+                            "autoscaling:DescribeLaunchConfigurations",
+                            "autoscaling:DescribeAutoScalingInstances",
+                            "autoscaling:DescribeAutoScalingGroups",
+                            "autoscaling:DescribeAccountLimits",
+                            "autoscaling:DeleteLaunchConfiguration",
+                            "autoscaling:DeleteAutoScalingGroup",
+                            "autoscaling:CreateOrUpdateTags",
+                            "autoscaling:CreateLaunchConfiguration",
+                            "autoscaling:CreateAutoScalingGroup",
+                        ]
+                        Effect   = "Allow"
+                        Resource = "*"
+                        Sid      = ""
+                    },
+                ]
+                Version   = "2012-10-17"
+            }
+        )
+    }
+    inline_policy {
+        [1m[0mname[0m[0m   = "ec2_custom"
+        [1m[0mpolicy[0m[0m = jsonencode(
+            {
+                Statement = [
+                    {
+                        Action    = "ec2:CreateTags"
+                        Condition = {
+                            StringEquals = {
+                                "ec2:CreateAction" = "RunInstances"
+                            }
+                        }
+                        Effect    = "Allow"
+                        Resource  = "*"
+                        Sid       = ""
+                    },
+                ]
+                Version   = "2012-10-17"
+            }
+        )
+    }
+    inline_policy {
+        [1m[0mname[0m[0m   = "iam_custom"
+        [1m[0mpolicy[0m[0m = jsonencode(
+            {
+                Statement = [
+                    {
+                        Action    = "iam:CreateServiceLinkedRole"
+                        Condition = {
+                            StringEquals = {
+                                "iam:AWSServiceName" = [
+                                    "autoscaling.amazonaws.com",
+                                    "ecs.amazonaws.com",
+                                ]
+                            }
+                        }
+                        Effect    = "Allow"
+                        Resource  = "*"
+                        Sid       = ""
+                    },
+                ]
+                Version   = "2012-10-17"
+            }
+        )
+    }
+    inline_policy {
+        [1m[0mname[0m[0m   = "iam_pass_role"
+        [1m[0mpolicy[0m[0m = jsonencode(
+            {
+                Statement = [
+                    {
+                        Action    = "iam:PassRole"
+                        Condition = {
+                            StringEquals = {
+                                "iam:PassedToService" = [
+                                    "ec2.amazonaws.com",
+                                    "ec2.amazonaws.com.cn",
+                                    "ecs-tasks.amazonaws.com",
+                                ]
+                            }
+                        }
+                        Effect    = "Allow"
+                        Resource  = "*"
+                        Sid       = ""
+                    },
+                ]
+                Version   = "2012-10-17"
+            }
+        )
+    }
+}
+
+# module.metaflow.module.metaflow-computation.aws_iam_role.ecs_execution_role:
+resource "aws_iam_role" "ecs_execution_role" {
+    [1m[0marn[0m[0m                   = "arn:aws:iam::794874039740:role/metaflow-ecs-execution-role-q1lkynmm"
+    [1m[0massume_role_policy[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "sts:AssumeRole"
+                    Effect    = "Allow"
+                    Principal = {
+                        Service = [
+                            "ecs-tasks.amazonaws.com",
+                            "batch.amazonaws.com",
+                            "ec2.amazonaws.com",
+                            "ecs.amazonaws.com",
+                        ]
+                    }
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mcreate_date[0m[0m           = "2023-02-14T06:01:44Z"
+    [1m[0mdescription[0m[0m           = "This role is passed to our AWS ECS' task definition as the `execution_role`. This allows things like the correct image to be pulled and logs to be stored."
+    [1m[0mforce_detach_policies[0m[0m = false
+    [1m[0mid[0m[0m                    = "metaflow-ecs-execution-role-q1lkynmm"
+    [1m[0mmanaged_policy_arns[0m[0m   = []
+    [1m[0mmax_session_duration[0m[0m  = 3600
+    [1m[0mname[0m[0m                  = "metaflow-ecs-execution-role-q1lkynmm"
+    [1m[0mpath[0m[0m                  = "/"
+    [1m[0mtags[0m[0m                  = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m              = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0munique_id[0m[0m             = "AROA3SERPJW6JVCA4LK2I"
+
+    inline_policy {
+        [1m[0mname[0m[0m   = "ecs_access"
+        [1m[0mpolicy[0m[0m = jsonencode(
+            {
+                Statement = [
+                    {
+                        Action   = [
+                            "logs:PutLogEvents",
+                            "logs:CreateLogStream",
+                            "ecr:GetDownloadUrlForLayer",
+                            "ecr:GetAuthorizationToken",
+                            "ecr:BatchGetImage",
+                            "ecr:BatchCheckLayerAvailability",
+                        ]
+                        Effect   = "Allow"
+                        Resource = "*"
+                        Sid      = ""
+                    },
+                ]
+                Version   = "2012-10-17"
+            }
+        )
+    }
+}
+
+# module.metaflow.module.metaflow-computation.aws_iam_role.ecs_instance_role:
+resource "aws_iam_role" "ecs_instance_role" {
+    [1m[0marn[0m[0m                   = "arn:aws:iam::794874039740:role/metaflow-ecs-iam-role-q1lkynmm"
+    [1m[0massume_role_policy[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "sts:AssumeRole"
+                    Effect    = "Allow"
+                    Principal = {
+                        Service = "ec2.amazonaws.com"
+                    }
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mcreate_date[0m[0m           = "2023-02-14T06:01:40Z"
+    [1m[0mdescription[0m[0m           = "This role is passed to AWS Batch as a `instance_role`. This allows our Metaflow Batch jobs to execute with proper permissions."
+    [1m[0mforce_detach_policies[0m[0m = false
+    [1m[0mid[0m[0m                    = "metaflow-ecs-iam-role-q1lkynmm"
+    [1m[0mmanaged_policy_arns[0m[0m   = [
+        "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role",
+    ]
+    [1m[0mmax_session_duration[0m[0m  = 3600
+    [1m[0mname[0m[0m                  = "metaflow-ecs-iam-role-q1lkynmm"
+    [1m[0mpath[0m[0m                  = "/"
+    [1m[0mtags[0m[0m                  = {}
+    [1m[0mtags_all[0m[0m              = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0munique_id[0m[0m             = "AROA3SERPJW6LQK5X6JRV"
+
+    inline_policy {}
+}
+
+# module.metaflow.module.metaflow-computation.aws_iam_role_policy.grant_custom_access_policy:
+resource "aws_iam_role_policy" "grant_custom_access_policy" {
+    [1m[0mid[0m[0m     = "metaflow-batch-execution-role-q1lkynmm:custom_access"
+    [1m[0mname[0m[0m   = "custom_access"
+    [1m[0mpolicy[0m[0m = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "logs:PutLogEvents",
+                        "logs:DescribeLogGroups",
+                        "logs:CreateLogStream",
+                        "logs:CreateLogGroup",
+                        "iam:GetRole",
+                        "iam:GetInstanceProfile",
+                        "ecs:UpdateContainerAgent",
+                        "ecs:StopTask",
+                        "ecs:StartTask",
+                        "ecs:RunTask",
+                        "ecs:RegisterTaskDefinition",
+                        "ecs:ListTasks",
+                        "ecs:ListTaskDefinitions",
+                        "ecs:ListTaskDefinitionFamilies",
+                        "ecs:ListContainerInstances",
+                        "ecs:ListClusters",
+                        "ecs:DescribeTasks",
+                        "ecs:DescribeTaskDefinition",
+                        "ecs:DescribeContainerInstances",
+                        "ecs:DescribeClusters",
+                        "ecs:DeregisterTaskDefinition",
+                        "ecs:DeregisterContainerInstance",
+                        "ecs:DeleteCluster",
+                        "ecs:CreateCluster",
+                        "ec2:TerminateInstances",
+                        "ec2:RunInstances",
+                        "ec2:RequestSpotFleet",
+                        "ec2:ModifySpotFleetRequest",
+                        "ec2:DescribeVpcClassicLink",
+                        "ec2:DescribeSubnets",
+                        "ec2:DescribeSpotPriceHistory",
+                        "ec2:DescribeSpotInstanceRequests",
+                        "ec2:DescribeSpotFleetRequests",
+                        "ec2:DescribeSpotFleetInstances",
+                        "ec2:DescribeSecurityGroups",
+                        "ec2:DescribeLaunchTemplateVersions",
+                        "ec2:DescribeKeyPairs",
+                        "ec2:DescribeInstances",
+                        "ec2:DescribeInstanceStatus",
+                        "ec2:DescribeInstanceAttribute",
+                        "ec2:DescribeImages",
+                        "ec2:DescribeImageAttribute",
+                        "ec2:DescribeAccountAttributes",
+                        "ec2:DeleteLaunchTemplate",
+                        "ec2:CreateLaunchTemplate",
+                        "ec2:CancelSpotFleetRequests",
+                        "autoscaling:UpdateAutoScalingGroup",
+                        "autoscaling:TerminateInstanceInAutoScalingGroup",
+                        "autoscaling:SuspendProcesses",
+                        "autoscaling:SetDesiredCapacity",
+                        "autoscaling:PutNotificationConfiguration",
+                        "autoscaling:DescribeLaunchConfigurations",
+                        "autoscaling:DescribeAutoScalingInstances",
+                        "autoscaling:DescribeAutoScalingGroups",
+                        "autoscaling:DescribeAccountLimits",
+                        "autoscaling:DeleteLaunchConfiguration",
+                        "autoscaling:DeleteAutoScalingGroup",
+                        "autoscaling:CreateOrUpdateTags",
+                        "autoscaling:CreateLaunchConfiguration",
+                        "autoscaling:CreateAutoScalingGroup",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "*"
+                    Sid      = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mrole[0m[0m   = "metaflow-batch-execution-role-q1lkynmm"
+}
+
+# module.metaflow.module.metaflow-computation.aws_iam_role_policy.grant_ec2_custom_policies:
+resource "aws_iam_role_policy" "grant_ec2_custom_policies" {
+    [1m[0mid[0m[0m     = "metaflow-batch-execution-role-q1lkynmm:ec2_custom"
+    [1m[0mname[0m[0m   = "ec2_custom"
+    [1m[0mpolicy[0m[0m = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "ec2:CreateTags"
+                    Condition = {
+                        StringEquals = {
+                            "ec2:CreateAction" = "RunInstances"
+                        }
+                    }
+                    Effect    = "Allow"
+                    Resource  = "*"
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mrole[0m[0m   = "metaflow-batch-execution-role-q1lkynmm"
+}
+
+# module.metaflow.module.metaflow-computation.aws_iam_role_policy.grant_ecs_access:
+resource "aws_iam_role_policy" "grant_ecs_access" {
+    [1m[0mid[0m[0m     = "metaflow-ecs-execution-role-q1lkynmm:ecs_access"
+    [1m[0mname[0m[0m   = "ecs_access"
+    [1m[0mpolicy[0m[0m = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "logs:PutLogEvents",
+                        "logs:CreateLogStream",
+                        "ecr:GetDownloadUrlForLayer",
+                        "ecr:GetAuthorizationToken",
+                        "ecr:BatchGetImage",
+                        "ecr:BatchCheckLayerAvailability",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "*"
+                    Sid      = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mrole[0m[0m   = "metaflow-ecs-execution-role-q1lkynmm"
+}
+
+# module.metaflow.module.metaflow-computation.aws_iam_role_policy.grant_iam_custom_policies:
+resource "aws_iam_role_policy" "grant_iam_custom_policies" {
+    [1m[0mid[0m[0m     = "metaflow-batch-execution-role-q1lkynmm:iam_custom"
+    [1m[0mname[0m[0m   = "iam_custom"
+    [1m[0mpolicy[0m[0m = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "iam:CreateServiceLinkedRole"
+                    Condition = {
+                        StringEquals = {
+                            "iam:AWSServiceName" = [
+                                "autoscaling.amazonaws.com",
+                                "ecs.amazonaws.com",
+                            ]
+                        }
+                    }
+                    Effect    = "Allow"
+                    Resource  = "*"
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mrole[0m[0m   = "metaflow-batch-execution-role-q1lkynmm"
+}
+
+# module.metaflow.module.metaflow-computation.aws_iam_role_policy.grant_iam_pass_role:
+resource "aws_iam_role_policy" "grant_iam_pass_role" {
+    [1m[0mid[0m[0m     = "metaflow-batch-execution-role-q1lkynmm:iam_pass_role"
+    [1m[0mname[0m[0m   = "iam_pass_role"
+    [1m[0mpolicy[0m[0m = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "iam:PassRole"
+                    Condition = {
+                        StringEquals = {
+                            "iam:PassedToService" = [
+                                "ec2.amazonaws.com",
+                                "ec2.amazonaws.com.cn",
+                                "ecs-tasks.amazonaws.com",
+                            ]
+                        }
+                    }
+                    Effect    = "Allow"
+                    Resource  = "*"
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mrole[0m[0m   = "metaflow-batch-execution-role-q1lkynmm"
+}
+
+# module.metaflow.module.metaflow-computation.aws_iam_role_policy_attachment.ecs_instance_role:
+resource "aws_iam_role_policy_attachment" "ecs_instance_role" {
+    [1m[0mid[0m[0m         = "metaflow-ecs-iam-role-q1lkynmm-20230214060147188000000001"
+    [1m[0mpolicy_arn[0m[0m = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+    [1m[0mrole[0m[0m       = "metaflow-ecs-iam-role-q1lkynmm"
+}
+
+# module.metaflow.module.metaflow-computation.aws_launch_template.cpu[0]:
+resource "aws_launch_template" "cpu" {
+    [1m[0marn[0m[0m                     = "arn:aws:ec2:ap-southeast-2:794874039740:launch-template/lt-0d94e84d90f24a5df"
+    [1m[0mdefault_version[0m[0m         = 1
+    [1m[0mdisable_api_termination[0m[0m = false
+    [1m[0mid[0m[0m                      = "lt-0d94e84d90f24a5df"
+    [1m[0mlatest_version[0m[0m          = 1
+    [1m[0mname[0m[0m                    = "metaflow-batch-launch-tmpl-cpu-100gb-q1lkynmm"
+    [1m[0msecurity_group_names[0m[0m    = []
+    [1m[0mtags[0m[0m                    = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m                = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mvpc_security_group_ids[0m[0m  = []
+
+    block_device_mappings {
+        [1m[0mdevice_name[0m[0m = "/dev/xvda"
+
+        ebs {
+            [1m[0mdelete_on_termination[0m[0m = "true"
+            [1m[0mencrypted[0m[0m             = "true"
+            [1m[0miops[0m[0m                  = 0
+            [1m[0mthroughput[0m[0m            = 0
+            [1m[0mvolume_size[0m[0m           = 100
+        }
+    }
+
+    iam_instance_profile {
+        [1m[0marn[0m[0m = "arn:aws:iam::794874039740:instance-profile/metaflow-ecs-iam-role-q1lkynmm"
+    }
+
+    metadata_options {
+        [1m[0mhttp_endpoint[0m[0m               = "enabled"
+        [1m[0mhttp_protocol_ipv6[0m[0m          = "disabled"
+        [1m[0mhttp_put_response_hop_limit[0m[0m = 2
+        [1m[0mhttp_tokens[0m[0m                 = "optional"
+        [1m[0minstance_metadata_tags[0m[0m      = "disabled"
+    }
+}
+
+# module.metaflow.module.metaflow-computation.aws_security_group.this:
+resource "aws_security_group" "this" {
+    [1m[0marn[0m[0m                    = "arn:aws:ec2:ap-southeast-2:794874039740:security-group/sg-0379b2540f81ec887"
+    [1m[0mdescription[0m[0m            = "Managed by Terraform"
+    [1m[0megress[0m[0m                 = [
+        {
+            cidr_blocks      = [
+                "0.0.0.0/0",
+            ]
+            description      = ""
+            from_port        = 0
+            ipv6_cidr_blocks = []
+            prefix_list_ids  = []
+            protocol         = "-1"
+            security_groups  = []
+            self             = false
+            to_port          = 0
+        },
+    ]
+    [1m[0mid[0m[0m                     = "sg-0379b2540f81ec887"
+    [1m[0mingress[0m[0m                = [
+        {
+            cidr_blocks      = []
+            description      = "internal traffic"
+            from_port        = 0
+            ipv6_cidr_blocks = []
+            prefix_list_ids  = []
+            protocol         = "-1"
+            security_groups  = []
+            self             = true
+            to_port          = 0
+        },
+    ]
+    [1m[0mname[0m[0m                   = "metaflow-batch-compute-environment-security-group-q1lkynmm"
+    [1m[0mowner_id[0m[0m               = "794874039740"
+    [1m[0mrevoke_rules_on_delete[0m[0m = false
+    [1m[0mtags[0m[0m                   = {}
+    [1m[0mtags_all[0m[0m               = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mvpc_id[0m[0m                 = "vpc-0d593e7740dd43cb4"
+}
+
+# module.metaflow.module.metaflow-computation.data.aws_iam_policy_document.batch_execution_role_assume_role:
+data "aws_iam_policy_document" "batch_execution_role_assume_role" {
+    [1m[0mid[0m[0m      = "2592449126"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "sts:AssumeRole"
+                    Effect    = "Allow"
+                    Principal = {
+                        Service = "batch.amazonaws.com"
+                    }
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "sts:AssumeRole",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = []
+
+        principals {
+            [1m[0midentifiers[0m[0m = [
+                "batch.amazonaws.com",
+            ]
+            [1m[0mtype[0m[0m        = "Service"
+        }
+    }
+}
+
+# module.metaflow.module.metaflow-computation.data.aws_iam_policy_document.custom_access_policy:
+data "aws_iam_policy_document" "custom_access_policy" {
+    [1m[0mid[0m[0m      = "2490296055"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "logs:PutLogEvents",
+                        "logs:DescribeLogGroups",
+                        "logs:CreateLogStream",
+                        "logs:CreateLogGroup",
+                        "iam:GetRole",
+                        "iam:GetInstanceProfile",
+                        "ecs:UpdateContainerAgent",
+                        "ecs:StopTask",
+                        "ecs:StartTask",
+                        "ecs:RunTask",
+                        "ecs:RegisterTaskDefinition",
+                        "ecs:ListTasks",
+                        "ecs:ListTaskDefinitions",
+                        "ecs:ListTaskDefinitionFamilies",
+                        "ecs:ListContainerInstances",
+                        "ecs:ListClusters",
+                        "ecs:DescribeTasks",
+                        "ecs:DescribeTaskDefinition",
+                        "ecs:DescribeContainerInstances",
+                        "ecs:DescribeClusters",
+                        "ecs:DeregisterTaskDefinition",
+                        "ecs:DeregisterContainerInstance",
+                        "ecs:DeleteCluster",
+                        "ecs:CreateCluster",
+                        "ec2:TerminateInstances",
+                        "ec2:RunInstances",
+                        "ec2:RequestSpotFleet",
+                        "ec2:ModifySpotFleetRequest",
+                        "ec2:DescribeVpcClassicLink",
+                        "ec2:DescribeSubnets",
+                        "ec2:DescribeSpotPriceHistory",
+                        "ec2:DescribeSpotInstanceRequests",
+                        "ec2:DescribeSpotFleetRequests",
+                        "ec2:DescribeSpotFleetInstances",
+                        "ec2:DescribeSecurityGroups",
+                        "ec2:DescribeLaunchTemplateVersions",
+                        "ec2:DescribeKeyPairs",
+                        "ec2:DescribeInstances",
+                        "ec2:DescribeInstanceStatus",
+                        "ec2:DescribeInstanceAttribute",
+                        "ec2:DescribeImages",
+                        "ec2:DescribeImageAttribute",
+                        "ec2:DescribeAccountAttributes",
+                        "ec2:DeleteLaunchTemplate",
+                        "ec2:CreateLaunchTemplate",
+                        "ec2:CancelSpotFleetRequests",
+                        "autoscaling:UpdateAutoScalingGroup",
+                        "autoscaling:TerminateInstanceInAutoScalingGroup",
+                        "autoscaling:SuspendProcesses",
+                        "autoscaling:SetDesiredCapacity",
+                        "autoscaling:PutNotificationConfiguration",
+                        "autoscaling:DescribeLaunchConfigurations",
+                        "autoscaling:DescribeAutoScalingInstances",
+                        "autoscaling:DescribeAutoScalingGroups",
+                        "autoscaling:DescribeAccountLimits",
+                        "autoscaling:DeleteLaunchConfiguration",
+                        "autoscaling:DeleteAutoScalingGroup",
+                        "autoscaling:CreateOrUpdateTags",
+                        "autoscaling:CreateLaunchConfiguration",
+                        "autoscaling:CreateAutoScalingGroup",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "*"
+                    Sid      = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "autoscaling:CreateAutoScalingGroup",
+            "autoscaling:CreateLaunchConfiguration",
+            "autoscaling:CreateOrUpdateTags",
+            "autoscaling:DeleteAutoScalingGroup",
+            "autoscaling:DeleteLaunchConfiguration",
+            "autoscaling:DescribeAccountLimits",
+            "autoscaling:DescribeAutoScalingGroups",
+            "autoscaling:DescribeAutoScalingInstances",
+            "autoscaling:DescribeLaunchConfigurations",
+            "autoscaling:PutNotificationConfiguration",
+            "autoscaling:SetDesiredCapacity",
+            "autoscaling:SuspendProcesses",
+            "autoscaling:TerminateInstanceInAutoScalingGroup",
+            "autoscaling:UpdateAutoScalingGroup",
+            "ec2:CancelSpotFleetRequests",
+            "ec2:CreateLaunchTemplate",
+            "ec2:DeleteLaunchTemplate",
+            "ec2:DescribeAccountAttributes",
+            "ec2:DescribeImageAttribute",
+            "ec2:DescribeImages",
+            "ec2:DescribeInstanceAttribute",
+            "ec2:DescribeInstanceStatus",
+            "ec2:DescribeInstances",
+            "ec2:DescribeKeyPairs",
+            "ec2:DescribeLaunchTemplateVersions",
+            "ec2:DescribeSecurityGroups",
+            "ec2:DescribeSpotFleetInstances",
+            "ec2:DescribeSpotFleetRequests",
+            "ec2:DescribeSpotInstanceRequests",
+            "ec2:DescribeSpotPriceHistory",
+            "ec2:DescribeSubnets",
+            "ec2:DescribeVpcClassicLink",
+            "ec2:ModifySpotFleetRequest",
+            "ec2:RequestSpotFleet",
+            "ec2:RunInstances",
+            "ec2:TerminateInstances",
+            "ecs:CreateCluster",
+            "ecs:DeleteCluster",
+            "ecs:DeregisterContainerInstance",
+            "ecs:DeregisterTaskDefinition",
+            "ecs:DescribeClusters",
+            "ecs:DescribeContainerInstances",
+            "ecs:DescribeTaskDefinition",
+            "ecs:DescribeTasks",
+            "ecs:ListClusters",
+            "ecs:ListContainerInstances",
+            "ecs:ListTaskDefinitionFamilies",
+            "ecs:ListTaskDefinitions",
+            "ecs:ListTasks",
+            "ecs:RegisterTaskDefinition",
+            "ecs:RunTask",
+            "ecs:StartTask",
+            "ecs:StopTask",
+            "ecs:UpdateContainerAgent",
+            "iam:GetInstanceProfile",
+            "iam:GetRole",
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:DescribeLogGroups",
+            "logs:PutLogEvents",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "*",
+        ]
+    }
+}
+
+# module.metaflow.module.metaflow-computation.data.aws_iam_policy_document.ec2_custom_policies:
+data "aws_iam_policy_document" "ec2_custom_policies" {
+    [1m[0mid[0m[0m      = "3149150468"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "ec2:CreateTags"
+                    Condition = {
+                        StringEquals = {
+                            "ec2:CreateAction" = "RunInstances"
+                        }
+                    }
+                    Effect    = "Allow"
+                    Resource  = "*"
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "ec2:CreateTags",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "*",
+        ]
+
+        condition {
+            [1m[0mtest[0m[0m     = "StringEquals"
+            [1m[0mvalues[0m[0m   = [
+                "RunInstances",
+            ]
+            [1m[0mvariable[0m[0m = "ec2:CreateAction"
+        }
+    }
+}
+
+# module.metaflow.module.metaflow-computation.data.aws_iam_policy_document.ecs_execution_role_assume_role:
+data "aws_iam_policy_document" "ecs_execution_role_assume_role" {
+    [1m[0mid[0m[0m      = "266137901"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "sts:AssumeRole"
+                    Effect    = "Allow"
+                    Principal = {
+                        Service = [
+                            "ecs.amazonaws.com",
+                            "ecs-tasks.amazonaws.com",
+                            "ec2.amazonaws.com",
+                            "batch.amazonaws.com",
+                        ]
+                    }
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "sts:AssumeRole",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = []
+
+        principals {
+            [1m[0midentifiers[0m[0m = [
+                "batch.amazonaws.com",
+                "ec2.amazonaws.com",
+                "ecs-tasks.amazonaws.com",
+                "ecs.amazonaws.com",
+            ]
+            [1m[0mtype[0m[0m        = "Service"
+        }
+    }
+}
+
+# module.metaflow.module.metaflow-computation.data.aws_iam_policy_document.ecs_instance_role_assume_role:
+data "aws_iam_policy_document" "ecs_instance_role_assume_role" {
+    [1m[0mid[0m[0m      = "1903849331"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "sts:AssumeRole"
+                    Effect    = "Allow"
+                    Principal = {
+                        Service = "ec2.amazonaws.com"
+                    }
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "sts:AssumeRole",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = []
+
+        principals {
+            [1m[0midentifiers[0m[0m = [
+                "ec2.amazonaws.com",
+            ]
+            [1m[0mtype[0m[0m        = "Service"
+        }
+    }
+}
+
+# module.metaflow.module.metaflow-computation.data.aws_iam_policy_document.ecs_task_execution_policy:
+data "aws_iam_policy_document" "ecs_task_execution_policy" {
+    [1m[0mid[0m[0m      = "1420726984"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "logs:PutLogEvents",
+                        "logs:CreateLogStream",
+                        "ecr:GetDownloadUrlForLayer",
+                        "ecr:GetAuthorizationToken",
+                        "ecr:BatchGetImage",
+                        "ecr:BatchCheckLayerAvailability",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "*"
+                    Sid      = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "ecr:BatchCheckLayerAvailability",
+            "ecr:BatchGetImage",
+            "ecr:GetAuthorizationToken",
+            "ecr:GetDownloadUrlForLayer",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "*",
+        ]
+    }
+}
+
+# module.metaflow.module.metaflow-computation.data.aws_iam_policy_document.iam_custom_policies:
+data "aws_iam_policy_document" "iam_custom_policies" {
+    [1m[0mid[0m[0m      = "3771432726"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "iam:CreateServiceLinkedRole"
+                    Condition = {
+                        StringEquals = {
+                            "iam:AWSServiceName" = [
+                                "autoscaling.amazonaws.com",
+                                "ecs.amazonaws.com",
+                            ]
+                        }
+                    }
+                    Effect    = "Allow"
+                    Resource  = "*"
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "iam:CreateServiceLinkedRole",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "*",
+        ]
+
+        condition {
+            [1m[0mtest[0m[0m     = "StringEquals"
+            [1m[0mvalues[0m[0m   = [
+                "autoscaling.amazonaws.com",
+                "ecs.amazonaws.com",
+            ]
+            [1m[0mvariable[0m[0m = "iam:AWSServiceName"
+        }
+    }
+}
+
+# module.metaflow.module.metaflow-computation.data.aws_iam_policy_document.iam_pass_role:
+data "aws_iam_policy_document" "iam_pass_role" {
+    [1m[0mid[0m[0m      = "939642489"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "iam:PassRole"
+                    Condition = {
+                        StringEquals = {
+                            "iam:PassedToService" = [
+                                "ec2.amazonaws.com",
+                                "ec2.amazonaws.com.cn",
+                                "ecs-tasks.amazonaws.com",
+                            ]
+                        }
+                    }
+                    Effect    = "Allow"
+                    Resource  = "*"
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "iam:PassRole",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "*",
+        ]
+
+        condition {
+            [1m[0mtest[0m[0m     = "StringEquals"
+            [1m[0mvalues[0m[0m   = [
+                "ec2.amazonaws.com",
+                "ec2.amazonaws.com.cn",
+                "ecs-tasks.amazonaws.com",
+            ]
+            [1m[0mvariable[0m[0m = "iam:PassedToService"
+        }
+    }
+}
+
+# module.metaflow.module.metaflow-computation.data.aws_region.current:
+data "aws_region" "current" {
+    [1m[0mdescription[0m[0m = "Asia Pacific (Sydney)"
+    [1m[0mendpoint[0m[0m    = "ec2.ap-southeast-2.amazonaws.com"
+    [1m[0mid[0m[0m          = "ap-southeast-2"
+    [1m[0mname[0m[0m        = "ap-southeast-2"
+}
+
+# module.metaflow.module.metaflow-computation.data.aws_ssm_parameter.ecs_optimized_cpu_ami:
+data "aws_ssm_parameter" "ecs_optimized_cpu_ami" {
+    [1m[0marn[0m[0m             = "arn:aws:ssm:ap-southeast-2::parameter/aws/service/ecs/optimized-ami/amazon-linux-2/recommended"
+    [1m[0mid[0m[0m              = "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended"
+    [1m[0mname[0m[0m            = "/aws/service/ecs/optimized-ami/amazon-linux-2/recommended"
+    [1m[0mtype[0m[0m            = "String"
+    [1m[0mvalue[0m[0m           = (sensitive value)
+    [1m[0mversion[0m[0m         = 105
+    [1m[0mwith_decryption[0m[0m = true
+}
+
+
+# module.metaflow.module.metaflow-datastore.aws_db_instance.this[0]:
+resource "aws_db_instance" "this" {
+    [1m[0maddress[0m[0m                               = "metaflow-metaflow-q1lkynmm.cszvk9ojbxki.ap-southeast-2.rds.amazonaws.com"
+    [1m[0mallocated_storage[0m[0m                     = 20
+    [1m[0mapply_immediately[0m[0m                     = false
+    [1m[0marn[0m[0m                                   = "arn:aws:rds:ap-southeast-2:794874039740:db:metaflow-metaflow-q1lkynmm"
+    [1m[0mauto_minor_version_upgrade[0m[0m            = true
+    [1m[0mavailability_zone[0m[0m                     = "ap-southeast-2a"
+    [1m[0mbackup_retention_period[0m[0m               = 0
+    [1m[0mbackup_window[0m[0m                         = "14:04-14:34"
+    [1m[0mca_cert_identifier[0m[0m                    = "rds-ca-2019"
+    [1m[0mcharacter_set_name[0m[0m                    = ""
+    [1m[0mcopy_tags_to_snapshot[0m[0m                 = false
+    [1m[0mcustomer_owned_ip_enabled[0m[0m             = false
+    [1m[0mdb_subnet_group_name[0m[0m                  = "metaflow-main-q1lkynmm"
+    [1m[0mdelete_automated_backups[0m[0m              = true
+    [1m[0mdeletion_protection[0m[0m                   = false
+    [1m[0mdomain[0m[0m                                = ""
+    [1m[0mdomain_iam_role_name[0m[0m                  = ""
+    [1m[0menabled_cloudwatch_logs_exports[0m[0m       = []
+    [1m[0mendpoint[0m[0m                              = "metaflow-metaflow-q1lkynmm.cszvk9ojbxki.ap-southeast-2.rds.amazonaws.com:5432"
+    [1m[0mengine[0m[0m                                = "postgres"
+    [1m[0mengine_version[0m[0m                        = "11"
+    [1m[0mengine_version_actual[0m[0m                 = "11.16"
+    [1m[0mfinal_snapshot_identifier[0m[0m             = "metaflow-metaflow-final-snapshot-q1lkynmm-known-ape"
+    [1m[0mhosted_zone_id[0m[0m                        = "Z32T0VRHXEXS0V"
+    [1m[0miam_database_authentication_enabled[0m[0m   = false
+    [1m[0mid[0m[0m                                    = "metaflow-metaflow-q1lkynmm"
+    [1m[0midentifier[0m[0m                            = "metaflow-metaflow-q1lkynmm"
+    [1m[0minstance_class[0m[0m                        = "db.t2.small"
+    [1m[0miops[0m[0m                                  = 0
+    [1m[0mkms_key_id[0m[0m                            = "arn:aws:kms:ap-southeast-2:794874039740:key/a5009002-f525-43e5-aa02-14e0e1043617"
+    [1m[0mlatest_restorable_time[0m[0m                = "0001-01-01T00:00:00Z"
+    [1m[0mlicense_model[0m[0m                         = "postgresql-license"
+    [1m[0mmaintenance_window[0m[0m                    = "mon:17:57-mon:18:27"
+    [1m[0mmax_allocated_storage[0m[0m                 = 1000
+    [1m[0mmonitoring_interval[0m[0m                   = 0
+    [1m[0mmonitoring_role_arn[0m[0m                   = ""
+    [1m[0mmulti_az[0m[0m                              = true
+    [1m[0mname[0m[0m                                  = "metaflow"
+    [1m[0mnchar_character_set_name[0m[0m              = ""
+    [1m[0moption_group_name[0m[0m                     = "default:postgres-11"
+    [1m[0mparameter_group_name[0m[0m                  = "default.postgres11"
+    [1m[0mpassword[0m[0m                              = (sensitive value)
+    [1m[0mperformance_insights_enabled[0m[0m          = false
+    [1m[0mperformance_insights_kms_key_id[0m[0m       = ""
+    [1m[0mperformance_insights_retention_period[0m[0m = 0
+    [1m[0mport[0m[0m                                  = 5432
+    [1m[0mpublicly_accessible[0m[0m                   = false
+    [1m[0mreplica_mode[0m[0m                          = ""
+    [1m[0mreplicas[0m[0m                              = []
+    [1m[0mreplicate_source_db[0m[0m                   = ""
+    [1m[0mresource_id[0m[0m                           = "db-Y75X3TTE57PBV277MC4LJNJR74"
+    [1m[0msecurity_group_names[0m[0m                  = []
+    [1m[0mskip_final_snapshot[0m[0m                   = false
+    [1m[0mstatus[0m[0m                                = "available"
+    [1m[0mstorage_encrypted[0m[0m                     = true
+    [1m[0mstorage_type[0m[0m                          = "gp2"
+    [1m[0mtags[0m[0m                                  = {
+        "Metaflow"  = "true"
+        "Name"      = "metaflow-metaflow-q1lkynmm"
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m                              = {
+        "Metaflow"              = "true"
+        "Name"                  = "metaflow-metaflow-q1lkynmm"
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mtimezone[0m[0m                              = ""
+    [1m[0musername[0m[0m                              = "metaflow"
+    [1m[0mvpc_security_group_ids[0m[0m                = [
+        "sg-01f48357135e9038d",
+    ]
+}
+
+# module.metaflow.module.metaflow-datastore.aws_db_subnet_group.this:
+resource "aws_db_subnet_group" "this" {
+    [1m[0marn[0m[0m         = "arn:aws:rds:ap-southeast-2:794874039740:subgrp:metaflow-main-q1lkynmm"
+    [1m[0mdescription[0m[0m = "Managed by Terraform"
+    [1m[0mid[0m[0m          = "metaflow-main-q1lkynmm"
+    [1m[0mname[0m[0m        = "metaflow-main-q1lkynmm"
+    [1m[0msubnet_ids[0m[0m  = [
+        "subnet-0878ad52456311c33",
+        "subnet-0bec9f6877b7c21dc",
+    ]
+    [1m[0mtags[0m[0m        = {
+        "Metaflow"  = "true"
+        "Name"      = "metaflow-main-q1lkynmm"
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m    = {
+        "Metaflow"              = "true"
+        "Name"                  = "metaflow-main-q1lkynmm"
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+}
+
+# module.metaflow.module.metaflow-datastore.aws_kms_key.rds:
+resource "aws_kms_key" "rds" {
+    [1m[0marn[0m[0m                                = "arn:aws:kms:ap-southeast-2:794874039740:key/a5009002-f525-43e5-aa02-14e0e1043617"
+    [1m[0mbypass_policy_lockout_safety_check[0m[0m = false
+    [1m[0mcustomer_master_key_spec[0m[0m           = "SYMMETRIC_DEFAULT"
+    [1m[0mdescription[0m[0m                        = "This key is used to encrypt and decrypt the RDS database used to store flow execution data."
+    [1m[0menable_key_rotation[0m[0m                = false
+    [1m[0mid[0m[0m                                 = "a5009002-f525-43e5-aa02-14e0e1043617"
+    [1m[0mis_enabled[0m[0m                         = true
+    [1m[0mkey_id[0m[0m                             = "a5009002-f525-43e5-aa02-14e0e1043617"
+    [1m[0mkey_usage[0m[0m                          = "ENCRYPT_DECRYPT"
+    [1m[0mmulti_region[0m[0m                       = false
+    [1m[0mpolicy[0m[0m                             = jsonencode(
+        {
+            Id        = "key-default-1"
+            Statement = [
+                {
+                    Action    = "kms:*"
+                    Effect    = "Allow"
+                    Principal = {
+                        AWS = "arn:aws:iam::794874039740:root"
+                    }
+                    Resource  = "*"
+                    Sid       = "Enable IAM User Permissions"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mtags[0m[0m                               = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m                           = {
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+}
+
+# module.metaflow.module.metaflow-datastore.aws_kms_key.s3:
+resource "aws_kms_key" "s3" {
+    [1m[0marn[0m[0m                                = "arn:aws:kms:ap-southeast-2:794874039740:key/85aa9de8-1abf-4dab-a785-019a5a8b2c71"
+    [1m[0mbypass_policy_lockout_safety_check[0m[0m = false
+    [1m[0mcustomer_master_key_spec[0m[0m           = "SYMMETRIC_DEFAULT"
+    [1m[0mdescription[0m[0m                        = "This key is used to encrypt and decrypt the S3 bucket used to store blobs."
+    [1m[0menable_key_rotation[0m[0m                = false
+    [1m[0mid[0m[0m                                 = "85aa9de8-1abf-4dab-a785-019a5a8b2c71"
+    [1m[0mis_enabled[0m[0m                         = true
+    [1m[0mkey_id[0m[0m                             = "85aa9de8-1abf-4dab-a785-019a5a8b2c71"
+    [1m[0mkey_usage[0m[0m                          = "ENCRYPT_DECRYPT"
+    [1m[0mmulti_region[0m[0m                       = false
+    [1m[0mpolicy[0m[0m                             = jsonencode(
+        {
+            Id        = "key-default-1"
+            Statement = [
+                {
+                    Action    = "kms:*"
+                    Effect    = "Allow"
+                    Principal = {
+                        AWS = "arn:aws:iam::794874039740:root"
+                    }
+                    Resource  = "*"
+                    Sid       = "Enable IAM User Permissions"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mtags[0m[0m                               = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m                           = {
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+}
+
+# module.metaflow.module.metaflow-datastore.aws_s3_bucket.this:
+resource "aws_s3_bucket" "this" {
+    [1m[0macl[0m[0m                         = "private"
+    [1m[0marn[0m[0m                         = "arn:aws:s3:::metaflow-s3-q1lkynmm"
+    [1m[0mbucket[0m[0m                      = "metaflow-s3-q1lkynmm"
+    [1m[0mbucket_domain_name[0m[0m          = "metaflow-s3-q1lkynmm.s3.amazonaws.com"
+    [1m[0mbucket_regional_domain_name[0m[0m = "metaflow-s3-q1lkynmm.s3.ap-southeast-2.amazonaws.com"
+    [1m[0mforce_destroy[0m[0m               = false
+    [1m[0mhosted_zone_id[0m[0m              = "Z1WCIGYICN2BYD"
+    [1m[0mid[0m[0m                          = "metaflow-s3-q1lkynmm"
+    [1m[0mobject_lock_enabled[0m[0m         = false
+    [1m[0mregion[0m[0m                      = "ap-southeast-2"
+    [1m[0mrequest_payer[0m[0m               = "BucketOwner"
+    [1m[0mtags[0m[0m                        = {
+        "Metaflow"  = "true"
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m                    = {
+        "Metaflow"              = "true"
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+
+    server_side_encryption_configuration {
+        rule {
+            [1m[0mbucket_key_enabled[0m[0m = false
+
+            apply_server_side_encryption_by_default {
+                [1m[0mkms_master_key_id[0m[0m = "arn:aws:kms:ap-southeast-2:794874039740:key/85aa9de8-1abf-4dab-a785-019a5a8b2c71"
+                [1m[0msse_algorithm[0m[0m     = "aws:kms"
+            }
+        }
+    }
+
+    versioning {
+        [1m[0menabled[0m[0m    = false
+        [1m[0mmfa_delete[0m[0m = false
+    }
+}
+
+# module.metaflow.module.metaflow-datastore.aws_s3_bucket_public_access_block.this:
+resource "aws_s3_bucket_public_access_block" "this" {
+    [1m[0mblock_public_acls[0m[0m       = true
+    [1m[0mblock_public_policy[0m[0m     = true
+    [1m[0mbucket[0m[0m                  = "metaflow-s3-q1lkynmm"
+    [1m[0mid[0m[0m                      = "metaflow-s3-q1lkynmm"
+    [1m[0mignore_public_acls[0m[0m      = true
+    [1m[0mrestrict_public_buckets[0m[0m = true
+}
+
+# module.metaflow.module.metaflow-datastore.aws_security_group.rds_security_group:
+resource "aws_security_group" "rds_security_group" {
+    [1m[0marn[0m[0m                    = "arn:aws:ec2:ap-southeast-2:794874039740:security-group/sg-01f48357135e9038d"
+    [1m[0mdescription[0m[0m            = "Managed by Terraform"
+    [1m[0megress[0m[0m                 = [
+        {
+            cidr_blocks      = [
+                "0.0.0.0/0",
+            ]
+            description      = ""
+            from_port        = 0
+            ipv6_cidr_blocks = []
+            prefix_list_ids  = []
+            protocol         = "-1"
+            security_groups  = []
+            self             = false
+            to_port          = 0
+        },
+    ]
+    [1m[0mid[0m[0m                     = "sg-01f48357135e9038d"
+    [1m[0mingress[0m[0m                = [
+        {
+            cidr_blocks      = []
+            description      = ""
+            from_port        = 5432
+            ipv6_cidr_blocks = []
+            prefix_list_ids  = []
+            protocol         = "tcp"
+            security_groups  = [
+                "sg-0061e6e772dd5de24",
+            ]
+            self             = false
+            to_port          = 5432
+        },
+    ]
+    [1m[0mname[0m[0m                   = "metaflow-rds-security-group-q1lkynmm"
+    [1m[0mowner_id[0m[0m               = "794874039740"
+    [1m[0mrevoke_rules_on_delete[0m[0m = false
+    [1m[0mtags[0m[0m                   = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m               = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mvpc_id[0m[0m                 = "vpc-0d593e7740dd43cb4"
+}
+
+# module.metaflow.module.metaflow-datastore.random_password.this:
+resource "random_password" "this" {
+    [1m[0mbcrypt_hash[0m[0m      = (sensitive value)
+    [1m[0mid[0m[0m               = "none"
+    [1m[0mlength[0m[0m           = 64
+    [1m[0mlower[0m[0m            = true
+    [1m[0mmin_lower[0m[0m        = 0
+    [1m[0mmin_numeric[0m[0m      = 0
+    [1m[0mmin_special[0m[0m      = 0
+    [1m[0mmin_upper[0m[0m        = 0
+    [1m[0mnumber[0m[0m           = true
+    [1m[0mnumeric[0m[0m          = true
+    [1m[0moverride_special[0m[0m = "!#$%&*()-_=+[]{}<>:?"
+    [1m[0mresult[0m[0m           = (sensitive value)
+    [1m[0mspecial[0m[0m          = true
+    [1m[0mupper[0m[0m            = true
+}
+
+# module.metaflow.module.metaflow-datastore.random_pet.final_snapshot_id:
+resource "random_pet" "final_snapshot_id" {
+    [1m[0mid[0m[0m        = "known-ape"
+    [1m[0mlength[0m[0m    = 2
+    [1m[0mseparator[0m[0m = "-"
+}
+
+
+# module.metaflow.module.metaflow-metadata-service.aws_api_gateway_api_key.this[0]:
+resource "aws_api_gateway_api_key" "this" {
+    [1m[0marn[0m[0m               = "arn:aws:apigateway:ap-southeast-2::/apikeys/zxt9z7k8of"
+    [1m[0mcreated_date[0m[0m      = "2023-02-14T06:01:40Z"
+    [1m[0mdescription[0m[0m       = "Managed by Terraform"
+    [1m[0menabled[0m[0m           = true
+    [1m[0mid[0m[0m                = "zxt9z7k8of"
+    [1m[0mlast_updated_date[0m[0m = "2023-02-14T06:01:40Z"
+    [1m[0mname[0m[0m              = "metaflow-key-q1lkynmm"
+    [1m[0mtags[0m[0m              = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m          = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mvalue[0m[0m             = (sensitive value)
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_api_gateway_deployment.this:
+resource "aws_api_gateway_deployment" "this" {
+    [1m[0mcreated_date[0m[0m  = "2023-02-14T06:12:31Z"
+    [1m[0mexecution_arn[0m[0m = "arn:aws:execute-api:ap-southeast-2:794874039740:n9y423tgzd/"
+    [1m[0mid[0m[0m            = "7opyij"
+    [1m[0minvoke_url[0m[0m    = "https://n9y423tgzd.execute-api.ap-southeast-2.amazonaws.com/"
+    [1m[0mrest_api_id[0m[0m   = "n9y423tgzd"
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_api_gateway_integration.db:
+resource "aws_api_gateway_integration" "db" {
+    [1m[0mcache_key_parameters[0m[0m    = []
+    [1m[0mcache_namespace[0m[0m         = "hosmr5"
+    [1m[0mconnection_id[0m[0m           = "j7yln9"
+    [1m[0mconnection_type[0m[0m         = "VPC_LINK"
+    [1m[0mhttp_method[0m[0m             = "GET"
+    [1m[0mid[0m[0m                      = "agi-n9y423tgzd-hosmr5-GET"
+    [1m[0mintegration_http_method[0m[0m = "GET"
+    [1m[0mpassthrough_behavior[0m[0m    = "WHEN_NO_MATCH"
+    [1m[0mrequest_parameters[0m[0m      = {}
+    [1m[0mrequest_templates[0m[0m       = {}
+    [1m[0mresource_id[0m[0m             = "hosmr5"
+    [1m[0mrest_api_id[0m[0m             = "n9y423tgzd"
+    [1m[0mtimeout_milliseconds[0m[0m    = 29000
+    [1m[0mtype[0m[0m                    = "HTTP_PROXY"
+    [1m[0muri[0m[0m                     = "http://metaflow-nlb-q1lkynmm-f6ce26dfade3c9b8.elb.ap-southeast-2.amazonaws.com:8082/db_schema_status"
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_api_gateway_integration.this:
+resource "aws_api_gateway_integration" "this" {
+    [1m[0mcache_key_parameters[0m[0m    = []
+    [1m[0mcache_namespace[0m[0m         = "9208ek"
+    [1m[0mconnection_id[0m[0m           = "j7yln9"
+    [1m[0mconnection_type[0m[0m         = "VPC_LINK"
+    [1m[0mhttp_method[0m[0m             = "ANY"
+    [1m[0mid[0m[0m                      = "agi-n9y423tgzd-9208ek-ANY"
+    [1m[0mintegration_http_method[0m[0m = "ANY"
+    [1m[0mpassthrough_behavior[0m[0m    = "WHEN_NO_MATCH"
+    [1m[0mrequest_parameters[0m[0m      = {
+        "integration.request.path.proxy" = "method.request.path.proxy"
+    }
+    [1m[0mrequest_templates[0m[0m       = {}
+    [1m[0mresource_id[0m[0m             = "9208ek"
+    [1m[0mrest_api_id[0m[0m             = "n9y423tgzd"
+    [1m[0mtimeout_milliseconds[0m[0m    = 29000
+    [1m[0mtype[0m[0m                    = "HTTP_PROXY"
+    [1m[0muri[0m[0m                     = "http://metaflow-nlb-q1lkynmm-f6ce26dfade3c9b8.elb.ap-southeast-2.amazonaws.com/{proxy}"
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_api_gateway_integration_response.this:
+resource "aws_api_gateway_integration_response" "this" {
+    [1m[0mhttp_method[0m[0m         = "ANY"
+    [1m[0mid[0m[0m                  = "agir-n9y423tgzd-9208ek-ANY-200"
+    [1m[0mresource_id[0m[0m         = "9208ek"
+    [1m[0mresponse_parameters[0m[0m = {}
+    [1m[0mresponse_templates[0m[0m  = {}
+    [1m[0mrest_api_id[0m[0m         = "n9y423tgzd"
+    [1m[0mstatus_code[0m[0m         = "200"
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_api_gateway_method.db:
+resource "aws_api_gateway_method" "db" {
+    [1m[0mapi_key_required[0m[0m     = true
+    [1m[0mauthorization[0m[0m        = "NONE"
+    [1m[0mauthorization_scopes[0m[0m = []
+    [1m[0mhttp_method[0m[0m          = "GET"
+    [1m[0mid[0m[0m                   = "agm-n9y423tgzd-hosmr5-GET"
+    [1m[0mrequest_models[0m[0m       = {}
+    [1m[0mrequest_parameters[0m[0m   = {}
+    [1m[0mresource_id[0m[0m          = "hosmr5"
+    [1m[0mrest_api_id[0m[0m          = "n9y423tgzd"
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_api_gateway_method.this:
+resource "aws_api_gateway_method" "this" {
+    [1m[0mapi_key_required[0m[0m     = true
+    [1m[0mauthorization[0m[0m        = "NONE"
+    [1m[0mauthorization_scopes[0m[0m = []
+    [1m[0mhttp_method[0m[0m          = "ANY"
+    [1m[0mid[0m[0m                   = "agm-n9y423tgzd-9208ek-ANY"
+    [1m[0mrequest_models[0m[0m       = {}
+    [1m[0mrequest_parameters[0m[0m   = {
+        "method.request.path.proxy" = true
+    }
+    [1m[0mresource_id[0m[0m          = "9208ek"
+    [1m[0mrest_api_id[0m[0m          = "n9y423tgzd"
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_api_gateway_method_response.db:
+resource "aws_api_gateway_method_response" "db" {
+    [1m[0mhttp_method[0m[0m         = "GET"
+    [1m[0mid[0m[0m                  = "agmr-n9y423tgzd-hosmr5-GET-200"
+    [1m[0mresource_id[0m[0m         = "hosmr5"
+    [1m[0mresponse_models[0m[0m     = {}
+    [1m[0mresponse_parameters[0m[0m = {}
+    [1m[0mrest_api_id[0m[0m         = "n9y423tgzd"
+    [1m[0mstatus_code[0m[0m         = "200"
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_api_gateway_method_response.this:
+resource "aws_api_gateway_method_response" "this" {
+    [1m[0mhttp_method[0m[0m         = "ANY"
+    [1m[0mid[0m[0m                  = "agmr-n9y423tgzd-9208ek-ANY-200"
+    [1m[0mresource_id[0m[0m         = "9208ek"
+    [1m[0mresponse_models[0m[0m     = {}
+    [1m[0mresponse_parameters[0m[0m = {}
+    [1m[0mrest_api_id[0m[0m         = "n9y423tgzd"
+    [1m[0mstatus_code[0m[0m         = "200"
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_api_gateway_resource.db:
+resource "aws_api_gateway_resource" "db" {
+    [1m[0mid[0m[0m          = "hosmr5"
+    [1m[0mparent_id[0m[0m   = "cuerfuulub"
+    [1m[0mpath[0m[0m        = "/db_schema_status"
+    [1m[0mpath_part[0m[0m   = "db_schema_status"
+    [1m[0mrest_api_id[0m[0m = "n9y423tgzd"
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_api_gateway_resource.this:
+resource "aws_api_gateway_resource" "this" {
+    [1m[0mid[0m[0m          = "9208ek"
+    [1m[0mparent_id[0m[0m   = "cuerfuulub"
+    [1m[0mpath[0m[0m        = "/{proxy+}"
+    [1m[0mpath_part[0m[0m   = "{proxy+}"
+    [1m[0mrest_api_id[0m[0m = "n9y423tgzd"
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_api_gateway_rest_api.this:
+resource "aws_api_gateway_rest_api" "this" {
+    [1m[0mapi_key_source[0m[0m               = "HEADER"
+    [1m[0marn[0m[0m                          = "arn:aws:apigateway:ap-southeast-2::/restapis/n9y423tgzd"
+    [1m[0mbinary_media_types[0m[0m           = []
+    [1m[0mcreated_date[0m[0m                 = "2023-02-14T05:33:28Z"
+    [1m[0mdescription[0m[0m                  = "Allows access to the Metadata service RDS instance"
+    [1m[0mdisable_execute_api_endpoint[0m[0m = false
+    [1m[0mexecution_arn[0m[0m                = "arn:aws:execute-api:ap-southeast-2:794874039740:n9y423tgzd"
+    [1m[0mid[0m[0m                           = "n9y423tgzd"
+    [1m[0mminimum_compression_size[0m[0m     = -1
+    [1m[0mname[0m[0m                         = "metaflow-api-q1lkynmm"
+    [1m[0mroot_resource_id[0m[0m             = "cuerfuulub"
+    [1m[0mtags[0m[0m                         = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m                     = {
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+
+    endpoint_configuration {
+        [1m[0mtypes[0m[0m            = [
+            "EDGE",
+        ]
+        [1m[0mvpc_endpoint_ids[0m[0m = []
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_api_gateway_stage.this:
+resource "aws_api_gateway_stage" "this" {
+    [1m[0marn[0m[0m                   = "arn:aws:apigateway:ap-southeast-2::/restapis/n9y423tgzd/stages/api"
+    [1m[0mcache_cluster_enabled[0m[0m = false
+    [1m[0mdeployment_id[0m[0m         = "7opyij"
+    [1m[0mexecution_arn[0m[0m         = "arn:aws:execute-api:ap-southeast-2:794874039740:n9y423tgzd/api"
+    [1m[0mid[0m[0m                    = "ags-n9y423tgzd-api"
+    [1m[0minvoke_url[0m[0m            = "https://n9y423tgzd.execute-api.ap-southeast-2.amazonaws.com/api"
+    [1m[0mrest_api_id[0m[0m           = "n9y423tgzd"
+    [1m[0mstage_name[0m[0m            = "api"
+    [1m[0mtags[0m[0m                  = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m              = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mvariables[0m[0m             = {}
+    [1m[0mxray_tracing_enabled[0m[0m  = false
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_api_gateway_usage_plan.this[0]:
+resource "aws_api_gateway_usage_plan" "this" {
+    [1m[0marn[0m[0m      = "arn:aws:apigateway:ap-southeast-2::/usageplans/gvk6qv"
+    [1m[0mid[0m[0m       = "gvk6qv"
+    [1m[0mname[0m[0m     = "metaflow-usage-plan-q1lkynmm"
+    [1m[0mtags[0m[0m     = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+
+    api_stages {
+        [1m[0mapi_id[0m[0m = "n9y423tgzd"
+        [1m[0mstage[0m[0m  = "api"
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_api_gateway_usage_plan_key.this[0]:
+resource "aws_api_gateway_usage_plan_key" "this" {
+    [1m[0mid[0m[0m            = "zxt9z7k8of"
+    [1m[0mkey_id[0m[0m        = "zxt9z7k8of"
+    [1m[0mkey_type[0m[0m      = "API_KEY"
+    [1m[0mname[0m[0m          = "metaflow-key-q1lkynmm"
+    [1m[0musage_plan_id[0m[0m = "gvk6qv"
+    [1m[0mvalue[0m[0m         = "wRjwFYgidA1Gw7V9nhQ3v2R4Dap0o3ns3F2eNGJE"
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_api_gateway_vpc_link.this:
+resource "aws_api_gateway_vpc_link" "this" {
+    [1m[0marn[0m[0m         = "arn:aws:apigateway:ap-southeast-2::/vpclinks/j7yln9"
+    [1m[0mid[0m[0m          = "j7yln9"
+    [1m[0mname[0m[0m        = "metaflow-vpclink-q1lkynmm"
+    [1m[0mtags[0m[0m        = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m    = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mtarget_arns[0m[0m = [
+        "arn:aws:elasticloadbalancing:ap-southeast-2:794874039740:loadbalancer/net/metaflow-nlb-q1lkynmm/f6ce26dfade3c9b8",
+    ]
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_cloudwatch_log_group.this:
+resource "aws_cloudwatch_log_group" "this" {
+    [1m[0marn[0m[0m               = "arn:aws:logs:ap-southeast-2:794874039740:log-group:metaflow-metadata-q1lkynmm"
+    [1m[0mid[0m[0m                = "metaflow-metadata-q1lkynmm"
+    [1m[0mname[0m[0m              = "metaflow-metadata-q1lkynmm"
+    [1m[0mretention_in_days[0m[0m = 0
+    [1m[0mtags[0m[0m              = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m          = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_ecs_cluster.this:
+resource "aws_ecs_cluster" "this" {
+    [1m[0marn[0m[0m                = "arn:aws:ecs:ap-southeast-2:794874039740:cluster/metaflow-q1lkynmm"
+    [1m[0mcapacity_providers[0m[0m = []
+    [1m[0mid[0m[0m                 = "arn:aws:ecs:ap-southeast-2:794874039740:cluster/metaflow-q1lkynmm"
+    [1m[0mname[0m[0m               = "metaflow-q1lkynmm"
+    [1m[0mtags[0m[0m               = {
+        "Metaflow"  = "true"
+        "Name"      = "metaflow-q1lkynmm"
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m           = {
+        "Metaflow"              = "true"
+        "Name"                  = "metaflow-q1lkynmm"
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+
+    setting {
+        [1m[0mname[0m[0m  = "containerInsights"
+        [1m[0mvalue[0m[0m = "disabled"
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_ecs_service.this:
+resource "aws_ecs_service" "this" {
+    [1m[0mcluster[0m[0m                            = "arn:aws:ecs:ap-southeast-2:794874039740:cluster/metaflow-q1lkynmm"
+    [1m[0mdeployment_maximum_percent[0m[0m         = 200
+    [1m[0mdeployment_minimum_healthy_percent[0m[0m = 100
+    [1m[0mdesired_count[0m[0m                      = 1
+    [1m[0menable_ecs_managed_tags[0m[0m            = false
+    [1m[0menable_execute_command[0m[0m             = false
+    [1m[0mhealth_check_grace_period_seconds[0m[0m  = 0
+    [1m[0miam_role[0m[0m                           = "aws-service-role"
+    [1m[0mid[0m[0m                                 = "arn:aws:ecs:ap-southeast-2:794874039740:service/metaflow-q1lkynmm/metaflow-metadata-service-q1lkynmm"
+    [1m[0mlaunch_type[0m[0m                        = "FARGATE"
+    [1m[0mname[0m[0m                               = "metaflow-metadata-service-q1lkynmm"
+    [1m[0mplatform_version[0m[0m                   = "LATEST"
+    [1m[0mpropagate_tags[0m[0m                     = "NONE"
+    [1m[0mscheduling_strategy[0m[0m                = "REPLICA"
+    [1m[0mtags[0m[0m                               = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m                           = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mtask_definition[0m[0m                    = "arn:aws:ecs:ap-southeast-2:794874039740:task-definition/metaflow-service-q1lkynmm:4"
+    [1m[0mwait_for_steady_state[0m[0m              = false
+
+    deployment_circuit_breaker {
+        [1m[0menable[0m[0m   = false
+        [1m[0mrollback[0m[0m = false
+    }
+
+    deployment_controller {
+        [1m[0mtype[0m[0m = "ECS"
+    }
+
+    load_balancer {
+        [1m[0mcontainer_name[0m[0m   = "metaflow-service-q1lkynmm"
+        [1m[0mcontainer_port[0m[0m   = 8080
+        [1m[0mtarget_group_arn[0m[0m = "arn:aws:elasticloadbalancing:ap-southeast-2:794874039740:targetgroup/metaflow-mdtg-q1lkynmm/7ec3a4b9ee1cb849"
+    }
+    load_balancer {
+        [1m[0mcontainer_name[0m[0m   = "metaflow-service-q1lkynmm"
+        [1m[0mcontainer_port[0m[0m   = 8082
+        [1m[0mtarget_group_arn[0m[0m = "arn:aws:elasticloadbalancing:ap-southeast-2:794874039740:targetgroup/metaflow-dbtg-q1lkynmm/1c06691b799890d3"
+    }
+
+    network_configuration {
+        [1m[0massign_public_ip[0m[0m = false
+        [1m[0msecurity_groups[0m[0m  = [
+            "sg-0061e6e772dd5de24",
+        ]
+        [1m[0msubnets[0m[0m          = [
+            "subnet-0878ad52456311c33",
+            "subnet-0bec9f6877b7c21dc",
+        ]
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_ecs_task_definition.this:
+resource "aws_ecs_task_definition" "this" {
+    [1m[0marn[0m[0m                      = "arn:aws:ecs:ap-southeast-2:794874039740:task-definition/metaflow-service-q1lkynmm:4"
+    [1m[0mcontainer_definitions[0m[0m    = (sensitive value)
+    [1m[0mcpu[0m[0m                      = "512"
+    [1m[0mexecution_role_arn[0m[0m       = "arn:aws:iam::794874039740:role/metaflow-ecs-execution-role-q1lkynmm"
+    [1m[0mfamily[0m[0m                   = "metaflow-service-q1lkynmm"
+    [1m[0mid[0m[0m                       = "metaflow-service-q1lkynmm"
+    [1m[0mipc_mode[0m[0m                 = ""
+    [1m[0mmemory[0m[0m                   = "1024"
+    [1m[0mnetwork_mode[0m[0m             = "awsvpc"
+    [1m[0mpid_mode[0m[0m                 = ""
+    [1m[0mrequires_compatibilities[0m[0m = [
+        "FARGATE",
+    ]
+    [1m[0mrevision[0m[0m                 = 4
+    [1m[0mskip_destroy[0m[0m             = false
+    [1m[0mtags[0m[0m                     = {
+        "Metaflow"  = "true"
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m                 = {
+        "Metaflow"              = "true"
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mtask_role_arn[0m[0m            = "arn:aws:iam::794874039740:role/metaflow-metadata-ecs-task-q1lkynmm"
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_iam_role.lambda_ecs_execute_role:
+resource "aws_iam_role" "lambda_ecs_execute_role" {
+    [1m[0marn[0m[0m                   = "arn:aws:iam::794874039740:role/metaflow-lambda_ecs_execute-q1lkynmm"
+    [1m[0massume_role_policy[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "sts:AssumeRole"
+                    Effect    = "Allow"
+                    Principal = {
+                        Service = "lambda.amazonaws.com"
+                    }
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mcreate_date[0m[0m           = "2023-02-14T06:01:44Z"
+    [1m[0mforce_detach_policies[0m[0m = false
+    [1m[0mid[0m[0m                    = "metaflow-lambda_ecs_execute-q1lkynmm"
+    [1m[0mmanaged_policy_arns[0m[0m   = []
+    [1m[0mmax_session_duration[0m[0m  = 3600
+    [1m[0mname[0m[0m                  = "metaflow-lambda_ecs_execute-q1lkynmm"
+    [1m[0mpath[0m[0m                  = "/"
+    [1m[0mtags[0m[0m                  = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m              = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0munique_id[0m[0m             = "AROA3SERPJW6OLLZKNZLF"
+
+    inline_policy {
+        [1m[0mname[0m[0m   = "cloudwatch"
+        [1m[0mpolicy[0m[0m = jsonencode(
+            {
+                Statement = [
+                    {
+                        Action   = "logs:CreateLogGroup"
+                        Effect   = "Allow"
+                        Resource = "arn:aws:logs:ap-southeast-2:794874039740:*"
+                        Sid      = "CreateLogGroup"
+                    },
+                    {
+                        Action   = [
+                            "logs:PutLogEvents",
+                            "logs:CreateLogStream",
+                        ]
+                        Effect   = "Allow"
+                        Resource = "arn:aws:logs:ap-southeast-2:794874039740:log-group:/aws/lambda/metaflow-db_migrate-q1lkynmm:*"
+                        Sid      = "LogEvents"
+                    },
+                ]
+                Version   = "2012-10-17"
+            }
+        )
+    }
+    inline_policy {
+        [1m[0mname[0m[0m   = "ecs_task_execute"
+        [1m[0mpolicy[0m[0m = jsonencode(
+            {
+                Statement = [
+                    {
+                        Action   = [
+                            "ec2:DescribeNetworkInterfaces",
+                            "ec2:DeleteNetworkInterface",
+                            "ec2:CreateNetworkInterface",
+                        ]
+                        Effect   = "Allow"
+                        Resource = "*"
+                        Sid      = "NetInts"
+                    },
+                ]
+                Version   = "2012-10-17"
+            }
+        )
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_iam_role.metadata_svc_ecs_task_role:
+resource "aws_iam_role" "metadata_svc_ecs_task_role" {
+    [1m[0marn[0m[0m                   = "arn:aws:iam::794874039740:role/metaflow-metadata-ecs-task-q1lkynmm"
+    [1m[0massume_role_policy[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "sts:AssumeRole"
+                    Effect    = "Allow"
+                    Principal = {
+                        Service = "ecs-tasks.amazonaws.com"
+                    }
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mcreate_date[0m[0m           = "2023-02-14T06:01:43Z"
+    [1m[0mdescription[0m[0m           = "This role is passed to AWS ECS' task definition as the `task_role`. This allows the running of the Metaflow Metadata Service to have the proper permissions to speak to other AWS resources."
+    [1m[0mforce_detach_policies[0m[0m = false
+    [1m[0mid[0m[0m                    = "metaflow-metadata-ecs-task-q1lkynmm"
+    [1m[0mmanaged_policy_arns[0m[0m   = []
+    [1m[0mmax_session_duration[0m[0m  = 3600
+    [1m[0mname[0m[0m                  = "metaflow-metadata-ecs-task-q1lkynmm"
+    [1m[0mpath[0m[0m                  = "/"
+    [1m[0mtags[0m[0m                  = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m              = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0munique_id[0m[0m             = "AROA3SERPJW6DYW4MFCXS"
+
+    inline_policy {
+        [1m[0mname[0m[0m   = "custom_s3"
+        [1m[0mpolicy[0m[0m = jsonencode(
+            {
+                Statement = [
+                    {
+                        Action   = [
+                            "s3:ListBucket",
+                            "s3:GetObject",
+                        ]
+                        Effect   = "Allow"
+                        Resource = [
+                            "arn:aws:s3:::metaflow-s3-q1lkynmm/*",
+                            "arn:aws:s3:::metaflow-s3-q1lkynmm",
+                        ]
+                        Sid      = "ObjectAccessMetadataService"
+                    },
+                ]
+                Version   = "2012-10-17"
+            }
+        )
+    }
+    inline_policy {
+        [1m[0mname[0m[0m   = "deny_presigned"
+        [1m[0mpolicy[0m[0m = jsonencode(
+            {
+                Statement = [
+                    {
+                        Action    = "s3:*"
+                        Condition = {
+                            StringNotEquals = {
+                                "s3:authType" = "REST-HEADER"
+                            }
+                        }
+                        Effect    = "Deny"
+                        Resource  = "*"
+                        Sid       = "DenyPresignedBatch"
+                    },
+                ]
+                Version   = "2012-10-17"
+            }
+        )
+    }
+    inline_policy {
+        [1m[0mname[0m[0m   = "s3_kms"
+        [1m[0mpolicy[0m[0m = jsonencode(
+            {
+                Statement = [
+                    {
+                        Action   = [
+                            "kms:GenerateDataKey",
+                            "kms:Encrypt",
+                            "kms:Decrypt",
+                        ]
+                        Effect   = "Allow"
+                        Resource = "arn:aws:kms:ap-southeast-2:794874039740:key/85aa9de8-1abf-4dab-a785-019a5a8b2c71"
+                        Sid      = ""
+                    },
+                ]
+                Version   = "2012-10-17"
+            }
+        )
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_iam_role_policy.grant_custom_s3_batch:
+resource "aws_iam_role_policy" "grant_custom_s3_batch" {
+    [1m[0mid[0m[0m     = "metaflow-metadata-ecs-task-q1lkynmm:custom_s3"
+    [1m[0mname[0m[0m   = "custom_s3"
+    [1m[0mpolicy[0m[0m = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "s3:ListBucket",
+                        "s3:GetObject",
+                    ]
+                    Effect   = "Allow"
+                    Resource = [
+                        "arn:aws:s3:::metaflow-s3-q1lkynmm/*",
+                        "arn:aws:s3:::metaflow-s3-q1lkynmm",
+                    ]
+                    Sid      = "ObjectAccessMetadataService"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mrole[0m[0m   = "metaflow-metadata-ecs-task-q1lkynmm"
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_iam_role_policy.grant_deny_presigned_batch:
+resource "aws_iam_role_policy" "grant_deny_presigned_batch" {
+    [1m[0mid[0m[0m     = "metaflow-metadata-ecs-task-q1lkynmm:deny_presigned"
+    [1m[0mname[0m[0m   = "deny_presigned"
+    [1m[0mpolicy[0m[0m = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "s3:*"
+                    Condition = {
+                        StringNotEquals = {
+                            "s3:authType" = "REST-HEADER"
+                        }
+                    }
+                    Effect    = "Deny"
+                    Resource  = "*"
+                    Sid       = "DenyPresignedBatch"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mrole[0m[0m   = "metaflow-metadata-ecs-task-q1lkynmm"
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_iam_role_policy.grant_lambda_ecs_cloudwatch:
+resource "aws_iam_role_policy" "grant_lambda_ecs_cloudwatch" {
+    [1m[0mid[0m[0m     = "metaflow-lambda_ecs_execute-q1lkynmm:cloudwatch"
+    [1m[0mname[0m[0m   = "cloudwatch"
+    [1m[0mpolicy[0m[0m = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = "logs:CreateLogGroup"
+                    Effect   = "Allow"
+                    Resource = "arn:aws:logs:ap-southeast-2:794874039740:*"
+                    Sid      = "CreateLogGroup"
+                },
+                {
+                    Action   = [
+                        "logs:PutLogEvents",
+                        "logs:CreateLogStream",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "arn:aws:logs:ap-southeast-2:794874039740:log-group:/aws/lambda/metaflow-db_migrate-q1lkynmm:*"
+                    Sid      = "LogEvents"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mrole[0m[0m   = "metaflow-lambda_ecs_execute-q1lkynmm"
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_iam_role_policy.grant_lambda_ecs_vpc:
+resource "aws_iam_role_policy" "grant_lambda_ecs_vpc" {
+    [1m[0mid[0m[0m     = "metaflow-lambda_ecs_execute-q1lkynmm:ecs_task_execute"
+    [1m[0mname[0m[0m   = "ecs_task_execute"
+    [1m[0mpolicy[0m[0m = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "ec2:DescribeNetworkInterfaces",
+                        "ec2:DeleteNetworkInterface",
+                        "ec2:CreateNetworkInterface",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "*"
+                    Sid      = "NetInts"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mrole[0m[0m   = "metaflow-lambda_ecs_execute-q1lkynmm"
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_iam_role_policy.grant_s3_kms:
+resource "aws_iam_role_policy" "grant_s3_kms" {
+    [1m[0mid[0m[0m     = "metaflow-metadata-ecs-task-q1lkynmm:s3_kms"
+    [1m[0mname[0m[0m   = "s3_kms"
+    [1m[0mpolicy[0m[0m = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "kms:GenerateDataKey",
+                        "kms:Encrypt",
+                        "kms:Decrypt",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "arn:aws:kms:ap-southeast-2:794874039740:key/85aa9de8-1abf-4dab-a785-019a5a8b2c71"
+                    Sid      = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mrole[0m[0m   = "metaflow-metadata-ecs-task-q1lkynmm"
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_lambda_function.db_migrate_lambda:
+resource "aws_lambda_function" "db_migrate_lambda" {
+    [1m[0marchitectures[0m[0m                  = [
+        "x86_64",
+    ]
+    [1m[0marn[0m[0m                            = "arn:aws:lambda:ap-southeast-2:794874039740:function:metaflow-db_migrate-q1lkynmm"
+    [1m[0mdescription[0m[0m                    = "Trigger DB Migration"
+    [1m[0mfilename[0m[0m                       = ".terraform/modules/metaflow/modules/metadata-service/db_migrate_lambda.zip"
+    [1m[0mfunction_name[0m[0m                  = "metaflow-db_migrate-q1lkynmm"
+    [1m[0mhandler[0m[0m                        = "index.handler"
+    [1m[0mid[0m[0m                             = "metaflow-db_migrate-q1lkynmm"
+    [1m[0minvoke_arn[0m[0m                     = "arn:aws:apigateway:ap-southeast-2:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-southeast-2:794874039740:function:metaflow-db_migrate-q1lkynmm/invocations"
+    [1m[0mlast_modified[0m[0m                  = "2023-02-14T06:05:00.565+0000"
+    [1m[0mlayers[0m[0m                         = []
+    [1m[0mmemory_size[0m[0m                    = 128
+    [1m[0mpackage_type[0m[0m                   = "Zip"
+    [1m[0mpublish[0m[0m                        = false
+    [1m[0mqualified_arn[0m[0m                  = "arn:aws:lambda:ap-southeast-2:794874039740:function:metaflow-db_migrate-q1lkynmm:$LATEST"
+    [1m[0mreserved_concurrent_executions[0m[0m = -1
+    [1m[0mrole[0m[0m                           = "arn:aws:iam::794874039740:role/metaflow-lambda_ecs_execute-q1lkynmm"
+    [1m[0mruntime[0m[0m                        = "python3.7"
+    [1m[0msource_code_hash[0m[0m               = "aiSWfRx3iCorgGQpHV62uDiIECbC2rB56ycEaaauzEI="
+    [1m[0msource_code_size[0m[0m               = 427
+    [1m[0mtags[0m[0m                           = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m                       = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mtimeout[0m[0m                        = 900
+    [1m[0mversion[0m[0m                        = "$LATEST"
+
+    environment {
+        [1m[0mvariables[0m[0m = {
+            "MD_LB_ADDRESS" = "http://metaflow-nlb-q1lkynmm-f6ce26dfade3c9b8.elb.ap-southeast-2.amazonaws.com:8082"
+        }
+    }
+
+    tracing_config {
+        [1m[0mmode[0m[0m = "PassThrough"
+    }
+
+    vpc_config {
+        [1m[0msecurity_group_ids[0m[0m = [
+            "sg-0061e6e772dd5de24",
+        ]
+        [1m[0msubnet_ids[0m[0m         = [
+            "subnet-0878ad52456311c33",
+            "subnet-0bec9f6877b7c21dc",
+        ]
+        [1m[0mvpc_id[0m[0m             = "vpc-0d593e7740dd43cb4"
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_lb.this:
+resource "aws_lb" "this" {
+    [1m[0marn[0m[0m                              = "arn:aws:elasticloadbalancing:ap-southeast-2:794874039740:loadbalancer/net/metaflow-nlb-q1lkynmm/f6ce26dfade3c9b8"
+    [1m[0marn_suffix[0m[0m                       = "net/metaflow-nlb-q1lkynmm/f6ce26dfade3c9b8"
+    [1m[0mdns_name[0m[0m                         = "metaflow-nlb-q1lkynmm-f6ce26dfade3c9b8.elb.ap-southeast-2.amazonaws.com"
+    [1m[0menable_cross_zone_load_balancing[0m[0m = false
+    [1m[0menable_deletion_protection[0m[0m       = false
+    [1m[0mid[0m[0m                               = "arn:aws:elasticloadbalancing:ap-southeast-2:794874039740:loadbalancer/net/metaflow-nlb-q1lkynmm/f6ce26dfade3c9b8"
+    [1m[0minternal[0m[0m                         = true
+    [1m[0mip_address_type[0m[0m                  = "ipv4"
+    [1m[0mload_balancer_type[0m[0m               = "network"
+    [1m[0mname[0m[0m                             = "metaflow-nlb-q1lkynmm"
+    [1m[0msecurity_groups[0m[0m                  = []
+    [1m[0msubnets[0m[0m                          = [
+        "subnet-0878ad52456311c33",
+        "subnet-0bec9f6877b7c21dc",
+    ]
+    [1m[0mtags[0m[0m                             = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m                         = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mvpc_id[0m[0m                           = "vpc-0d593e7740dd43cb4"
+    [1m[0mzone_id[0m[0m                          = "ZCT6FZBF4DROD"
+
+    access_logs {
+        [1m[0menabled[0m[0m = false
+    }
+
+    subnet_mapping {
+        [1m[0msubnet_id[0m[0m = "subnet-0878ad52456311c33"
+    }
+    subnet_mapping {
+        [1m[0msubnet_id[0m[0m = "subnet-0bec9f6877b7c21dc"
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_lb_listener.db_migrate:
+resource "aws_lb_listener" "db_migrate" {
+    [1m[0marn[0m[0m               = "arn:aws:elasticloadbalancing:ap-southeast-2:794874039740:listener/net/metaflow-nlb-q1lkynmm/f6ce26dfade3c9b8/ca10ba3e36b6e1a6"
+    [1m[0mid[0m[0m                = "arn:aws:elasticloadbalancing:ap-southeast-2:794874039740:listener/net/metaflow-nlb-q1lkynmm/f6ce26dfade3c9b8/ca10ba3e36b6e1a6"
+    [1m[0mload_balancer_arn[0m[0m = "arn:aws:elasticloadbalancing:ap-southeast-2:794874039740:loadbalancer/net/metaflow-nlb-q1lkynmm/f6ce26dfade3c9b8"
+    [1m[0mport[0m[0m              = 8082
+    [1m[0mprotocol[0m[0m          = "TCP"
+    [1m[0mtags[0m[0m              = {}
+    [1m[0mtags_all[0m[0m          = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+
+    default_action {
+        [1m[0morder[0m[0m            = 1
+        [1m[0mtarget_group_arn[0m[0m = "arn:aws:elasticloadbalancing:ap-southeast-2:794874039740:targetgroup/metaflow-dbtg-q1lkynmm/1c06691b799890d3"
+        [1m[0mtype[0m[0m             = "forward"
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_lb_listener.this:
+resource "aws_lb_listener" "this" {
+    [1m[0marn[0m[0m               = "arn:aws:elasticloadbalancing:ap-southeast-2:794874039740:listener/net/metaflow-nlb-q1lkynmm/f6ce26dfade3c9b8/d442ce2ce6e914e8"
+    [1m[0mid[0m[0m                = "arn:aws:elasticloadbalancing:ap-southeast-2:794874039740:listener/net/metaflow-nlb-q1lkynmm/f6ce26dfade3c9b8/d442ce2ce6e914e8"
+    [1m[0mload_balancer_arn[0m[0m = "arn:aws:elasticloadbalancing:ap-southeast-2:794874039740:loadbalancer/net/metaflow-nlb-q1lkynmm/f6ce26dfade3c9b8"
+    [1m[0mport[0m[0m              = 80
+    [1m[0mprotocol[0m[0m          = "TCP"
+    [1m[0mtags[0m[0m              = {}
+    [1m[0mtags_all[0m[0m          = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "team"                  = "ml-apac-trisolaris"
+    }
+
+    default_action {
+        [1m[0morder[0m[0m            = 1
+        [1m[0mtarget_group_arn[0m[0m = "arn:aws:elasticloadbalancing:ap-southeast-2:794874039740:targetgroup/metaflow-mdtg-q1lkynmm/7ec3a4b9ee1cb849"
+        [1m[0mtype[0m[0m             = "forward"
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_lb_target_group.db_migrate:
+resource "aws_lb_target_group" "db_migrate" {
+    [1m[0marn[0m[0m                                = "arn:aws:elasticloadbalancing:ap-southeast-2:794874039740:targetgroup/metaflow-dbtg-q1lkynmm/1c06691b799890d3"
+    [1m[0marn_suffix[0m[0m                         = "targetgroup/metaflow-dbtg-q1lkynmm/1c06691b799890d3"
+    [1m[0mconnection_termination[0m[0m             = false
+    [1m[0mderegistration_delay[0m[0m               = "300"
+    [1m[0mid[0m[0m                                 = "arn:aws:elasticloadbalancing:ap-southeast-2:794874039740:targetgroup/metaflow-dbtg-q1lkynmm/1c06691b799890d3"
+    [1m[0mlambda_multi_value_headers_enabled[0m[0m = false
+    [1m[0mname[0m[0m                               = "metaflow-dbtg-q1lkynmm"
+    [1m[0mport[0m[0m                               = 8082
+    [1m[0mpreserve_client_ip[0m[0m                 = "false"
+    [1m[0mprotocol[0m[0m                           = "TCP"
+    [1m[0mproxy_protocol_v2[0m[0m                  = false
+    [1m[0mslow_start[0m[0m                         = 0
+    [1m[0mtags[0m[0m                               = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m                           = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mtarget_type[0m[0m                        = "ip"
+    [1m[0mvpc_id[0m[0m                             = "vpc-0d593e7740dd43cb4"
+
+    health_check {
+        [1m[0menabled[0m[0m             = true
+        [1m[0mhealthy_threshold[0m[0m   = 2
+        [1m[0minterval[0m[0m            = 10
+        [1m[0mport[0m[0m                = "8080"
+        [1m[0mprotocol[0m[0m            = "TCP"
+        [1m[0mtimeout[0m[0m             = 10
+        [1m[0munhealthy_threshold[0m[0m = 2
+    }
+
+    stickiness {
+        [1m[0mcookie_duration[0m[0m = 0
+        [1m[0menabled[0m[0m         = false
+        [1m[0mtype[0m[0m            = "source_ip"
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_lb_target_group.this:
+resource "aws_lb_target_group" "this" {
+    [1m[0marn[0m[0m                                = "arn:aws:elasticloadbalancing:ap-southeast-2:794874039740:targetgroup/metaflow-mdtg-q1lkynmm/7ec3a4b9ee1cb849"
+    [1m[0marn_suffix[0m[0m                         = "targetgroup/metaflow-mdtg-q1lkynmm/7ec3a4b9ee1cb849"
+    [1m[0mconnection_termination[0m[0m             = false
+    [1m[0mderegistration_delay[0m[0m               = "300"
+    [1m[0mid[0m[0m                                 = "arn:aws:elasticloadbalancing:ap-southeast-2:794874039740:targetgroup/metaflow-mdtg-q1lkynmm/7ec3a4b9ee1cb849"
+    [1m[0mlambda_multi_value_headers_enabled[0m[0m = false
+    [1m[0mname[0m[0m                               = "metaflow-mdtg-q1lkynmm"
+    [1m[0mport[0m[0m                               = 8080
+    [1m[0mpreserve_client_ip[0m[0m                 = "false"
+    [1m[0mprotocol[0m[0m                           = "TCP"
+    [1m[0mproxy_protocol_v2[0m[0m                  = false
+    [1m[0mslow_start[0m[0m                         = 0
+    [1m[0mtags[0m[0m                               = {
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m                           = {
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mtarget_type[0m[0m                        = "ip"
+    [1m[0mvpc_id[0m[0m                             = "vpc-0d593e7740dd43cb4"
+
+    health_check {
+        [1m[0menabled[0m[0m             = true
+        [1m[0mhealthy_threshold[0m[0m   = 2
+        [1m[0minterval[0m[0m            = 10
+        [1m[0mport[0m[0m                = "traffic-port"
+        [1m[0mprotocol[0m[0m            = "TCP"
+        [1m[0mtimeout[0m[0m             = 10
+        [1m[0munhealthy_threshold[0m[0m = 2
+    }
+
+    stickiness {
+        [1m[0mcookie_duration[0m[0m = 0
+        [1m[0menabled[0m[0m         = false
+        [1m[0mtype[0m[0m            = "source_ip"
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.aws_security_group.metadata_service_security_group:
+resource "aws_security_group" "metadata_service_security_group" {
+    [1m[0marn[0m[0m                    = "arn:aws:ec2:ap-southeast-2:794874039740:security-group/sg-0061e6e772dd5de24"
+    [1m[0mdescription[0m[0m            = "Security Group for Fargate which runs the Metadata Service."
+    [1m[0megress[0m[0m                 = [
+        {
+            cidr_blocks      = [
+                "0.0.0.0/0",
+            ]
+            description      = "Allow all external communication"
+            from_port        = 0
+            ipv6_cidr_blocks = []
+            prefix_list_ids  = []
+            protocol         = "-1"
+            security_groups  = []
+            self             = false
+            to_port          = 0
+        },
+    ]
+    [1m[0mid[0m[0m                     = "sg-0061e6e772dd5de24"
+    [1m[0mingress[0m[0m                = [
+        {
+            cidr_blocks      = [
+                "10.10.0.0/16",
+            ]
+            description      = "Allow API calls internally"
+            from_port        = 8080
+            ipv6_cidr_blocks = []
+            prefix_list_ids  = []
+            protocol         = "tcp"
+            security_groups  = []
+            self             = false
+            to_port          = 8080
+        },
+        {
+            cidr_blocks      = [
+                "10.10.0.0/16",
+            ]
+            description      = "Allow API calls internally"
+            from_port        = 8082
+            ipv6_cidr_blocks = []
+            prefix_list_ids  = []
+            protocol         = "tcp"
+            security_groups  = []
+            self             = false
+            to_port          = 8082
+        },
+        {
+            cidr_blocks      = []
+            description      = "Internal communication"
+            from_port        = 0
+            ipv6_cidr_blocks = []
+            prefix_list_ids  = []
+            protocol         = "-1"
+            security_groups  = []
+            self             = true
+            to_port          = 0
+        },
+    ]
+    [1m[0mname[0m[0m                   = "metaflow-metadata-service-security-group-q1lkynmm"
+    [1m[0mowner_id[0m[0m               = "794874039740"
+    [1m[0mrevoke_rules_on_delete[0m[0m = false
+    [1m[0mtags[0m[0m                   = {
+        "Metaflow"  = "true"
+        "managedBy" = "terraform"
+    }
+    [1m[0mtags_all[0m[0m               = {
+        "Metaflow"              = "true"
+        "Name"                  = ""
+        "final-expiration-date" = "2023-03-15"
+        "managedBy"             = "terraform"
+        "team"                  = "ml-apac-trisolaris"
+    }
+    [1m[0mvpc_id[0m[0m                 = "vpc-0d593e7740dd43cb4"
+}
+
+# module.metaflow.module.metaflow-metadata-service.data.archive_file.db_migrate_lambda:
+data "archive_file" "db_migrate_lambda" {
+    [1m[0mid[0m[0m                  = "518b2a79542e171adccd6fe0dcb241fcbb24c569"
+    [1m[0moutput_base64sha256[0m[0m = "aiSWfRx3iCorgGQpHV62uDiIECbC2rB56ycEaaauzEI="
+    [1m[0moutput_file_mode[0m[0m    = "0666"
+    [1m[0moutput_md5[0m[0m          = "214f125850bd06c5da96b0b272bf574c"
+    [1m[0moutput_path[0m[0m         = ".terraform/modules/metaflow/modules/metadata-service/db_migrate_lambda.zip"
+    [1m[0moutput_sha[0m[0m          = "518b2a79542e171adccd6fe0dcb241fcbb24c569"
+    [1m[0moutput_size[0m[0m         = 427
+    [1m[0msource_file[0m[0m         = ".terraform/modules/metaflow/modules/metadata-service/index.py"
+    [1m[0mtype[0m[0m                = "zip"
+}
+
+# module.metaflow.module.metaflow-metadata-service.data.aws_caller_identity.current:
+data "aws_caller_identity" "current" {
+    [1m[0maccount_id[0m[0m = "794874039740"
+    [1m[0marn[0m[0m        = "arn:aws:sts::794874039740:assumed-role/atlantis-role-trisolaris/1676590479435095000"
+    [1m[0mid[0m[0m         = "794874039740"
+    [1m[0muser_id[0m[0m    = "AROA3SERPJW6MSURX5RNN:1676590479435095000"
+}
+
+# module.metaflow.module.metaflow-metadata-service.data.aws_iam_policy_document.custom_s3_batch:
+data "aws_iam_policy_document" "custom_s3_batch" {
+    [1m[0mid[0m[0m      = "2812397336"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "s3:ListBucket",
+                        "s3:GetObject",
+                    ]
+                    Effect   = "Allow"
+                    Resource = [
+                        "arn:aws:s3:::metaflow-s3-q1lkynmm/*",
+                        "arn:aws:s3:::metaflow-s3-q1lkynmm",
+                    ]
+                    Sid      = "ObjectAccessMetadataService"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "s3:GetObject",
+            "s3:ListBucket",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "arn:aws:s3:::metaflow-s3-q1lkynmm",
+            "arn:aws:s3:::metaflow-s3-q1lkynmm/*",
+        ]
+        [1m[0msid[0m[0m           = "ObjectAccessMetadataService"
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.data.aws_iam_policy_document.deny_presigned_batch:
+data "aws_iam_policy_document" "deny_presigned_batch" {
+    [1m[0mid[0m[0m      = "1087333182"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "s3:*"
+                    Condition = {
+                        StringNotEquals = {
+                            "s3:authType" = "REST-HEADER"
+                        }
+                    }
+                    Effect    = "Deny"
+                    Resource  = "*"
+                    Sid       = "DenyPresignedBatch"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "s3:*",
+        ]
+        [1m[0meffect[0m[0m        = "Deny"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "*",
+        ]
+        [1m[0msid[0m[0m           = "DenyPresignedBatch"
+
+        condition {
+            [1m[0mtest[0m[0m     = "StringNotEquals"
+            [1m[0mvalues[0m[0m   = [
+                "REST-HEADER",
+            ]
+            [1m[0mvariable[0m[0m = "s3:authType"
+        }
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.data.aws_iam_policy_document.lambda_ecs_execute_role:
+data "aws_iam_policy_document" "lambda_ecs_execute_role" {
+    [1m[0mid[0m[0m      = "3693445097"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "sts:AssumeRole"
+                    Effect    = "Allow"
+                    Principal = {
+                        Service = "lambda.amazonaws.com"
+                    }
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "sts:AssumeRole",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = []
+
+        principals {
+            [1m[0midentifiers[0m[0m = [
+                "lambda.amazonaws.com",
+            ]
+            [1m[0mtype[0m[0m        = "Service"
+        }
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.data.aws_iam_policy_document.lambda_ecs_task_execute_policy_cloudwatch:
+data "aws_iam_policy_document" "lambda_ecs_task_execute_policy_cloudwatch" {
+    [1m[0mid[0m[0m      = "4246493236"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = "logs:CreateLogGroup"
+                    Effect   = "Allow"
+                    Resource = "arn:aws:logs:ap-southeast-2:794874039740:*"
+                    Sid      = "CreateLogGroup"
+                },
+                {
+                    Action   = [
+                        "logs:PutLogEvents",
+                        "logs:CreateLogStream",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "arn:aws:logs:ap-southeast-2:794874039740:log-group:/aws/lambda/metaflow-db_migrate-q1lkynmm:*"
+                    Sid      = "LogEvents"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "logs:CreateLogGroup",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "arn:aws:logs:ap-southeast-2:794874039740:*",
+        ]
+        [1m[0msid[0m[0m           = "CreateLogGroup"
+    }
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "logs:CreateLogStream",
+            "logs:PutLogEvents",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "arn:aws:logs:ap-southeast-2:794874039740:log-group:/aws/lambda/metaflow-db_migrate-q1lkynmm:*",
+        ]
+        [1m[0msid[0m[0m           = "LogEvents"
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.data.aws_iam_policy_document.lambda_ecs_task_execute_policy_vpc:
+data "aws_iam_policy_document" "lambda_ecs_task_execute_policy_vpc" {
+    [1m[0mid[0m[0m      = "1735722009"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "ec2:DescribeNetworkInterfaces",
+                        "ec2:DeleteNetworkInterface",
+                        "ec2:CreateNetworkInterface",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "*"
+                    Sid      = "NetInts"
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "ec2:CreateNetworkInterface",
+            "ec2:DeleteNetworkInterface",
+            "ec2:DescribeNetworkInterfaces",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "*",
+        ]
+        [1m[0msid[0m[0m           = "NetInts"
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.data.aws_iam_policy_document.metadata_svc_ecs_task_assume_role:
+data "aws_iam_policy_document" "metadata_svc_ecs_task_assume_role" {
+    [1m[0mid[0m[0m      = "320642683"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action    = "sts:AssumeRole"
+                    Effect    = "Allow"
+                    Principal = {
+                        Service = "ecs-tasks.amazonaws.com"
+                    }
+                    Sid       = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "sts:AssumeRole",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = []
+
+        principals {
+            [1m[0midentifiers[0m[0m = [
+                "ecs-tasks.amazonaws.com",
+            ]
+            [1m[0mtype[0m[0m        = "Service"
+        }
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.data.aws_iam_policy_document.s3_kms:
+data "aws_iam_policy_document" "s3_kms" {
+    [1m[0mid[0m[0m      = "3388776064"
+    [1m[0mjson[0m[0m    = jsonencode(
+        {
+            Statement = [
+                {
+                    Action   = [
+                        "kms:GenerateDataKey",
+                        "kms:Encrypt",
+                        "kms:Decrypt",
+                    ]
+                    Effect   = "Allow"
+                    Resource = "arn:aws:kms:ap-southeast-2:794874039740:key/85aa9de8-1abf-4dab-a785-019a5a8b2c71"
+                    Sid      = ""
+                },
+            ]
+            Version   = "2012-10-17"
+        }
+    )
+    [1m[0mversion[0m[0m = "2012-10-17"
+
+    statement {
+        [1m[0mactions[0m[0m       = [
+            "kms:Decrypt",
+            "kms:Encrypt",
+            "kms:GenerateDataKey",
+        ]
+        [1m[0meffect[0m[0m        = "Allow"
+        [1m[0mnot_actions[0m[0m   = []
+        [1m[0mnot_resources[0m[0m = []
+        [1m[0mresources[0m[0m     = [
+            "arn:aws:kms:ap-southeast-2:794874039740:key/85aa9de8-1abf-4dab-a785-019a5a8b2c71",
+        ]
+    }
+}
+
+# module.metaflow.module.metaflow-metadata-service.data.aws_region.current:
+data "aws_region" "current" {
+    [1m[0mdescription[0m[0m = "Asia Pacific (Sydney)"
+    [1m[0mendpoint[0m[0m    = "ec2.ap-southeast-2.amazonaws.com"
+    [1m[0mid[0m[0m          = "ap-southeast-2"
+    [1m[0mname[0m[0m        = "ap-southeast-2"
+}
+
+# module.metaflow.module.metaflow-metadata-service.local_file.db_migrate_lambda:
+resource "local_file" "db_migrate_lambda" {
+    [1m[0mcontent[0m[0m              = <<-EOT
+        import os, json
+        from urllib import request
+        
+        def handler(event, context):
+          response = {}
+          status_endpoint = "{}/db_schema_status".format(os.environ.get('MD_LB_ADDRESS'))
+          upgrade_endpoint = "{}/upgrade".format(os.environ.get('MD_LB_ADDRESS'))
+        
+          with request.urlopen(status_endpoint) as status:
+            response['init-status'] = json.loads(status.read())
+        
+          upgrade_patch = request.Request(upgrade_endpoint, method='PATCH')
+          with request.urlopen(upgrade_patch) as upgrade:
+            response['upgrade-result'] = upgrade.read().decode()
+        
+          with request.urlopen(status_endpoint) as status:
+            response['final-status'] = json.loads(status.read())
+        
+          print(response)
+          return(response)
+    EOT
+    [1m[0mdirectory_permission[0m[0m = "0777"
+    [1m[0mfile_permission[0m[0m      = "0777"
+    [1m[0mfilename[0m[0m             = ".terraform/modules/metaflow/modules/metadata-service/index.py"
+    [1m[0mid[0m[0m                   = "8ee1a757de18816ac8f78c1b0365c8245aa94a9e"
+}[0m[0m
