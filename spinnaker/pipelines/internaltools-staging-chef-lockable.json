@@ -2,7 +2,7 @@
   "application": "ml-training-pipelines",
   "keepWaitingPipelines": false,
   "limitConcurrent": true,
-  "name": "staging-deploy-pod998-lockable",
+  "name": "internaltools-staging-chef-lockable",
   "notifications": [],
   "parameterConfig": [
     {
@@ -430,12 +430,12 @@
       "completeOtherBranchesThenFail": false,
       "continuePipeline": false,
       "failPipeline": true,
-      "name": "staging-deploy-pod998",
-      "pipeline": "${#pipelineId(\"staging-deploy-pod998\")}",
+      "name": "ml-training-pipelines",
+      "pipeline": "${#pipelineId(\"ml-training-pipelines\")}",
       "pipelineParameters": {
         "gitRef": "${ trigger.parameters.gitRef }"
       },
-      "refId": "staging-deploy-pod998",
+      "refId": "ml-training-pipelines",
       "requisiteStageRefIds": [
         "preflight-check-artifacts-ready"
       ],
@@ -450,7 +450,7 @@
       "name": "Wait",
       "refId": "wait",
       "requisiteStageRefIds": [
-        "staging-deploy-pod998"
+        "ml-training-pipelines"
       ],
       "type": "wait",
       "waitTime": "${#toInt(parameters.lockDuration) * 3600}"
@@ -460,7 +460,7 @@
     {
       "enabled": true,
       "payloadConstraints": {},
-      "source": "ml-training-pipelines-staging-deploy-pod998-lockable",
+      "source": "ml-training-pipelines-internaltools-staging-chef-lockable",
       "type": "webhook"
     }
   ]

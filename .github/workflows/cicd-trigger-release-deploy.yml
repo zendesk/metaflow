@@ -17,12 +17,12 @@ on:
         required: false
         default: ''
   workflow_run:
-    workflows: ['Create project release']
+    workflows: ['Create deployment artifacts for release']
     types: [completed]
 
 env:
   AWS_PROFILE: "ecr-publish"
-  ARTIFACT_NAME: "release"
+  ARTIFACT_NAME: "trigger"
 
 jobs:
   deploy:

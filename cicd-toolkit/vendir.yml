@@ -18,17 +18,4 @@ directories:
     - data/shared_env_groups/zendesk_pod_id.json
     path: zendesk/config-service-data
   path: vendor/github.com
-- contents:
-  - git:
-      ref: v2.3.5
-      url: https://github.com/Netflix/metaflow-service
-    includedPaths:
-    - services/__init__.py 
-    - services/data 
-    - services/utils 
-    - services/metadata_service 
-    - setup.py 
-    - setup.cfg 
-    path: Netflix/metaflow-service
-  path: ../src/vendor/netflix
 kind: Config

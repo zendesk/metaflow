@@ -2,16 +2,48 @@
   "application": "ml-training-pipelines",
   "keepWaitingPipelines": false,
   "limitConcurrent": true,
-  "name": "staging",
+  "name": "internaltools-production-chef-lockable",
   "notifications": [],
   "parameterConfig": [
     {
-      "default": "",
+      "default": "main",
       "description": "Version of the App to deploy e.g. \"v23\". To deploy your branch use branch name without \"-deploy\" suffix e.g. \"jdoe.feature-branch-name\"",
       "hasOptions": false,
       "name": "gitRef",
       "pinned": true,
       "required": true
+    },
+    {
+      "default": "1",
+      "description": "How many hours to lock the stage for",
+      "hasOptions": true,
+      "label": "Lock duration",
+      "name": "lockDuration",
+      "options": [
+        {
+          "value": "0"
+        },
+        {
+          "value": "1"
+        },
+        {
+          "value": "2"
+        },
+        {
+          "value": "3"
+        },
+        {
+          "value": "4"
+        },
+        {
+          "value": "5"
+        },
+        {
+          "value": "6"
+        }
+      ],
+      "pinned": true,
+      "required": false
     },
     {
       "default": "false",
@@ -35,110 +67,6 @@
     "okta:role:ml-training-pipelines"
   ],
   "stages": [
-    {
-      "application": "ml-training-pipelines",
-      "comments": "",
-      "completeOtherBranchesThenFail": false,
-      "continuePipeline": true,
-      "failPipeline": false,
-      "name": "staging-deploy-pod998-lockable",
-      "pipeline": "${#pipelineId(\"staging-deploy-pod998-lockable\")}",
-      "pipelineParameters": {
-        "gitRef": "${ trigger.parameters.gitRef }",
-        "lockDuration": "0"
-      },
-      "refId": "staging-deploy-pod998-lockable",
-      "requisiteStageRefIds": [
-        "preflight-check-artifacts-ready"
-      ],
-      "skipDownstreamOutput": true,
-      "type": "pipeline",
-      "waitForCompletion": false
-    },
-    {
-      "application": "ml-training-pipelines",
-      "comments": "",
-      "completeOtherBranchesThenFail": false,
-      "continuePipeline": true,
-      "failPipeline": false,
-      "name": "staging-deploy-pod999",
-      "pipeline": "${#pipelineId(\"staging-deploy-pod999\")}",
-      "pipelineParameters": {
-        "gitRef": "${ trigger.parameters.gitRef }"
-      },
-      "refId": "staging-deploy-pod999",
-      "requisiteStageRefIds": [
-        "preflight-check-artifacts-ready"
-      ],
-      "skipDownstreamOutput": true,
-      "type": "pipeline",
-      "waitForCompletion": true
-    },
-    {
-      "completeOtherBranchesThenFail": false,
-      "continuePipeline": false,
-      "failPipeline": false,
-      "name": "Phase Succeeded",
-      "preconditions": [
-        {
-          "context": {
-            "expression": "${ #stageByRefId(\"staging-deploy-pod998-lockable\").status == \"SUCCEEDED\" \u0026\u0026 #stageByRefId(\"staging-deploy-pod999\").status == \"SUCCEEDED\" }",
-            "failureMessage": "One of the previous steps failed"
-          },
-          "failPipeline": true,
-          "type": "expression"
-        }
-      ],
-      "refId": "successful-phase-phase-0-staging",
-      "requisiteStageRefIds": [
-        "staging-deploy-pod998-lockable",
-        "staging-deploy-pod999"
-      ],
-      "type": "checkPreconditions"
-    },
-    {
-      "completeOtherBranchesThenFail": false,
-      "continuePipeline": false,
-      "failPipeline": false,
-      "name": "Phase Failed",
-      "preconditions": [
-        {
-          "context": {
-            "expression": "${ #stageByRefId(\"staging-deploy-pod998-lockable\").status == \"FAILED_CONTINUE\" || #stageByRefId(\"staging-deploy-pod999\").status == \"FAILED_CONTINUE\" }",
-            "failureMessage": "One of the previous steps failed"
-          },
-          "failPipeline": false,
-          "type": "expression"
-        }
-      ],
-      "refId": "failed-phase-phase-0-staging",
-      "requisiteStageRefIds": [
-        "staging-deploy-pod998-lockable",
-        "staging-deploy-pod999"
-      ],
-      "type": "checkPreconditions"
-    },
-    {
-      "completeOtherBranchesThenFail": false,
-      "continuePipeline": false,
-      "failPipeline": true,
-      "name": "Report Failure",
-      "preconditions": [
-        {
-          "context": {
-            "expression": "false",
-            "failureMessage": "Pipeline execution halted at Phase 0: Staging ; see execution details for further information\n"
-          },
-          "failPipeline": true,
-          "type": "expression"
-        }
-      ],
-      "refId": "report-failure-phase-0:-staging",
-      "requisiteStageRefIds": [
-        "failed-phase-phase-0-staging"
-      ],
-      "type": "checkPreconditions"
-    },
     {
       "completeOtherBranchesThenFail": false,
       "continuePipeline": false,
@@ -496,13 +424,43 @@
         "type": "expression"
       },
       "type": "runJobManifest"
+    },
+    {
+      "application": "ml-training-pipelines",
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "name": "ml-training-pipelines",
+      "pipeline": "${#pipelineId(\"ml-training-pipelines\")}",
+      "pipelineParameters": {
+        "gitRef": "${ trigger.parameters.gitRef }"
+      },
+      "refId": "ml-training-pipelines",
+      "requisiteStageRefIds": [
+        "preflight-check-artifacts-ready"
+      ],
+      "skipDownstreamOutput": true,
+      "type": "pipeline",
+      "waitForCompletion": false
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "name": "Wait",
+      "refId": "wait",
+      "requisiteStageRefIds": [
+        "ml-training-pipelines"
+      ],
+      "type": "wait",
+      "waitTime": "${#toInt(parameters.lockDuration) * 3600}"
     }
   ],
   "triggers": [
     {
       "enabled": true,
       "payloadConstraints": {},
-      "source": "ml-training-pipelines-staging",
+      "source": "ml-training-pipelines-internaltools-production-chef-lockable",
       "type": "webhook"
     }
   ]

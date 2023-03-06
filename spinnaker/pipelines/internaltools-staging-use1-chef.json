@@ -2,7 +2,7 @@
   "application": "ml-training-pipelines",
   "keepWaitingPipelines": false,
   "limitConcurrent": true,
-  "name": "pod19",
+  "name": "internaltools-staging-use1-chef",
   "notifications": [],
   "parameterConfig": [
     {
@@ -18,22 +18,6 @@
       "description": "Rollback mode will skip some of the stages like interface stage to speed up the rollback.",
       "hasOptions": true,
       "name": "rollback",
-      "options": [
-        {
-          "value": "true"
-        },
-        {
-          "value": "false"
-        }
-      ],
-      "pinned": true,
-      "required": false
-    },
-    {
-      "default": "true",
-      "description": "Skip the child pipeline deployment if the currently deployed is the same as the version to be deployed.",
-      "hasOptions": true,
-      "name": "skipSameVersion",
       "options": [
         {
           "value": "true"
@@ -65,74 +49,21 @@
   ],
   "stages": [
     {
-      "account": "pod19",
-      "application": "ml-training-pipelines",
-      "cloudProvider": "kubernetes",
-      "completeOtherBranchesThenFail": false,
-      "continuePipeline": true,
-      "failPipeline": false,
-      "location": "ml-training-pipelines",
-      "manifestName": "configMap deployed-version",
-      "mode": "static",
-      "name": "Read version",
-      "refId": "read-version",
-      "requisiteStageRefIds": [
-        "buddy"
-      ],
-      "type": "findArtifactsFromResource"
-    },
-    {
-      "completeOtherBranchesThenFail": false,
-      "continuePipeline": false,
-      "failPipeline": false,
-      "name": "Check version",
-      "namespaceOverride": "ml-training-pipelines",
-      "preconditions": [
-        {
-          "context": {
-            "expression": "parameters.skipSameVersion == \"false\" || #stage(\"Read version\").status == \"FAILED_CONTINUE\" || #stage(\"Read version\").status == \"SKIPPED\" || ( #stage(\"Read version\").context.manifest.data.version != parameters.gitRef )",
-            "failureMessage": "same version already deployed"
-          },
-          "failPipeline": false,
-          "type": "expression"
-        }
-      ],
-      "refId": "check-version",
-      "requisiteStageRefIds": [
-        "read-version"
-      ],
-      "type": "checkPreconditions"
-    },
-    {
-      "completeOtherBranchesThenFail": false,
-      "continuePipeline": false,
-      "failPipeline": true,
-      "gitRef": "${parameters.gitRef}",
-      "instructions": "This is a buddy check. It requires user approval for the pipeline to continue.\n\nThis pipeline will deploy \u003cb\u003e${ trigger['parameters']['gitRef'] }\u003c/b\u003e\n\n\u003ca href=${ trigger['parameters']['gitRef'] == \"master\" || trigger['parameters']['gitRef'] == \"main\" ? \"https://github.com/zendesk/ml-training-pipelines\" : trigger['parameters']['gitRef'] matches \"v(\\d+)[\\.\\d+]*\" ? \"https://github.com/zendesk/ml-training-pipelines/releases/${trigger['parameters']['gitRef']}\" : \"https://github.com/zendesk/ml-training-pipelines/commits/${trigger['parameters']['gitRef']}\"}\u003e View ${trigger['parameters']['gitRef']}\u003c/a\u003e\n",
-      "name": "Buddy",
-      "refId": "buddy",
-      "sendNotifications": true,
-      "type": "buddy"
-    },
-    {
       "completeOtherBranchesThenFail": false,
       "continuePipeline": false,
       "failPipeline": true,
       "name": "Create GitHub Deployment",
       "parameters": {
         "autoMerge": "false",
-        "description": "Deploy to pod19",
-        "environment": "pod19 #production",
+        "description": "Deploy to internaltools-staging-use1-chef",
+        "environment": "internaltools-staging-use1-chef",
         "gitReference": "${ parameters.gitRef }",
         "organization": "zendesk",
-        "payload": "{\n  \"applicationName\": \"${ execution.application }\",\n\"buddy\": \"${ trigger?.parentExecution?.stages == null ? #stage('Buddy')?.context?.lastModifiedBy : ( trigger?.parentExecution?.stages[0]?.context?.lastModifiedBy == '' ? #stage('Buddy')?.context?.lastModifiedBy : trigger.parentExecution.stages[0].context.lastModifiedBy ) }\",\n\"githubActor\": \"${ trigger?.parentExecution?.trigger?.parameters?.githubActor ?: \"\" }\",\n\"manualActor\": \"${ trigger?.parentExecution?.trigger?.type != 'webhook' ? (trigger?.parentExecution?.trigger?.user ?: trigger.user) : '' }\",\n\"version\": \"${ parameters?.version ?: parameters?.gitRef }\"\n}\n",
+        "payload": "{\n  \"applicationName\": \"${ execution.application }\",\n\"githubActor\": \"${ trigger?.parentExecution?.trigger?.parameters?.githubActor ?: \"\" }\",\n\"manualActor\": \"${ trigger?.parentExecution?.trigger?.type != 'webhook' ? (trigger?.parentExecution?.trigger?.user ?: trigger.user) : '' }\",\n\"version\": \"${ parameters?.version ?: parameters?.gitRef }\"\n}\n",
         "project": "ml-training-pipelines",
         "requiredContexts": "[]"
       },
       "refId": "create-github-deployment",
-      "requisiteStageRefIds": [
-        "check-version"
-      ],
       "type": "createGithubDeploymentJob"
     },
     {
@@ -142,7 +73,7 @@
       "failPipeline": true,
       "name": "Self-Service Interface",
       "parameters": {
-        "deployGroups": "\"pod19\"",
+        "deployGroups": "\"internaltools-staging-use1-chef\"",
         "description": "${ parameters.gitRef }",
         "forceApply": "${ parameters.forceApplyInterface }",
         "gitCommit": "${ parameters.gitRef }",
@@ -157,7 +88,24 @@
         "expression": "${ parameters.rollback != 'true' }",
         "type": "expression"
       },
-      "type": "interfaceProductionJob"
+      "type": "interfaceStagingJob"
+    },
+    {
+      "account": "internaltools-staging-use1-chef",
+      "application": "ml-training-pipelines",
+      "cloudProvider": "kubernetes",
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": true,
+      "failPipeline": false,
+      "location": "ml-training-pipelines",
+      "manifestName": "configMap deployed-version",
+      "mode": "static",
+      "name": "Read version",
+      "refId": "read-version",
+      "requisiteStageRefIds": [
+        "self-service-interface"
+      ],
+      "type": "findArtifactsFromResource"
     },
     {
       "completeOtherBranchesThenFail": false,
@@ -167,7 +115,7 @@
       "parameters": {
         "deploymentId": "${ #stage( 'Create GitHub Deployment' ).context.id }",
         "description": "Deployment in progress",
-        "environment": "pod19",
+        "environment": "internaltools-staging-use1-chef",
         "environmentURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }",
         "organization": "zendesk",
         "project": "ml-training-pipelines",
@@ -176,22 +124,22 @@
       },
       "refId": "set-deployment-in-progress",
       "requisiteStageRefIds": [
-        "self-service-interface"
+        "read-version"
       ],
       "type": "updateGithubDeploymentStatusJob"
     },
     {
-      "account": "pod19",
+      "account": "internaltools-staging-use1-chef",
       "cloudProvider": "kubernetes",
       "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eLogs\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/logs/livetail?query=service%3Aml-training-pipelines+%40kubernetes.labels.track%3A${execution.id}+%40kubernetes.labels.role%3Ahello-world\"\u003eDatadog hello-world Logs\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,
       "manifestArtifact": {
-        "artifactAccount": "github_spin_acct7",
+        "artifactAccount": "github_spin_acct2",
         "id": "hello-world.yml",
         "name": "hello-world.yml",
-        "reference": "https://api.github.com/repos/zendesk/ml-training-pipelines/contents/kubernetes/manifests/production/pod19/hello-world.yml",
+        "reference": "https://api.github.com/repos/zendesk/ml-training-pipelines/contents/kubernetes/manifests/staging/internaltools-staging-use1-chef/hello-world.yml",
         "type": "github/file",
         "version": "${ parameters.gitRef + \"-deploy\" }"
       },
@@ -263,17 +211,17 @@
       "type": "checkPreconditions"
     },
     {
-      "account": "pod19",
+      "account": "internaltools-staging-use1-chef",
       "cloudProvider": "kubernetes",
       "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eLogs\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/logs/livetail?query=service%3Aml-training-pipelines+%40kubernetes.labels.track%3A${execution.id}+%40kubernetes.labels.role%3Ahello-world\"\u003eDatadog hello-world Logs\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,
       "manifestArtifact": {
-        "artifactAccount": "github_spin_acct7",
+        "artifactAccount": "github_spin_acct2",
         "id": "previous-hello-world.yml",
         "name": "Previous hello-world.yml",
-        "reference": "https://api.github.com/repos/zendesk/ml-training-pipelines/contents/kubernetes/manifests/production/pod19/hello-world.yml",
+        "reference": "https://api.github.com/repos/zendesk/ml-training-pipelines/contents/kubernetes/manifests/staging/internaltools-staging-use1-chef/hello-world.yml",
         "type": "github/file",
         "version": "${ #stage('Read version').context.manifest.data.gitRef }"
       },
@@ -302,7 +250,7 @@
       "type": "deployManifest"
     },
     {
-      "account": "pod19",
+      "account": "internaltools-staging-use1-chef",
       "cloudProvider": "kubernetes",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": false,
@@ -352,7 +300,7 @@
       "parameters": {
         "deploymentId": "${ #stage( 'Create GitHub Deployment' ).context.id }",
         "description": "See Spinnaker for deployment details",
-        "environment": "pod19",
+        "environment": "internaltools-staging-use1-chef",
         "environmentURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }",
         "organization": "zendesk",
         "project": "ml-training-pipelines",
@@ -373,7 +321,7 @@
       "parameters": {
         "deploymentId": "${ #stage( 'Create GitHub Deployment' ).context.id }",
         "description": "See Spinnaker for deployment details",
-        "environment": "pod19",
+        "environment": "internaltools-staging-use1-chef",
         "environmentURL": "https://spinnaker.zende.sk/#/applications/${ execution.application }/executions/details/${ execution['id'] }",
         "organization": "zendesk",
         "project": "ml-training-pipelines",

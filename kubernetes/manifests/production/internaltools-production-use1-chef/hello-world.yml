@@ -9,12 +9,12 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   annotations:
-    cicd-toolkit.zende.sk/environment: staging
+    cicd-toolkit.zende.sk/environment: production
     cicd-toolkit.zende.sk/generated-by: jsonnet-kubernetes
-    cicd-toolkit.zende.sk/partition: pod999
+    cicd-toolkit.zende.sk/partition: internaltools-production-use1-chef
     cicd-toolkit.zende.sk/role: hello-world
     cicd-toolkit.zende.sk/version: compare
-    moniker.spinnaker.io/cluster: pod999
+    moniker.spinnaker.io/cluster: internaltools-production-use1-chef
     moniker.spinnaker.io/detail: unknown
     moniker.spinnaker.io/stack: ml-training-pipelines-hello-world
     sidecar.istio.io/inject: "true"
@@ -40,7 +40,7 @@ spec:
   template:
     metadata:
       annotations:
-        moniker.spinnaker.io/cluster: pod999
+        moniker.spinnaker.io/cluster: internaltools-production-use1-chef
         moniker.spinnaker.io/detail: unknown
         moniker.spinnaker.io/stack: ml-training-pipelines-hello-world
         sidecar.istio.io/inject: "true"
@@ -50,7 +50,7 @@ spec:
         sidecar.istio.io/proxyMemoryLimit: 2Gi
       labels:
         branch: unknown
-        deploy_group: pod999
+        deploy_group: internaltools-production-use1-chef
         deploy_id: unknown
         product: ml-training-pipelines
         project: ml-training-pipelines
@@ -111,7 +111,7 @@ spec:
         - name: TAG
           value: unknown
         - name: ZENDESK_POD_ID
-          value: "999"
+          value: NA
         - name: ZENDESK_STATSD
           value: "true"
         - name: ISTIO_STATUS
@@ -120,6 +120,13 @@ spec:
               fieldPath: metadata.annotations['sidecar.istio.io/status']
         image: 713408432298.dkr.ecr.us-west-2.amazonaws.com/dev/zendesk/ml-training-pipelines:unknown
         name: helow-world
+        resources:
+          limits:
+            cpu: "1.0"
+            memory: 900Mi
+          requests:
+            cpu: "1.0"
+            memory: 900Mi
       dnsConfig:
         options:
         - name: single-request-reopen

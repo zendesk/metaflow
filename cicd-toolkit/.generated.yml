@@ -14,43 +14,16 @@ target:
     - Path: ../.github/workflows/cicd-trigger-branch-deploy.yml
     - Path: ../.github/workflows/cicd-trigger-release-deploy.yml
     - Path: ../kubernetes/manifests/.gitattributes
-    - Path: ../kubernetes/manifests/development/scooter-pod1/hello-world.yml
-    - Path: ../kubernetes/manifests/production/pod13/hello-world.yml
-    - Path: ../kubernetes/manifests/production/pod15/hello-world.yml
-    - Path: ../kubernetes/manifests/production/pod17/hello-world.yml
-    - Path: ../kubernetes/manifests/production/pod18/hello-world.yml
-    - Path: ../kubernetes/manifests/production/pod19/hello-world.yml
-    - Path: ../kubernetes/manifests/production/pod20/hello-world.yml
-    - Path: ../kubernetes/manifests/production/pod23/hello-world.yml
-    - Path: ../kubernetes/manifests/production/pod25/hello-world.yml
-    - Path: ../kubernetes/manifests/production/pod26/hello-world.yml
-    - Path: ../kubernetes/manifests/production/pod27/hello-world.yml
-    - Path: ../kubernetes/manifests/production/pod28/hello-world.yml
-    - Path: ../kubernetes/manifests/production/pod29/hello-world.yml
-    - Path: ../kubernetes/manifests/staging/pod998/hello-world.yml
-    - Path: ../kubernetes/manifests/staging/pod999/hello-world.yml
+    - Path: ../kubernetes/manifests/production/internaltools-production-use1-chef/hello-world.yml
+    - Path: ../kubernetes/manifests/staging/internaltools-staging-use1-chef/hello-world.yml
     - Path: ../spinnaker/.gitattributes
     - Path: ../spinnaker/applications/ml-training-pipelines.json
-    - Path: ../spinnaker/pipelines/pod13.json
-    - Path: ../spinnaker/pipelines/pod15.json
-    - Path: ../spinnaker/pipelines/pod17.json
-    - Path: ../spinnaker/pipelines/pod18.json
-    - Path: ../spinnaker/pipelines/pod19.json
-    - Path: ../spinnaker/pipelines/pod20.json
-    - Path: ../spinnaker/pipelines/pod23.json
-    - Path: ../spinnaker/pipelines/pod25.json
-    - Path: ../spinnaker/pipelines/pod26.json
-    - Path: ../spinnaker/pipelines/pod27.json
-    - Path: ../spinnaker/pipelines/pod28.json
-    - Path: ../spinnaker/pipelines/pod29.json
-    - Path: ../spinnaker/pipelines/pod998.json
-    - Path: ../spinnaker/pipelines/pod999.json
-    - Path: ../spinnaker/pipelines/production-rollback.json
-    - Path: ../spinnaker/pipelines/production.json
-    - Path: ../spinnaker/pipelines/staging-deploy-pod998-lockable.json
-    - Path: ../spinnaker/pipelines/staging-deploy-pod998.json
-    - Path: ../spinnaker/pipelines/staging-deploy-pod999.json
-    - Path: ../spinnaker/pipelines/staging.json
+    - Path: ../spinnaker/pipelines/internaltools-production-chef-lockable.json
+    - Path: ../spinnaker/pipelines/internaltools-production-chef.json
+    - Path: ../spinnaker/pipelines/internaltools-production-use1-chef.json
+    - Path: ../spinnaker/pipelines/internaltools-staging-chef-lockable.json
+    - Path: ../spinnaker/pipelines/internaltools-staging-chef.json
+    - Path: ../spinnaker/pipelines/internaltools-staging-use1-chef.json
     - Path: .gitattributes
     - Path: .gitignore
     - Path: lib/shared-env-groups.libsonnet
