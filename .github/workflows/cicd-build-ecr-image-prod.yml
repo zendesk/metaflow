@@ -13,12 +13,6 @@ on:
       - "main"
 
 jobs:
-  update-submodules:
-    steps:
-      - name: Run vendir
-        uses: zendesk/action-vendir@v7
-        with:
-          token: ${{ secrets.ORG_GITHUB_TOKEN }}
   build-image:
     uses: zendesk/build-image/.github/workflows/build.yml@v2
     secrets: inherit
