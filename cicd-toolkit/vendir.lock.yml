@@ -10,8 +10,8 @@ directories:
   path: vendor
 - contents:
   - git:
-      commitTitle: 'FSEC-4811: CNA Staging account metadata (#1923)'
-      sha: d377a7e1682e5b1b087478ebc2010695d982d7ef
+      commitTitle: fix bad path in secret (#1966)
+      sha: 9ab1e6040f97fa2c9e9cd7deff72156a8e9256d7
     path: zendesk/config-service-data
   path: vendor/github.com
 - contents:
@@ -21,5 +21,5 @@ directories:
       tags:
       - v2.3.5
     path: Netflix/metaflow-service
-  path: ../vendor/netflix
+  path: ../src/vendor/netflix
 kind: LockConfig

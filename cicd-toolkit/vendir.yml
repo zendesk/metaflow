@@ -30,5 +30,5 @@ directories:
     - setup.py 
     - setup.cfg 
     path: Netflix/metaflow-service
-  path: ../vendor/netflix
+  path: ../src/vendor/netflix
 kind: Config
