@@ -1,11 +1,1 @@
-FROM python:3.7
-WORKDIR /build
-RUN ls
-ADD /vendor/netflix/Netflix/metaflow-service/services/__init__.py /root/services/
-ADD /vendor/netflix/Netflix/metaflow-service/services/data /root/services/data
-ADD /vendor/netflix/Netflix/metaflow-service/services/utils /root/services/utils
-ADD /vendor/netflix/Netflix/metaflow-service/services/metadata_service /root/services/metadata_service
-ADD /vendor/netflix/Netflix/metaflow-service/setup.py /vendor/netflix/Netflix/metaflow-service/setup.cfg /root/
-WORKDIR /root
-RUN pip install --editable .
-CMD metadata_service
+FROM 713408432298.dkr.ecr.us-west-2.amazonaws.com/prod/zendesk/ml-training-pipelines:latest
