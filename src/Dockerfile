@@ -1,11 +1,11 @@
 FROM python:3.7
 WORKDIR /build
 RUN ls
-ADD /vendor/netflix/Netflix/metaflow-service/services/__init__.py /root/services/
-ADD /vendor/netflix/Netflix/metaflow-service/services/data /root/services/data
-ADD /vendor/netflix/Netflix/metaflow-service/services/utils /root/services/utils
-ADD /vendor/netflix/Netflix/metaflow-service/services/metadata_service /root/services/metadata_service
-ADD /vendor/netflix/Netflix/metaflow-service/setup.py /vendor/netflix/Netflix/metaflow-service/setup.cfg /root/
+ADD /metaflow-service/services/__init__.py /root/services/
+ADD /metaflow-service/services/data /root/services/data
+ADD /metaflow-service/services/utils /root/services/utils
+ADD /metaflow-service/services/metadata_service /root/services/metadata_service
+ADD /metaflow-service/setup.py /metaflow-service/setup.cfg /root/
 WORKDIR /root
 RUN pip install --editable .
 CMD metadata_service

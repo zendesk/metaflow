@@ -1,0 +1,4 @@
+aiohttp >= 3.8.1, < 4
+psycopg2
+boto3
+aiopg
