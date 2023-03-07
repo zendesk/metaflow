@@ -22,6 +22,7 @@ metadata:
     sidecar.istio.io/proxyCPULimit: "4"
     sidecar.istio.io/proxyMemory: 256Mi
     sidecar.istio.io/proxyMemoryLimit: 2Gi
+    storage.zende.sk/tempauth-no-sidecar: "true"
     strategy.spinnaker.io/replace: "true"
   generateName: hello-world-
   labels:

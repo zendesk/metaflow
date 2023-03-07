@@ -33,7 +33,7 @@ function(params={}) (
                  .withTTLSecondsAfterFinished(600)
                  .withActiveDeadlineSeconds(600)
                  .withBackoffLimit(0)
-                 .withPodTemplate(podTemplate){metadata+: { "generateName": p.name + "-", "storage.zende.sk/tempauth-no-sidecar": "true"}};
+                 .withPodTemplate(podTemplate){metadata+: { "generateName": p.name + "-", annotations+: {"storage.zende.sk/tempauth-no-sidecar": 'true'}} };
 
 
   local manifests = [
