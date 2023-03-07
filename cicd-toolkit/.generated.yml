@@ -18,10 +18,10 @@ target:
     - Path: ../kubernetes/manifests/staging/internaltools-staging-use1-chef/hello-world.yml
     - Path: ../spinnaker/.gitattributes
     - Path: ../spinnaker/applications/ml-training-pipelines.json
-    - Path: ../spinnaker/pipelines/internaltools-production-chef-lockable.json
+    - Path: ../spinnaker/pipelines/internaltools-production-chef-rollback.json
     - Path: ../spinnaker/pipelines/internaltools-production-chef.json
     - Path: ../spinnaker/pipelines/internaltools-production-use1-chef.json
-    - Path: ../spinnaker/pipelines/internaltools-staging-chef-lockable.json
+    - Path: ../spinnaker/pipelines/internaltools-staging-chef-rollback.json
     - Path: ../spinnaker/pipelines/internaltools-staging-chef.json
     - Path: ../spinnaker/pipelines/internaltools-staging-use1-chef.json
     - Path: .cicd-toolkit-version
