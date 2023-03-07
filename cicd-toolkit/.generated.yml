@@ -24,6 +24,7 @@ target:
     - Path: ../spinnaker/pipelines/internaltools-staging-chef-lockable.json
     - Path: ../spinnaker/pipelines/internaltools-staging-chef.json
     - Path: ../spinnaker/pipelines/internaltools-staging-use1-chef.json
+    - Path: .cicd-toolkit-version
     - Path: .gitattributes
     - Path: .gitignore
     - Path: lib/shared-env-groups.libsonnet

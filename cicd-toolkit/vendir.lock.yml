@@ -2,10 +2,10 @@ apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
   - git:
-      commitTitle: 'fix: use ecr url for vault-pki-auth-manager sidecar (#1637)'
-      sha: 7c6eb07e314c45cb04b587f67b5089e54856699e
+      commitTitle: 'feat: remove support for Argo Rollouts (#1776)...'
+      sha: 15aebc3f95170967588484448fd08a45e7ba0934
       tags:
-      - v8.222.1
+      - v8.239.0
     path: cicd-toolkit
   path: vendor
 - contents:
