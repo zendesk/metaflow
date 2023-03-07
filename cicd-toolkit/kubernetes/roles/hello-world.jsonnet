@@ -13,7 +13,7 @@ function(params={}) (
   local container = K8s.Container
                         .withName(role_name)
                         .withCommand(['echo', 'world'])
-                        .withImage('');
+                        .withImage(p.image);
 
   local podTemplate = K8s.PodTemplate
                          .withTemplateName(role_name)
