@@ -12,7 +12,7 @@ function(params={}) (
 
   local container = K8s.Container
                         .withName(role_name)
-                        .withCommand(['echo', 'hello', 'world'])
+                        .withCommand(['echo', 'hello'])
                         .withImage('');
 
   local podTemplate = K8s.PodTemplate

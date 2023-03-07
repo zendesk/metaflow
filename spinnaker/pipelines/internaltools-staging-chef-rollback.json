@@ -2,26 +2,9 @@
   "application": "ml-training-pipelines",
   "keepWaitingPipelines": false,
   "limitConcurrent": true,
-  "name": "internaltools-staging-chef",
+  "name": "internaltools-staging-chef-rollback",
   "notifications": [],
   "parameterConfig": [
-    {
-      "default": "false",
-      "description": "Force interface stage to apply changes from service yml even if there is no change",
-      "hasOptions": true,
-      "label": "forceApplyInterface",
-      "name": "forceApplyInterface",
-      "options": [
-        {
-          "value": "true"
-        },
-        {
-          "value": "false"
-        }
-      ],
-      "pinned": true,
-      "required": false
-    },
     {
       "default": "",
       "description": "Version of the App to deploy e.g. \"v23\". To deploy your branch use branch name without \"-deploy\" suffix e.g. \"jdoe.feature-branch-name\"",
@@ -30,9 +13,6 @@
       "pinned": true,
       "required": true
     }
-  ],
-  "roles": [
-    "okta:role:ml-training-pipelines"
   ],
   "stages": [
     {
@@ -44,8 +24,8 @@
       "name": "internaltools-staging-use1-chef",
       "pipeline": "${#pipelineId(\"internaltools-staging-use1-chef\")}",
       "pipelineParameters": {
-        "forceApplyInterface": "${ trigger.parameters.forceApplyInterface }",
-        "gitRef": "${ trigger.parameters.gitRef }"
+        "gitRef": "${ trigger.parameters.gitRef }",
+        "rollback": "true"
       },
       "refId": "internaltools-staging-use1-chef",
       "requisiteStageRefIds": [],
@@ -57,7 +37,7 @@
       "completeOtherBranchesThenFail": false,
       "continuePipeline": false,
       "failPipeline": false,
-      "name": "Phase Succeeded",
+      "name": "Rollback succeeded",
       "preconditions": [
         {
           "context": {
@@ -68,7 +48,7 @@
           "type": "expression"
         }
       ],
-      "refId": "successful-phase-internaltools-staging-chef",
+      "refId": "rollback-succeeded",
       "requisiteStageRefIds": [
         "internaltools-staging-use1-chef"
       ],
@@ -78,7 +58,7 @@
       "completeOtherBranchesThenFail": false,
       "continuePipeline": false,
       "failPipeline": false,
-      "name": "Phase Failed",
+      "name": "Rollback failed",
       "preconditions": [
         {
           "context": {
@@ -89,7 +69,7 @@
           "type": "expression"
         }
       ],
-      "refId": "failed-phase-internaltools-staging-chef",
+      "refId": "rollback-failed",
       "requisiteStageRefIds": [
         "internaltools-staging-use1-chef"
       ],
@@ -104,25 +84,18 @@
         {
           "context": {
             "expression": "false",
-            "failureMessage": "Pipeline execution halted at Deploy: internaltools-staging-chef ; see execution details for further information\n"
+            "failureMessage": "Pipeline execution halted; see execution details for further information\n"
           },
           "failPipeline": true,
           "type": "expression"
         }
       ],
-      "refId": "report-failure-deploy:-internaltools-staging-chef",
+      "refId": "report-failure",
       "requisiteStageRefIds": [
-        "failed-phase-internaltools-staging-chef"
+        "rollback-failed"
       ],
       "type": "checkPreconditions"
     }
   ],
-  "triggers": [
-    {
-      "enabled": true,
-      "payloadConstraints": {},
-      "source": "ml-training-pipelines-internaltools-staging-chef",
-      "type": "webhook"
-    }
-  ]
+  "triggers": []
 }
