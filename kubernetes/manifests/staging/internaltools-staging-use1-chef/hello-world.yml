@@ -66,7 +66,6 @@ spec:
       - command:
         - echo
         - hello
-        - world
         env:
         - name: DD_ENV
           valueFrom:
@@ -127,6 +126,10 @@ spec:
           requests:
             cpu: "1.0"
             memory: 900Mi
+        volumeMounts:
+        - mountPath: /var/run/datadog
+          name: dsdsocket
+          readOnly: true
       dnsConfig:
         options:
         - name: single-request-reopen
@@ -136,5 +139,8 @@ spec:
         runAsNonRoot: true
         runAsUser: 1000
       terminationGracePeriodSeconds: 123
-      volumes: []
+      volumes:
+      - hostPath:
+          path: /var/run/datadog
+        name: dsdsocket
   ttlSecondsAfterFinished: 600

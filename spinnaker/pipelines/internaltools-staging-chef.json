@@ -29,22 +29,6 @@
       "name": "gitRef",
       "pinned": true,
       "required": true
-    },
-    {
-      "default": "true",
-      "description": "Skip the child pipeline deployment if the currently deployed is the same as the version to be deployed.",
-      "hasOptions": true,
-      "name": "skipSameVersion",
-      "options": [
-        {
-          "value": "true"
-        },
-        {
-          "value": "false"
-        }
-      ],
-      "pinned": true,
-      "required": false
     }
   ],
   "roles": [
@@ -61,8 +45,7 @@
       "pipeline": "${#pipelineId(\"internaltools-staging-use1-chef\")}",
       "pipelineParameters": {
         "forceApplyInterface": "${ trigger.parameters.forceApplyInterface }",
-        "gitRef": "${ trigger.parameters.gitRef }",
-        "skipSameVersion": "${ trigger.parameters.skipSameVersion }"
+        "gitRef": "${ trigger.parameters.gitRef }"
       },
       "refId": "internaltools-staging-use1-chef",
       "requisiteStageRefIds": [],

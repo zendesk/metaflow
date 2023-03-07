@@ -97,7 +97,7 @@
         "metadata": {
           "annotations": {
             "moniker.spinnaker.io/cluster": "internaltools-staging-use1-chef",
-            "moniker.spinnaker.io/detail": "${ parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\") }",
+            "moniker.spinnaker.io/detail": "${ parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\").length() \u003e 63 ? parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\").substring(0, 63) : parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\") }",
             "moniker.spinnaker.io/stack": "ml-training-pipelines-cicd-toolkit-preflight",
             "sidecar.istio.io/inject": "false"
           },
@@ -121,7 +121,7 @@
             "metadata": {
               "annotations": {
                 "moniker.spinnaker.io/cluster": "internaltools-staging-use1-chef",
-                "moniker.spinnaker.io/detail": "${ parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\") }",
+                "moniker.spinnaker.io/detail": "${ parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\").length() \u003e 63 ? parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\").substring(0, 63) : parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\") }",
                 "moniker.spinnaker.io/stack": "ml-training-pipelines-cicd-toolkit-preflight",
                 "secret/GCLOUD_IMAGE_PULL_PASSWORD": "global/cicd-toolkit/global/gcloud_image_pull_password",
                 "secret/GCLOUD_IMAGE_PULL_USERNAME": "global/cicd-toolkit/global/gcloud_image_pull_username",
@@ -137,7 +137,7 @@
                 "revision": "${ #stage(\"preflight-resolve-git-ref\").context.sha }",
                 "role": "cicd-toolkit-preflight",
                 "sidecar.istio.io/inject": "false",
-                "tag": "${ parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\") }",
+                "tag": "${ parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\").length() \u003e 63 ? parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\").substring(0, 63) : parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\") }",
                 "team": "ml-apac-trisolaris",
                 "track": "unknown"
               }
@@ -215,7 +215,7 @@
                     },
                     {
                       "name": "TAG",
-                      "value": "${ parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\") }"
+                      "value": "${ parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\").length() \u003e 63 ? parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\").substring(0, 63) : parameters.gitRef.replaceAll(\"[^A-Za-z0-9_-]\",\"-\").replaceAll(\"--\",\"-\") }"
                     },
                     {
                       "name": "PROJECT_NAME",
@@ -238,7 +238,7 @@
                       "value": "${ parameters.gitRef }"
                     }
                   ],
-                  "image": "713408432298.dkr.ecr.us-west-2.amazonaws.com/zendesk/cicd-toolkit:7c6eb07e314c45cb04b587f67b5089e54856699e",
+                  "image": "713408432298.dkr.ecr.us-west-2.amazonaws.com/zendesk/cicd-toolkit:15aebc3f95170967588484448fd08a45e7ba0934",
                   "name": "preflight",
                   "resources": {
                     "limits": {
@@ -254,6 +254,11 @@
                     {
                       "mountPath": "/secrets",
                       "name": "secrets-volume"
+                    },
+                    {
+                      "mountPath": "/var/run/datadog",
+                      "name": "dsdsocket",
+                      "readOnly": true
                     }
                   ]
                 }
@@ -406,6 +411,12 @@
                     "medium": "Memory"
                   },
                   "name": "vault-data"
+                },
+                {
+                  "hostPath": {
+                    "path": "/var/run/datadog"
+                  },
+                  "name": "dsdsocket"
                 }
               ]
             }
