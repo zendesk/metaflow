@@ -19,6 +19,14 @@ libprojectmetadata.v1 {
   repository+: {
     defaultBranch: 'main',
   },
+  spinnaker+: {
+    webhooks+: {
+      branch: 'ml-training-pipelines-internaltools-staging-chef-lockable',
+    },
+    stages+: {
+      branch: 'ml-training-pipelines-internaltools-staging-chef-lockable',
+    },
+  },
   githubWorkflows+: {
     buildAndRelease+: {
       buildEcrImages+: {
