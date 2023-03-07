@@ -1,0 +1,25 @@
+# ------------------------------------------------------------------------------------------------------------
+# NOTE: THIS FILE IS AUTO GENERATED AND MANAGED BY https://github.com/zendesk/cicd-toolkit
+#
+# You can regenerate the content by running `make` in the 'cicd-toolkit' directory.
+#
+# MANUAL CHANGES TO THIS FILE MAY RESULT IN INCORRECT BEHAVIOUR, AND WILL BE LOST IF THE CODE IS REGENERATED.
+# ------------------------------------------------------------------------------------------------------------
+name: Cleanup deployment artifacts branch
+
+on: delete
+
+jobs:
+  cleanup:
+    name: Cleanup
+    runs-on: ["self-hosted", "zendesk-stable"]
+    if: github.event.ref_type == 'branch'
+    steps:
+      - name: Checkout
+        uses: zendesk/checkout@v3
+
+      - name: Fetch branches
+        run: git fetch
+
+      - name: Delete deploy branch
+        run: git push origin --delete ${{ github.event.ref }}-deploy || true

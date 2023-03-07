@@ -1,0 +1,17 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - git:
+      commitTitle: 'fix: use ecr url for vault-pki-auth-manager sidecar (#1637)'
+      sha: 7c6eb07e314c45cb04b587f67b5089e54856699e
+      tags:
+      - v8.222.1
+    path: cicd-toolkit
+  path: vendor
+- contents:
+  - git:
+      commitTitle: fix bad path in secret (#1966)
+      sha: 9ab1e6040f97fa2c9e9cd7deff72156a8e9256d7
+    path: zendesk/config-service-data
+  path: vendor/github.com
+kind: LockConfig

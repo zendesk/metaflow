@@ -1,0 +1,37 @@
+apiVersion: simopolis.xyz/v1alpha1
+kind: StateConfig
+target:
+  cicd-toolkit/generated/update-boilerplate:
+    files:
+    - Path: ../.github/workflows/.gitattributes
+    - Path: ../.github/workflows/cicd-build-ecr-image-dev.yml
+    - Path: ../.github/workflows/cicd-build-ecr-image-prod.yml
+    - Path: ../.github/workflows/cicd-cleanup-deploy-branch.yml
+    - Path: ../.github/workflows/cicd-create-deployment-artifacts-for-branch.yml
+    - Path: ../.github/workflows/cicd-create-deployment-artifacts-for-release.yml
+    - Path: ../.github/workflows/cicd-create-project-release.yml
+    - Path: ../.github/workflows/cicd-deployment-boilerplate-check.yml
+    - Path: ../.github/workflows/cicd-trigger-branch-deploy.yml
+    - Path: ../.github/workflows/cicd-trigger-release-deploy.yml
+    - Path: ../kubernetes/manifests/.gitattributes
+    - Path: ../kubernetes/manifests/production/internaltools-production-use1-chef/hello-world.yml
+    - Path: ../kubernetes/manifests/staging/internaltools-staging-use1-chef/hello-world.yml
+    - Path: ../spinnaker/.gitattributes
+    - Path: ../spinnaker/applications/ml-training-pipelines.json
+    - Path: ../spinnaker/pipelines/internaltools-production-chef-lockable.json
+    - Path: ../spinnaker/pipelines/internaltools-production-chef.json
+    - Path: ../spinnaker/pipelines/internaltools-production-use1-chef.json
+    - Path: ../spinnaker/pipelines/internaltools-staging-chef-lockable.json
+    - Path: ../spinnaker/pipelines/internaltools-staging-chef.json
+    - Path: ../spinnaker/pipelines/internaltools-staging-use1-chef.json
+    - Path: .gitattributes
+    - Path: .gitignore
+    - Path: lib/shared-env-groups.libsonnet
+  generated/self-update:
+    files:
+    - Path: Makefile
+    - Path: README.md
+    - Path: appconfig.yml
+    - Path: render
+    - Path: scripts/apply-update.sh
+    - Path: scripts/self-update.sh

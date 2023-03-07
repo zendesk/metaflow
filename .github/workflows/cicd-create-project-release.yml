@@ -1,0 +1,168 @@
+# ------------------------------------------------------------------------------------------------------------
+# NOTE: THIS FILE IS AUTO GENERATED AND MANAGED BY https://github.com/zendesk/cicd-toolkit
+#
+# You can regenerate the content by running `make` in the 'cicd-toolkit' directory.
+#
+# MANUAL CHANGES TO THIS FILE MAY RESULT IN INCORRECT BEHAVIOUR, AND WILL BE LOST IF THE CODE IS REGENERATED.
+# ------------------------------------------------------------------------------------------------------------
+name: Create project release
+
+# Ensure that we only run a single instance of this workflow
+#
+# We want to queue up jobs if we do quick merges in succession to retain
+# a linear history of releases.
+concurrency: project-release
+
+on:
+  # This workflow is triggered when a commit is pushed to 'main' branch. This is
+  # typically when a PR is merged, since no one is pushing commits directly.
+  push:
+    branches:
+      - 'main'
+
+  # we add a manual trigger to allow for creation of releases in case automation fails
+  workflow_dispatch:
+
+env:
+  AWS_PROFILE: "ecr-publish"
+
+jobs:
+  tag_and_release:
+    name: Tag and release
+    runs-on: ["self-hosted", "zendesk-stable"]
+    steps:
+      - name: Checkout
+        uses: zendesk/checkout@v3
+
+# cicd-toolkit preamble begin
+      - name: bootstrap cicd-toolkit
+        env:
+          APPCONFIG_DOCKER_IMAGE: 713408432298.dkr.ecr.us-west-2.amazonaws.com/zendesk/appconfig:v1.5.0
+        run: |
+          cid=$(docker create "$APPCONFIG_DOCKER_IMAGE")
+          sudo docker cp $cid:/bin/appconfig /usr/local/bin
+
+          echo >&2 "appconfig version"
+          echo >&2 "==="
+          appconfig version
+          echo >&2 "==="
+
+          echo >&2 "vendir version"
+          echo >&2 "==="
+          vendir version
+          echo >&2 "==="
+
+          echo >&2 "kbld version"
+          echo >&2 "==="
+          kbld version
+          echo >&2 "==="
+
+      - name: cache vendor dependencies
+        uses: zendesk/cache@v3
+        id: cicd-cache-vendor
+        with:
+          path: cicd-toolkit/vendor
+          key: ${{ runner.os }}-${{ hashFiles('cicd-toolkit/vendir.lock.yml') }}
+
+      - name: install dependencies
+        if: steps.cicd-cache-vendor.cache-hit != 'true'
+        env:
+          APPLICATION_ROOT_DIR: "cicd-toolkit"
+        run: |
+          ORG_BASIC_AUTH="$(echo -n 'x-access-token:${{ secrets.ORG_GITHUB_TOKEN }}' | base64)"
+          echo "::add-mask::$ORG_BASIC_AUTH"
+          env \
+            GIT_CONFIG_COUNT=2 \
+            GIT_CONFIG_KEY_0='http.https://github.com/.extraheader' \
+            GIT_CONFIG_VALUE_0='' \
+            GIT_CONFIG_KEY_1='http.https://github.com/.extraheader' \
+            GIT_CONFIG_VALUE_1="Authorization: basic $ORG_BASIC_AUTH" \
+            vendir sync --chdir "$APPLICATION_ROOT_DIR" --locked
+
+          echo >&2 "Checking for differences in vendored dependencies lock file ..."
+
+          if ! git diff --exit-code "$APPLICATION_ROOT_DIR/vendir.lock.yml"; then
+            echo >&2 "==="
+            echo >&2 "Notice: Found above differences in vendir.lock.yml file..."
+            echo >&2 "==="
+          else
+            echo >&2 "No differences found."
+          fi
+
+      - name: extract actions if not present
+        env:
+          APPLICATION_ROOT_DIR: "cicd-toolkit"
+        run: |
+          # extract actions unless present already
+          if [ ! -d "$APPLICATION_ROOT_DIR/actions" ]; then
+            (cd $APPLICATION_ROOT_DIR && \
+              appconfig run boilerplate:github-actions) | \
+                appconfig manifest --state-file /dev/null
+          fi
+
+# cicd-toolkit preamble end
+
+
+      - name: setup env vars from project metadata
+        uses: ./cicd-toolkit/actions/env-vars-from-project-metadata
+        with:
+          application_root_dir: "cicd-toolkit"
+
+      - name: Detect release type
+        id: release_type
+        uses: ./cicd-toolkit/actions/detect-release-type
+        with:
+          application_root_dir: ${{ env.APPLICATION_ROOT_DIR }}
+          github_token: ${{ github.token }}
+          head_ref: ${{ github.event.after }}
+          base_ref: ${{ github.event.before }}
+          release_version_type: ${{ env.RELEASE_VERSION_TYPE }}
+          release_version_type_for_config_only: ${{ env.RELEASE_VERSION_TYPE_FOR_CONFIG_ONLY }}
+
+      - name: Compute release tag
+        id: compute_tag
+        if: env.TAG_AND_RELEASE == 'true'
+        uses: zendesk/compute-tag@v14
+        with:
+          github_token: ${{ github.token }}
+          version_scheme: ${{ env.RELEASE_VERSION_SCHEME }}
+          version_type: ${{ steps.release_type.outputs.version-type }}
+          # pass the branch to only fetch tags on the given release branch
+          branch: 'main'
+
+      - name: Create source code release
+        id: create_source_release
+        if: env.TAG_AND_RELEASE == 'true'
+        uses: zendesk/create-release@v1.1.4
+        with:
+          tag_name: ${{ steps.compute_tag.outputs.next_tag }}
+          release_name: ${{ steps.compute_tag.outputs.next_tag }}
+          commitish: ${{ github.sha }}
+        env:
+          GITHUB_TOKEN: ${{ secrets[env.CREATE_RELEASE_GITHUB_SECRET_KEY_NAME] }}
+
+      - name: Samson release tag
+        id: samson_release
+        if: env.SAMSON_RELEASE_WEBHOOK_ENABLED == 'true'
+        uses: zendesk/ga/samson-inbound-webhook@v4
+        with:
+          webhook-url: ${{ env.SAMSON_RELEASE_WEBHOOK_URL }}
+          message: 'Create release from cicd-toolkit'
+
+      - name: Write release artifact for consumption from downstream workflows
+        env:
+          TAG: ${{ steps.compute_tag.outputs.next_tag || steps.samson_release.outputs.next_tag }}
+          COMMIT: ${{ github.sha }}
+          PREVIOUS_TAG: ${{ steps.compute_tag.outputs.previous_tag || steps.samson_release.outputs.previous_tag }}
+        run: |
+          jq -n \
+            --arg tag "$TAG" \
+            --arg commit "$COMMIT" \
+            --arg previous_tag  "$PREVIOUS_TAG" \
+            '{tag: $tag, previous_tag: $previous_tag, commit: $commit}' > release.json
+
+      - name: Upload release artifact
+        uses: zendesk/upload-artifact@v3
+        with:
+          name: release
+          path: release.json

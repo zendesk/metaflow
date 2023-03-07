@@ -1,0 +1,21 @@
+apiVersion: vendir.k14s.io/v1alpha1
+directories:
+- contents:
+  - git:
+      depth: 1
+      ref: v8.222.1
+      url: https://github.com/zendesk/cicd-toolkit
+    includePaths:
+    - jsonnet/**/*
+    path: cicd-toolkit
+  path: vendor
+- contents:
+  - git:
+      ref: master
+      url: https://github.com/zendesk/config-service-data
+    includePaths:
+    - data/shared_env_groups/statsd_kubernetes.json
+    - data/shared_env_groups/zendesk_pod_id.json
+    path: zendesk/config-service-data
+  path: vendor/github.com
+kind: Config

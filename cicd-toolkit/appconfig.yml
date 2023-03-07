@@ -1,0 +1,32 @@
+# ------------------------------------------------------------------------------------------------------------
+# NOTE: THIS FILE IS GENERATED ON SELF-UPDATE BY https://github.com/zendesk/cicd-toolkit
+#
+# You can regenerate the content by running `make self-update` in the 'cicd-toolkit' directory.
+#
+# MANUAL CHANGES TO THIS FILE MAY RESULT IN INCORRECT BEHAVIOUR, AND WILL BE LOST IF THE CODE IS REGENERATED.
+# ------------------------------------------------------------------------------------------------------------
+appconfig:
+  version:
+    semver:
+      constraints: ^1.2
+env: staging
+environments-file: lib/environments.libsonnet
+filesets:
+- kubernetes=kubernetes/roles
+- resources=kubernetes/resources
+- environments=environments
+- project=project
+- spinnaker=spinnaker
+- lib=lib
+- foundation=..
+- application=.
+filetrees:
+- openapi=../openapi
+jsonnet-path:
+- vendor
+- vendor/cicd-toolkit/jsonnet
+- lib
+- ../kubernetes
+run: |
+  import 'lib/run.libsonnet'
+version: v1

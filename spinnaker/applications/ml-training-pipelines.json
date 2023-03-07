@@ -1,0 +1,35 @@
+{
+  "cloudProviders": "kubernetes",
+  "dataSources": {
+    "disabled": [],
+    "enabled": [
+      "canaryConfigs",
+      "executions",
+      "loadBalancers",
+      "securityGroups",
+      "serverGroups"
+    ]
+  },
+  "description": "ml-training-pipelines",
+  "email": "ml-apac-trisolaris@zendesk.com",
+  "enableRerunActiveExecutions": false,
+  "enableRestartRunningExecutions": false,
+  "instancePort": 80,
+  "name": "ml-training-pipelines",
+  "permissions": {
+    "EXECUTE": [
+      "okta:role:ml-training-pipelines"
+    ],
+    "READ": [
+      "okta:role:read-only",
+      "okta:role:ml-training-pipelines"
+    ],
+    "WRITE": [
+      "okta:role:ml-training-pipelines"
+    ]
+  },
+  "repoProjectKey": "zendesk",
+  "repoSlug": "ml-training-pipelines",
+  "repoType": "github",
+  "trafficGuards": []
+}

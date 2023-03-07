@@ -1,0 +1,18 @@
+# ------------------------------------------------------------------------------------------------------------
+# NOTE: THIS FILE IS AUTO GENERATED AND MANAGED BY https://github.com/zendesk/cicd-toolkit
+#
+# You can regenerate the content by running `make` in the 'cicd-toolkit' directory.
+#
+# MANUAL CHANGES TO THIS FILE MAY RESULT IN INCORRECT BEHAVIOUR, AND WILL BE LOST IF THE CODE IS REGENERATED.
+# ------------------------------------------------------------------------------------------------------------
+.gitattributes linguist-generated
+.gitignore linguist-generated
+README.md linguist-generated
+generated.yaml linguist-generated
+generated/* linguist-generated
+lib/samson/* linguist-generated
+lib/shared-env-groups.libsonnet linguist-generated
+Makefile linguist-generated
+render linguist-generated
+scripts/* linguist-generated
+vendir.lock.yml linguist-generated

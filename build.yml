@@ -1,0 +1,9 @@
+version: "1.0"
+name: ml-training-pipelines
+team: ml-apac-trisolaris
+product: ml-training-pipelines
+description: images for metaflow deployment
+
+ecrRepositories:
+  - type: dev
+  - type: prod

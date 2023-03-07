@@ -1,0 +1,265 @@
+# ------------------------------------------------------------------------------------------------------------
+# NOTE: THIS FILE IS AUTO GENERATED AND MANAGED BY https://github.com/zendesk/cicd-toolkit
+#
+# You can regenerate the content by running `make` in the 'cicd-toolkit' directory.
+#
+# MANUAL CHANGES TO THIS FILE MAY RESULT IN INCORRECT BEHAVIOUR, AND WILL BE LOST IF THE CODE IS REGENERATED.
+# ------------------------------------------------------------------------------------------------------------
+name: Create deployment artifacts for release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to create deployment artifacts for'
+        required: true
+      sha:
+        required: false
+        default: ''
+  workflow_run:
+    workflows: ['Create project release']
+    types: [completed]
+
+env:
+  AWS_PROFILE: "ecr-publish"
+  DOCKER_IMAGE: "713408432298.dkr.ecr.us-west-2.amazonaws.com/prod/zendesk/ml-training-pipelines"
+  ECR_IMAGE_PREFIX: "prod"
+
+jobs:
+  create:
+    name: build-artifacts
+    runs-on: ["self-hosted", "zendesk-stable"]
+    steps:
+      - name: Checkout
+        uses: zendesk/checkout@v3
+
+# cicd-toolkit preamble begin
+      - name: bootstrap cicd-toolkit
+        env:
+          APPCONFIG_DOCKER_IMAGE: 713408432298.dkr.ecr.us-west-2.amazonaws.com/zendesk/appconfig:v1.5.0
+        run: |
+          cid=$(docker create "$APPCONFIG_DOCKER_IMAGE")
+          sudo docker cp $cid:/bin/appconfig /usr/local/bin
+
+          echo >&2 "appconfig version"
+          echo >&2 "==="
+          appconfig version
+          echo >&2 "==="
+
+          echo >&2 "vendir version"
+          echo >&2 "==="
+          vendir version
+          echo >&2 "==="
+
+          echo >&2 "kbld version"
+          echo >&2 "==="
+          kbld version
+          echo >&2 "==="
+
+      - name: cache vendor dependencies
+        uses: zendesk/cache@v3
+        id: cicd-cache-vendor
+        with:
+          path: cicd-toolkit/vendor
+          key: ${{ runner.os }}-${{ hashFiles('cicd-toolkit/vendir.lock.yml') }}
+
+      - name: install dependencies
+        if: steps.cicd-cache-vendor.cache-hit != 'true'
+        env:
+          APPLICATION_ROOT_DIR: "cicd-toolkit"
+        run: |
+          ORG_BASIC_AUTH="$(echo -n 'x-access-token:${{ secrets.ORG_GITHUB_TOKEN }}' | base64)"
+          echo "::add-mask::$ORG_BASIC_AUTH"
+          env \
+            GIT_CONFIG_COUNT=2 \
+            GIT_CONFIG_KEY_0='http.https://github.com/.extraheader' \
+            GIT_CONFIG_VALUE_0='' \
+            GIT_CONFIG_KEY_1='http.https://github.com/.extraheader' \
+            GIT_CONFIG_VALUE_1="Authorization: basic $ORG_BASIC_AUTH" \
+            vendir sync --chdir "$APPLICATION_ROOT_DIR" --locked
+
+          echo >&2 "Checking for differences in vendored dependencies lock file ..."
+
+          if ! git diff --exit-code "$APPLICATION_ROOT_DIR/vendir.lock.yml"; then
+            echo >&2 "==="
+            echo >&2 "Notice: Found above differences in vendir.lock.yml file..."
+            echo >&2 "==="
+          else
+            echo >&2 "No differences found."
+          fi
+
+      - name: extract actions if not present
+        env:
+          APPLICATION_ROOT_DIR: "cicd-toolkit"
+        run: |
+          # extract actions unless present already
+          if [ ! -d "$APPLICATION_ROOT_DIR/actions" ]; then
+            (cd $APPLICATION_ROOT_DIR && \
+              appconfig run boilerplate:github-actions) | \
+                appconfig manifest --state-file /dev/null
+          fi
+
+# cicd-toolkit preamble end
+
+
+      - name: setup env vars from project metadata
+        uses: ./cicd-toolkit/actions/env-vars-from-project-metadata
+        with:
+          application_root_dir: "cicd-toolkit"
+
+      - name: Download release artifact
+        if: github.event_name == 'workflow_run'
+        uses: ./cicd-toolkit/actions/download-named-artifact-from-url
+        id: download-release-artifact
+        with:
+          url: ${{ github.event.workflow_run.artifacts_url }}
+          name: release
+
+      - name: Determine release tag
+        if: github.event_name == 'workflow_run'
+        id: set-release-tag
+        env:
+          RELEASE_ARTIFACT_DIR: ${{ steps.download-release-artifact.outputs.dir }}
+        run: |
+          set -x
+          tag=$(cat "$RELEASE_ARTIFACT_DIR/release.json" | jq -r '.tag')
+          previous_tag=$(cat "$RELEASE_ARTIFACT_DIR/release.json" | jq -r '.previous_tag')
+          commit=$(cat "$RELEASE_ARTIFACT_DIR/release.json" | jq -r '.commit')
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "previous_tag=$previous_tag" >> "$GITHUB_OUTPUT"
+          echo "commit=$commit" >> "$GITHUB_OUTPUT"
+
+      - name: Normalize references
+        id: normalize_refs
+        uses: ./cicd-toolkit/actions/normalize-refs
+        with:
+          tag: ${{ github.event.inputs.tag || steps.set-release-tag.outputs.tag }}
+          # pass sha from upstream release workflow, unless explicitly given to return the resolved tag name from the action
+          sha: ${{ github.event.inputs.sha || steps.set-release-tag.outputs.commit }}
+
+      - name: Detect release type
+        id: release_type
+        uses: ./cicd-toolkit/actions/detect-release-type
+        with:
+          application_root_dir: ${{ env.APPLICATION_ROOT_DIR }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          head_ref: ${{ steps.set-release-tag.outputs.tag }}
+          base_ref: ${{ steps.set-release-tag.outputs.previous_tag }}
+          release_version_type: ${{ env.RELEASE_VERSION_TYPE }}
+          release_version_type_for_config_only: ${{ env.RELEASE_VERSION_TYPE_FOR_CONFIG_ONLY }}
+
+      - name: Detect hotfix revision
+        if: steps.set-release-tag.outputs.previous_tag != ''
+        id: detect_hotfix
+        uses: ./cicd-toolkit/actions/detect-hotfix
+        with:
+          application_root_dir: ${{ env.APPLICATION_ROOT_DIR }}
+          base_ref: ${{ steps.set-release-tag.outputs.previous_tag }}
+          hotfix_tag: ${{ github.event.inputs.tag }}
+          docker_image: ${{ env.DOCKER_IMAGE }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          hotfix_ref_type: 'release'
+          hotfix_config_only: ${{ steps.release_type.outputs.config-only }}
+          hotfix_detection_enabled: ${{ steps.release_type.outputs.release-hotfix-detection-enabled }}
+
+      - name: Setup deploy branch
+        uses: ./cicd-toolkit/actions/setup-deploy-branch
+        id: setup-deploy-branch
+        with:
+          deploy_ref: ${{ steps.normalize_refs.outputs.deploy_ref }}
+          sha: ${{ steps.normalize_refs.outputs.sha }}
+
+      - name: Generate deployment config
+        if: env.DEPLOYMENT_CONFIG_TRACKING_ENABLED == 'true'
+        uses: ./cicd-toolkit/actions/generate-deploy-cfg
+        with:
+          working_directory: ${{ env.APPLICATION_ROOT_DIR }}
+          output_directory: ${{ env.DEPLOY_CFG_OUTPUT_DIR }}/kubernetes/deploy
+          base_deploy_ref: ${{ steps.detect_hotfix.outputs.base_deploy_ref }}
+          base_deploy_sha: ${{ steps.detect_hotfix.outputs.base_deploy_sha }}
+          deploy_ref: ${{ steps.normalize_refs.outputs.deploy_ref }}
+
+      - name: Generate deployment manifests
+        uses: ./cicd-toolkit/actions/generate-manifests
+        with:
+          deployment_branch: ${{ env.DEFAULT_BRANCH }}
+          deployment_revision: ${{ steps.normalize_refs.outputs.sha }}
+          deployment_tag: ${{ steps.normalize_refs.outputs.ref }}
+          deployment_version: ${{ steps.normalize_refs.outputs.ref }}
+          docker_image_tag: ${{ steps.detect_hotfix.outputs.hotfix_image_tag || steps.normalize_refs.outputs.sha }}
+          ecr_image_prefix: ${{ env.ECR_IMAGE_PREFIX }}
+          docker_image: ${{ env.DOCKER_IMAGE }}
+          working_directory: ${{ env.APPLICATION_ROOT_DIR }}
+          output_directory: ${{ env.DEPLOY_CFG_OUTPUT_DIR }}/kubernetes/manifests
+
+
+      - name: Commit manifests (unresolved)
+        id: commit_manifests_unresolved
+        uses: ./cicd-toolkit/actions/commit-manifests
+        with:
+          deploy_branch: ${{ steps.normalize_refs.outputs.deploy_ref }}
+          output_directory: ${{ env.DEPLOY_CFG_OUTPUT_DIR }}/kubernetes
+
+      - name: Wait for image build(s)
+        if: steps.detect_hotfix.outputs.hotfix_enabled == 'false'
+        uses: ./cicd-toolkit/actions/wait-for-images
+        timeout-minutes: 30
+        with:
+          tag: ${{ steps.normalize_refs.outputs.sha }}
+          working_directory: ${{ env.APPLICATION_ROOT_DIR }}
+          ecr_image_prefix: ${{ env.ECR_IMAGE_PREFIX }}
+
+      - name: Resolve container images in manifests
+        uses: ./cicd-toolkit/actions/resolve-images
+        with:
+          output_directory: ${{ env.DEPLOY_CFG_OUTPUT_DIR }}/kubernetes
+          manifests_directory: ${{ env.DEPLOY_CFG_OUTPUT_DIR }}/kubernetes/manifests
+          working_directory: ${{ env.APPLICATION_ROOT_DIR }}
+          hotfix_image_lock_file: ${{ steps.detect_hotfix.outputs.hotfix_image_lock_file }}
+          deployment_revision: ${{ steps.normalize_refs.outputs.sha }}
+
+      - name: Write artifacts ready marker
+        uses: ./cicd-toolkit/actions/write-artifacts-ready
+        with:
+          git_commit: ${{ steps.normalize_refs.outputs.sha }}
+          git_ref: ${{ steps.normalize_refs.outputs.ref }}
+          output_directory: ${{ env.DEPLOY_CFG_OUTPUT_DIR }}/kubernetes/deploy
+
+      - name: Commit manifests (resolved)
+        id: commit_manifests_resolved
+        uses: ./cicd-toolkit/actions/commit-manifests
+        with:
+          message: Resolved manifests for ${{ steps.normalize_refs.outputs.sha }}
+          deploy_branch: ${{ steps.normalize_refs.outputs.deploy_ref }}
+          output_directory: ${{ env.DEPLOY_CFG_OUTPUT_DIR }}/kubernetes
+          force: "true"
+          push: "true"
+          tag_release: ${{ env.CREATE_AND_DEPLOY_RELEASE }}
+
+      - name: Cleanup release deploy branch
+        uses: ./cicd-toolkit/actions/cleanup-intermediary-branch
+        with:
+          branch: refs/heads/${{ steps.commit_manifests_resolved.outputs.deploy_branch }}
+
+      - name: Write artifact for downstream workflows
+        env:
+          DEPLOY_REF: ${{ steps.commit_manifests_resolved.outputs.deploy_branch }}
+          DEPLOY_SHA: ${{ steps.commit_manifests_resolved.outputs.deploy_commit }}
+          RELEASE_REF: ${{ steps.normalize_refs.outputs.ref }}
+          RELEASE_SHA: ${{ steps.normalize_refs.outputs.sha }}
+        run: |
+          jq -n \
+            --arg release_ref "$RELEASE_REF" \
+            --arg release_sha "$RELEASE_SHA" \
+            --arg deploy_sha "$DEPLOY_SHA" \
+            --arg deploy_ref "$DEPLOY_REF" \
+            '{
+              deploy: { ref: $deploy_ref, sha: $deploy_sha },
+              release: { ref: $release_ref, sha: $release_sha },
+            }' > trigger.json
+
+      - name: Upload trigger artifact
+        uses: zendesk/upload-artifact@v3
+        with:
+          name: trigger
+          path: trigger.json

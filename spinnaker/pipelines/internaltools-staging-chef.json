@@ -1,0 +1,145 @@
+{
+  "application": "ml-training-pipelines",
+  "keepWaitingPipelines": false,
+  "limitConcurrent": true,
+  "name": "ml-training-pipelines",
+  "notifications": [],
+  "parameterConfig": [
+    {
+      "default": "false",
+      "description": "Force interface stage to apply changes from service yml even if there is no change",
+      "hasOptions": true,
+      "label": "forceApplyInterface",
+      "name": "forceApplyInterface",
+      "options": [
+        {
+          "value": "true"
+        },
+        {
+          "value": "false"
+        }
+      ],
+      "pinned": true,
+      "required": false
+    },
+    {
+      "default": "",
+      "description": "Version of the App to deploy e.g. \"v23\". To deploy your branch use branch name without \"-deploy\" suffix e.g. \"jdoe.feature-branch-name\"",
+      "hasOptions": false,
+      "name": "gitRef",
+      "pinned": true,
+      "required": true
+    },
+    {
+      "default": "true",
+      "description": "Skip the child pipeline deployment if the currently deployed is the same as the version to be deployed.",
+      "hasOptions": true,
+      "name": "skipSameVersion",
+      "options": [
+        {
+          "value": "true"
+        },
+        {
+          "value": "false"
+        }
+      ],
+      "pinned": true,
+      "required": false
+    }
+  ],
+  "roles": [
+    "okta:role:ml-training-pipelines"
+  ],
+  "stages": [
+    {
+      "application": "ml-training-pipelines",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Aml-training-pipelines%2Ckube_cluster_name%3Ainternaltools-staging-use1-chef\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": true,
+      "failPipeline": false,
+      "name": "internaltools-staging-use1-chef",
+      "pipeline": "${#pipelineId(\"internaltools-staging-use1-chef\")}",
+      "pipelineParameters": {
+        "forceApplyInterface": "${ trigger.parameters.forceApplyInterface }",
+        "gitRef": "${ trigger.parameters.gitRef }",
+        "skipSameVersion": "${ trigger.parameters.skipSameVersion }"
+      },
+      "refId": "internaltools-staging-use1-chef",
+      "requisiteStageRefIds": [],
+      "skipDownstreamOutput": true,
+      "type": "pipeline",
+      "waitForCompletion": true
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": false,
+      "name": "Phase Succeeded",
+      "preconditions": [
+        {
+          "context": {
+            "expression": "${ #stageByRefId(\"internaltools-staging-use1-chef\").status == \"SUCCEEDED\" }",
+            "failureMessage": "One of the previous steps failed"
+          },
+          "failPipeline": true,
+          "type": "expression"
+        }
+      ],
+      "refId": "successful-phase-Phase 1: Staging",
+      "requisiteStageRefIds": [
+        "internaltools-staging-use1-chef"
+      ],
+      "type": "checkPreconditions"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": false,
+      "name": "Phase Failed",
+      "preconditions": [
+        {
+          "context": {
+            "expression": "${ #stageByRefId(\"internaltools-staging-use1-chef\").status == \"FAILED_CONTINUE\" }",
+            "failureMessage": "One of the previous steps failed"
+          },
+          "failPipeline": false,
+          "type": "expression"
+        }
+      ],
+      "refId": "failed-phase-Phase 1: Staging",
+      "requisiteStageRefIds": [
+        "internaltools-staging-use1-chef"
+      ],
+      "type": "checkPreconditions"
+    },
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "name": "Report Failure",
+      "preconditions": [
+        {
+          "context": {
+            "expression": "false",
+            "failureMessage": "Pipeline execution halted at Phase 1: Staging ; see execution details for further information\n"
+          },
+          "failPipeline": true,
+          "type": "expression"
+        }
+      ],
+      "refId": "report-failure-phase-1:-staging",
+      "requisiteStageRefIds": [
+        "failed-phase-Phase 1: Staging"
+      ],
+      "type": "checkPreconditions"
+    }
+  ],
+  "triggers": [
+    {
+      "enabled": true,
+      "payloadConstraints": {},
+      "source": "ml-training-pipelines-internaltools-staging-chef",
+      "type": "webhook"
+    }
+  ]
+}

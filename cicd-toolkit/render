@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# ------------------------------------------------------------------------------------------------------------
+# NOTE: THIS FILE IS GENERATED ON SELF-UPDATE BY https://github.com/zendesk/cicd-toolkit
+#
+# You can regenerate the content by running `make self-update` in the 'cicd-toolkit' directory.
+#
+# MANUAL CHANGES TO THIS FILE MAY RESULT IN INCORRECT BEHAVIOUR, AND WILL BE LOST IF THE CODE IS REGENERATED.
+# ------------------------------------------------------------------------------------------------------------
+
+set -euo pipefail
+
+#-------------------------------------------------------------------------------
+# This script is used by appconfig to render files from json objects and is not
+# meant to be run by hand.
+#-------------------------------------------------------------------------------
+
+readonly root="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+tmpfile="$(mktemp "$root/scripts/render.sh.XXXXXX")"
+
+trap 'rm -f "$tmpfile"' EXIT
+
+# ensure we're running in the root of the project to pick up the config file correctly
+# to get the version of the rendering script from the bundle
+(
+  cd "$root" && \
+    appconfig show -e "(importstr 'github.com/zendesk/cicd-toolkit/lib/bootstrap/templates/scripts/render.sh')" -o string
+) > "$tmpfile"
+
+chmod +x "$tmpfile" && "$tmpfile" "$@"
