@@ -65,7 +65,6 @@ spec:
       containers:
       - command:
         - echo
-        - hello
         - world
         env:
         - name: DD_ENV
