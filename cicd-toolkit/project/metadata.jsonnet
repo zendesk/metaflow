@@ -20,10 +20,8 @@ libprojectmetadata.v1 {
     defaultBranch: 'main',
   },
   spinnaker+: {
-    webhooks+: {
-      branch: 'ml-training-pipelines-internaltools-staging-chef-lockable',
-    },
-    stages+: {
+    webhooks: {
+      staging: 'ml-training-pipelines-internaltools-staging-chef-lockable',
       branch: 'ml-training-pipelines-internaltools-staging-chef-lockable',
     },
   },
