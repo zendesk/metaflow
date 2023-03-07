@@ -1,3 +1,0 @@
-[submodule "metaflow-service"]
-	path = metaflow-service
-	url = https://github.com/Netflix/metaflow-service/
