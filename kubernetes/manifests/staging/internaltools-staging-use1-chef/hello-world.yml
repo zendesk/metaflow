@@ -281,9 +281,12 @@ spec:
   - hosts:
     - ml-training-pipelines.internaltools-staging-use1-chef.zdmesh.io
     port:
-      name: http
-      number: 80
-      protocol: HTTP
+      name: https
+      number: 443
+      protocol: HTTPS
+    tls:
+      credentialName: ml-experimentation-tracker
+      mode: MUTUAL
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
