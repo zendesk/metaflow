@@ -13,7 +13,7 @@ function(params={}) (
 
   local secrets = {
     '/secret/numbats/metaflow_service_db_user': 'secret/db_user',
-    '/secret/numbats/metaflow_service_db_user': 'secret/db_pass'
+    '/secret/numbats/metaflow_service_db_pass': 'secret/db_pass'
   };
 
 
