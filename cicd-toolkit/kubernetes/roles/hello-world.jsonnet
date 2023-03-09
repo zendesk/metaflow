@@ -34,6 +34,14 @@ function(params={}) (
                              runAsUser: 65534,
                              runAsGroup:1000
                          })
+                        .withPorts([{
+                          name: "http-port",
+                          containerPort: 8000,
+                          protocol: "TCP",
+                        }])
+                        .withEnvFromMap({
+                          "STUFF": "GOES_HERE"
+                        })
                         .withImage('');
 
   local deployment = K8s.Deployment
