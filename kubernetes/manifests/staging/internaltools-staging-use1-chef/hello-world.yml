@@ -152,7 +152,7 @@ spec:
         name: metaflow-service
         ports:
         - containerPort: 8080
-          name: metadata-service
+          name: metadata-svc
           protocol: TCP
         - containerPort: 8080
           name: migration-service
@@ -238,7 +238,7 @@ spec:
   ports:
   - name: http
     port: 8080
-    targetPort: metadata-service
+    targetPort: metadata-svc
   selector:
     project: ml-training-pipelines
     role: metaflow-service
