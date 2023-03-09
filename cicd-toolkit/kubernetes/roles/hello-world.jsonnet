@@ -11,21 +11,6 @@ function(params={}) (
   local project_name = "ml-training-pipelines";
   local hostname = p.roleVariables.hostname;
 
-  local istio_gateway = Istio.Gateway
-                        .withName(role_name)
-                        .withIstioSelector("ingressgateway")
-                        .withServers([{
-                          hosts: [hostname],
-                          port: {
-                            name: "https",
-                            number: 443,
-                            protocol: "HTTPS",
-                          },
-                          tls: {
-                            mode: "MUTUAL",
-                            credentialName: "ml-experimentation-tracker" # Istio assumes CA cert is secret under ml-experimentation-tracker-cacert
-                          },
-                        }]);
 
   local container = K8s.Container
                         .withName(role_name)
@@ -77,7 +62,7 @@ function(params={}) (
   local virtual_service = Istio.VirtualService
                           .withName(role_name)
                           .withHosts([role_name, hostname])
-                          .withGateways([p.namespace + "/" + istio_gateway.metadata.name]);
+                          .withGateways( "ml-experimentation-tracker/mlflow-write-access"]);
 
   local auth_policy = Istio.AuthorizationPolicy
                       .withName(p.name + "-auth-policy")
