@@ -14,7 +14,7 @@ function(params={}) (
 
   local container = K8s.Container
                         .withName(role_name)
-                        .withCommand(["curl", "localhost:8080/ping"])
+                        .withCommand(["sleep", "10000000"])
                         .withSecurityContext({
                              runAsUser: 65534,
                              runAsGroup:1000
