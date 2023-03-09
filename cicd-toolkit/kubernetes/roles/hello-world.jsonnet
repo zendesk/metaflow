@@ -62,7 +62,7 @@ function(params={}) (
   local virtual_service = Istio.VirtualService
                           .withName(role_name)
                           .withHosts([role_name, hostname])
-                          .withGateways( "ml-experimentation-tracker/mlflow-write-access"]);
+                          .withGateways(["ml-experimentation-tracker/mlflow-write-access"]);
 
   local auth_policy = Istio.AuthorizationPolicy
                       .withName(p.name + "-auth-policy")
@@ -84,8 +84,7 @@ function(params={}) (
     deployment,
     auth_policy,
     service,
-    virtual_service,
-    istio_gateway
+    virtual_service
   ];
 
   librole.mutateRole(p, manifests)
