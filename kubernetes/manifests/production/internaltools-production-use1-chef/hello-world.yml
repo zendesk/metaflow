@@ -5,10 +5,11 @@
 #
 # MANUAL CHANGES TO THIS FILE MAY RESULT IN INCORRECT BEHAVIOUR, AND WILL BE LOST IF THE CODE IS REGENERATED.
 # ------------------------------------------------------------------------------------------------------------
-apiVersion: batch/v1
-kind: Job
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   annotations:
+    ad.datadoghq.com/tags: '{"git.commit.sha":"unknown","git.repository_url":"github.com/zendesk/ml-training-pipelines"}'
     cicd-toolkit.zende.sk/environment: production
     cicd-toolkit.zende.sk/generated-by: jsonnet-kubernetes
     cicd-toolkit.zende.sk/partition: internaltools-production-use1-chef
@@ -22,25 +23,37 @@ metadata:
     sidecar.istio.io/proxyCPULimit: "4"
     sidecar.istio.io/proxyMemory: 256Mi
     sidecar.istio.io/proxyMemoryLimit: 2Gi
-    storage.zende.sk/tempauth-no-sidecar: "true"
     strategy.spinnaker.io/replace: "true"
-  generateName: hello-world-
   labels:
+    app.kubernetes.io/instance: hello-world
+    app.kubernetes.io/name: ml-training-pipelines
+    app.kubernetes.io/version: unknown-unknown
     branch: unknown
     deploy_id: unknown
     product: ml-training-pipelines
     project: ml-training-pipelines
     role: hello-world
     sidecar.istio.io/inject: "true"
+    tags.datadoghq.com/env: production
+    tags.datadoghq.com/service: ml-training-pipelines-hello-world
+    tags.datadoghq.com/version: unknown-unknown
     team: ml-apac-trisolaris
     track: unknown
+  name: metaflow-service
   namespace: ml-training-pipelines
 spec:
-  activeDeadlineSeconds: 600
-  backoffLimit: 0
+  minReadySeconds: 10
+  progressDeadlineSeconds: 300
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      project: ml-training-pipelines
+      role: hello-world
   template:
     metadata:
       annotations:
+        ad.datadoghq.com/tags: '{"git.commit.sha":"unknown","git.repository_url":"github.com/zendesk/ml-training-pipelines"}'
         moniker.spinnaker.io/cluster: internaltools-production-use1-chef
         moniker.spinnaker.io/detail: unknown
         moniker.spinnaker.io/stack: ml-training-pipelines-hello-world
@@ -50,7 +63,12 @@ spec:
         sidecar.istio.io/proxyMemory: 256Mi
         sidecar.istio.io/proxyMemoryLimit: 2Gi
       labels:
+        app: metadata-service
+        app.kubernetes.io/instance: hello-world
+        app.kubernetes.io/name: ml-training-pipelines
+        app.kubernetes.io/version: unknown-unknown
         branch: unknown
+        configuration-delivery: "true"
         deploy_group: internaltools-production-use1-chef
         deploy_id: unknown
         product: ml-training-pipelines
@@ -59,14 +77,18 @@ spec:
         role: hello-world
         sidecar.istio.io/inject: "true"
         tag: unknown
+        tags.datadoghq.com/env: production
+        tags.datadoghq.com/service: ml-training-pipelines-hello-world
+        tags.datadoghq.com/version: unknown-unknown
         team: ml-apac-trisolaris
+        temp-auth: enabled
         track: unknown
-      name: helow-world
+        workload-rebalancing.compute.zende.sk/enabled: "false"
     spec:
       containers:
       - command:
         - echo
-        - world
+        - hello
         env:
         - name: DD_ENV
           valueFrom:
@@ -119,7 +141,7 @@ spec:
             fieldRef:
               fieldPath: metadata.annotations['sidecar.istio.io/status']
         image: 713408432298.dkr.ecr.us-west-2.amazonaws.com/dev/zendesk/ml-training-pipelines:unknown
-        name: helow-world
+        name: metaflow-service
         resources:
           limits:
             cpu: "1.0"
@@ -127,14 +149,164 @@ spec:
           requests:
             cpu: "1.0"
             memory: 900Mi
+        securityContext:
+          runAsGroup: 1000
+          runAsUser: 65534
       dnsConfig:
         options:
         - name: single-request-reopen
       initContainers: []
-      restartPolicy: Never
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-      terminationGracePeriodSeconds: 123
+      terminationGracePeriodSeconds: 30
       volumes: []
-  ttlSecondsAfterFinished: 600
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  annotations:
+    cicd-toolkit.zende.sk/environment: production
+    cicd-toolkit.zende.sk/partition: internaltools-production-use1-chef
+    cicd-toolkit.zende.sk/role: hello-world
+    cicd-toolkit.zende.sk/version: compare
+    strategy.spinnaker.io/replace: "true"
+  labels:
+    branch: unknown
+    deploy_id: unknown
+    product: ml-training-pipelines
+    project: ml-training-pipelines
+    role: hello-world
+    team: ml-apac-trisolaris
+    track: unknown
+  name: hello-world-auth-policy
+  namespace: ml-training-pipelines
+spec:
+  rules:
+  - from:
+    - source:
+        namespaces:
+        - istio-gateways
+        - ml-training-pipelines
+  selector:
+    matchLabels:
+      project: ml-training-pipelines
+      role: metaflow-service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cicd-toolkit.zende.sk/environment: production
+    cicd-toolkit.zende.sk/generated-by: jsonnet-kubernetes
+    cicd-toolkit.zende.sk/partition: internaltools-production-use1-chef
+    cicd-toolkit.zende.sk/role: hello-world
+    cicd-toolkit.zende.sk/version: compare
+  labels:
+    app.kubernetes.io/instance: hello-world
+    app.kubernetes.io/name: ml-training-pipelines
+    app.kubernetes.io/version: unknown-unknown
+    branch: unknown
+    deploy_id: unknown
+    product: ml-training-pipelines
+    project: ml-training-pipelines
+    role: hello-world
+    team: ml-apac-trisolaris
+    track: unknown
+  name: metaflow-service
+  namespace: ml-training-pipelines
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http-port
+  selector:
+    project: ml-training-pipelines
+    role: metaflow-service
+  type: ClusterIP
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  annotations:
+    cicd-toolkit.zende.sk/environment: production
+    cicd-toolkit.zende.sk/partition: internaltools-production-use1-chef
+    cicd-toolkit.zende.sk/role: hello-world
+    cicd-toolkit.zende.sk/version: compare
+    strategy.spinnaker.io/replace: "true"
+  labels:
+    branch: unknown
+    deploy_id: unknown
+    product: ml-training-pipelines
+    project: ml-training-pipelines
+    role: hello-world
+    team: ml-apac-trisolaris
+    track: unknown
+  name: metaflow-service
+  namespace: ml-training-pipelines
+spec:
+  gateways:
+  - ml-training-pipelines/metaflow-service
+  hosts:
+  - metaflow-service
+  - ml-training-pipelines.internaltools-production-use1-chef.zdmesh.io
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  annotations:
+    cicd-toolkit.zende.sk/environment: production
+    cicd-toolkit.zende.sk/partition: internaltools-production-use1-chef
+    cicd-toolkit.zende.sk/role: hello-world
+    cicd-toolkit.zende.sk/version: compare
+    strategy.spinnaker.io/replace: "true"
+  labels:
+    branch: unknown
+    deploy_id: unknown
+    product: ml-training-pipelines
+    project: ml-training-pipelines
+    role: hello-world
+    team: ml-apac-trisolaris
+    track: unknown
+  name: metaflow-service
+  namespace: ml-training-pipelines
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - ml-training-pipelines.internaltools-production-use1-chef.zdmesh.io
+    port:
+      name: http
+      number: 80
+      protocol: HTTP
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  annotations:
+    cicd-toolkit.zende.sk/environment: production
+    cicd-toolkit.zende.sk/partition: internaltools-production-use1-chef
+    cicd-toolkit.zende.sk/role: hello-world
+    cicd-toolkit.zende.sk/version: compare
+    strategy.spinnaker.io/replace: "true"
+  labels:
+    branch: unknown
+    deploy_id: unknown
+    product: ml-training-pipelines
+    project: ml-training-pipelines
+    role: hello-world
+    team: ml-apac-trisolaris
+    track: unknown
+  name: metaflow-service
+  namespace: ml-training-pipelines
+spec:
+  host: metaflow-service
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        connectTimeout: 1s
+    loadBalancer:
+      simple: LEAST_REQUEST
+    outlierDetection:
+      baseEjectionTime: 30s
+      consecutive5xxErrors: 3
+      interval: 30s
+      maxEjectionPercent: 35

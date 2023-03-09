@@ -26,16 +26,15 @@ function(params={}) (
   local container = K8s.Container
                         .withName(role_name)
                         .withCommand(['echo', 'hello'])
+                        .withSecurityContext({
+                             runAsUser: 65534,
+                             runAsGroup:1000
+                         })
                         .withImage('');
 
   local deployment = K8s.Deployment
                      .withName(role_name)
                      .withContainers([container])
-                       .withSecurityContext({
-                         runAsUser: 65534,
-                         runAsGroup:1000
-                       })
-                    ])
                      .withTemplateLabels({
                        'temp-auth': 'enabled',
                        'configuration-delivery': 'true',
