@@ -12,8 +12,8 @@ function(params={}) (
   local hostname = p.roleVariables.hostname;
 
   local secrets = {
-    '/secret/numbats/metaflow_service_db_user': 'secret/db_user',
-    '/secret/numbats/metaflow_service_db_pass': 'secret/db_pass'
+    'metaflow_service_db_pass': 'secret/db_pass',
+    'metaflow_service_db_user': 'secret/db_user'
   };
 
 
@@ -41,18 +41,16 @@ function(params={}) (
                         })
                         .withImage('');
 
-  local podTemplate = K.PodTemplate
+  local podTemplate = K8s.PodTemplate
                         .withContainers([container])
-                        .withServiceAccountName(serviceAccountName)
                         .withSecretSidecarWithDefaultsFromConfigmaps(
-                        secrets=secrets,
-                        roles={role},
+                          secrets=secrets,
                         );
 
 
   local deployment = K8s.Deployment
                      .withName(role_name)
-                     .withContainers([container])
+                     .withPodTemplate(podTemplate)
                      .withTemplateLabels({
                        'temp-auth': 'enabled',
                        'configuration-delivery': 'true',
