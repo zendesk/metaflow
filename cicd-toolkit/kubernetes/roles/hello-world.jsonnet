@@ -21,7 +21,7 @@ function(params={}) (
                          })
                         .withPorts([
                           {
-                            name: "metadata-service",
+                            name: "metadata-svc",
                             containerPort: 8080,
                             protocol: "TCP",
                           },
@@ -54,7 +54,7 @@ function(params={}) (
                   .withPorts([{
                     name: "http",
                     port: 8080,
-                    targetPort: 'metadata-service',
+                    targetPort: 'metadata-svc',
                   }])
                   .withType("ClusterIP")
                   .forDeployment(deployment);
