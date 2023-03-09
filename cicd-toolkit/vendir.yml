@@ -3,7 +3,7 @@ directories:
 - contents:
   - git:
       depth: 1
-      ref: v8.222.1
+      ref: v8.239.0
       url: https://github.com/zendesk/cicd-toolkit
     includePaths:
     - jsonnet/**/*

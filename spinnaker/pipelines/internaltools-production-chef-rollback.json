@@ -2,26 +2,9 @@
   "application": "ml-training-pipelines",
   "keepWaitingPipelines": false,
   "limitConcurrent": true,
-  "name": "internaltools-production-chef",
+  "name": "internaltools-production-chef-rollback",
   "notifications": [],
   "parameterConfig": [
-    {
-      "default": "false",
-      "description": "Force interface stage to apply changes from service yml even if there is no change",
-      "hasOptions": true,
-      "label": "forceApplyInterface",
-      "name": "forceApplyInterface",
-      "options": [
-        {
-          "value": "true"
-        },
-        {
-          "value": "false"
-        }
-      ],
-      "pinned": true,
-      "required": false
-    },
     {
       "default": "",
       "description": "Version of the App to deploy e.g. \"v23\". To deploy your branch use branch name without \"-deploy\" suffix e.g. \"jdoe.feature-branch-name\"",
@@ -29,25 +12,22 @@
       "name": "gitRef",
       "pinned": true,
       "required": true
-    },
-    {
-      "default": "true",
-      "description": "Skip the child pipeline deployment if the currently deployed is the same as the version to be deployed.",
-      "hasOptions": true,
-      "name": "skipSameVersion",
-      "options": [
-        {
-          "value": "true"
-        },
-        {
-          "value": "false"
-        }
-      ],
-      "pinned": true,
-      "required": false
     }
   ],
   "stages": [
+    {
+      "completeOtherBranchesThenFail": false,
+      "continuePipeline": false,
+      "failPipeline": true,
+      "gitRef": "${parameters.gitRef}",
+      "instructions": "This is a buddy check. It requires user approval for the pipeline to continue.\n\nThis pipeline will deploy \u003cb\u003e${ trigger['parameters']['gitRef'] }\u003c/b\u003e\n\n\u003ca href=${ trigger['parameters']['gitRef'] == \"master\" || trigger['parameters']['gitRef'] == \"main\" ? \"https://github.com/zendesk/ml-training-pipelines\" : trigger['parameters']['gitRef'] matches \"v(\\d+)[\\.\\d+]*\" ? \"https://github.com/zendesk/ml-training-pipelines/releases/${trigger['parameters']['gitRef']}\" : \"https://github.com/zendesk/ml-training-pipelines/commits/${trigger['parameters']['gitRef']}\"}\u003e View ${trigger['parameters']['gitRef']}\u003c/a\u003e\n",
+      "name": "Buddy",
+      "notifications": [],
+      "refId": "buddy",
+      "requisiteStageRefIds": [],
+      "sendNotifications": true,
+      "type": "buddy"
+    },
     {
       "application": "ml-training-pipelines",
       "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eDeployment Status\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/orchestration/overview/deployment?tags=kube_app_name%3Aml-training-pipelines%2Ckube_cluster_name%3Ainternaltools-production-use1-chef\"\u003eDeployment Status\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
@@ -57,9 +37,8 @@
       "name": "internaltools-production-use1-chef",
       "pipeline": "${#pipelineId(\"internaltools-production-use1-chef\")}",
       "pipelineParameters": {
-        "forceApplyInterface": "${ trigger.parameters.forceApplyInterface }",
         "gitRef": "${ trigger.parameters.gitRef }",
-        "skipSameVersion": "${ trigger.parameters.skipSameVersion }"
+        "rollback": "true"
       },
       "refId": "internaltools-production-use1-chef",
       "requisiteStageRefIds": [
@@ -73,7 +52,7 @@
       "completeOtherBranchesThenFail": false,
       "continuePipeline": false,
       "failPipeline": false,
-      "name": "Phase Succeeded",
+      "name": "Rollback succeeded",
       "preconditions": [
         {
           "context": {
@@ -84,7 +63,7 @@
           "type": "expression"
         }
       ],
-      "refId": "successful-phase-internaltools-production-chef",
+      "refId": "rollback-succeeded",
       "requisiteStageRefIds": [
         "internaltools-production-use1-chef"
       ],
@@ -94,7 +73,7 @@
       "completeOtherBranchesThenFail": false,
       "continuePipeline": false,
       "failPipeline": false,
-      "name": "Phase Failed",
+      "name": "Rollback failed",
       "preconditions": [
         {
           "context": {
@@ -105,7 +84,7 @@
           "type": "expression"
         }
       ],
-      "refId": "failed-phase-internaltools-production-chef",
+      "refId": "rollback-failed",
       "requisiteStageRefIds": [
         "internaltools-production-use1-chef"
       ],
@@ -120,30 +99,17 @@
         {
           "context": {
             "expression": "false",
-            "failureMessage": "Pipeline execution halted at Deploy: internaltools-production-chef ; see execution details for further information\n"
+            "failureMessage": "Pipeline execution halted; see execution details for further information\n"
           },
           "failPipeline": true,
           "type": "expression"
         }
       ],
-      "refId": "report-failure-deploy:-internaltools-production-chef",
+      "refId": "report-failure",
       "requisiteStageRefIds": [
-        "failed-phase-internaltools-production-chef"
+        "rollback-failed"
       ],
       "type": "checkPreconditions"
-    },
-    {
-      "completeOtherBranchesThenFail": false,
-      "continuePipeline": false,
-      "failPipeline": true,
-      "gitRef": "${parameters.gitRef}",
-      "instructions": "This is a buddy check. It requires user approval for the pipeline to continue.\n\nThis pipeline will deploy \u003cb\u003e${ trigger['parameters']['gitRef'] }\u003c/b\u003e\n\n\u003ca href=${ trigger['parameters']['gitRef'] == \"master\" || trigger['parameters']['gitRef'] == \"main\" ? \"https://github.com/zendesk/ml-training-pipelines\" : trigger['parameters']['gitRef'] matches \"v(\\d+)[\\.\\d+]*\" ? \"https://github.com/zendesk/ml-training-pipelines/releases/${trigger['parameters']['gitRef']}\" : \"https://github.com/zendesk/ml-training-pipelines/commits/${trigger['parameters']['gitRef']}\"}\u003e View ${trigger['parameters']['gitRef']}\u003c/a\u003e\n",
-      "name": "Buddy",
-      "notifications": [],
-      "refId": "buddy",
-      "requisiteStageRefIds": [],
-      "sendNotifications": true,
-      "type": "buddy"
     }
   ],
   "triggers": []

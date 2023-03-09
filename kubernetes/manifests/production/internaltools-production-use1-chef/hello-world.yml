@@ -152,6 +152,10 @@ spec:
         securityContext:
           runAsGroup: 1000
           runAsUser: 65534
+        volumeMounts:
+        - mountPath: /var/run/datadog
+          name: dsdsocket
+          readOnly: true
       dnsConfig:
         options:
         - name: single-request-reopen
@@ -310,3 +314,13 @@ spec:
       consecutive5xxErrors: 3
       interval: 30s
       maxEjectionPercent: 35
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+      terminationGracePeriodSeconds: 123
+      volumes:
+      - hostPath:
+          path: /var/run/datadog
+        name: dsdsocket
+  ttlSecondsAfterFinished: 600
