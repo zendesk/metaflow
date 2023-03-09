@@ -136,12 +136,24 @@ spec:
           value: NA
         - name: ZENDESK_STATSD
           value: "true"
+        - name: STUFF
+          value: GOES_HERE
         - name: ISTIO_STATUS
           valueFrom:
             fieldRef:
               fieldPath: metadata.annotations['sidecar.istio.io/status']
         image: 713408432298.dkr.ecr.us-west-2.amazonaws.com/dev/zendesk/ml-training-pipelines:unknown
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - /bin/sleep
+              - "31"
         name: metaflow-service
+        ports:
+        - containerPort: 8000
+          name: http-port
+          protocol: TCP
         resources:
           limits:
             cpu: "1.0"
