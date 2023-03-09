@@ -87,8 +87,8 @@ spec:
     spec:
       containers:
       - command:
-        - echo
-        - hello
+        - curl
+        - localhost:8080/ping
         env:
         - name: DD_ENV
           valueFrom:
@@ -151,8 +151,11 @@ spec:
               - "31"
         name: metaflow-service
         ports:
-        - containerPort: 8000
-          name: http-port
+        - containerPort: 8080
+          name: metadata-service
+          protocol: TCP
+        - containerPort: 8080
+          name: migration-service
           protocol: TCP
         resources:
           limits:
@@ -235,7 +238,7 @@ spec:
   ports:
   - name: http
     port: 8080
-    targetPort: http-port
+    targetPort: metadata-service
   selector:
     project: ml-training-pipelines
     role: metaflow-service
