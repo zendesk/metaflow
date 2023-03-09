@@ -4,3 +4,8 @@ description: metaflow
 product: machine-learning
 team: ml-apac-trisolaris
 
+access:
+  secret_paths:
+    - path: /secret/numbat/metaflow_service_db_user
+    - path: /secret/numbat/metaflow_service_db_pass
+
