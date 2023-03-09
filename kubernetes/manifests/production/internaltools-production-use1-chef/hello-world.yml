@@ -39,7 +39,7 @@ metadata:
     tags.datadoghq.com/version: unknown-unknown
     team: ml-apac-trisolaris
     track: unknown
-  name: metaflow-service
+  name: metaflow
   namespace: ml-training-pipelines
 spec:
   minReadySeconds: 10
@@ -63,7 +63,7 @@ spec:
         sidecar.istio.io/proxyMemory: 256Mi
         sidecar.istio.io/proxyMemoryLimit: 2Gi
       labels:
-        app: metadata-service
+        app: metaflow
         app.kubernetes.io/instance: hello-world
         app.kubernetes.io/name: ml-training-pipelines
         app.kubernetes.io/version: unknown-unknown
@@ -149,13 +149,13 @@ spec:
               command:
               - /bin/sleep
               - "31"
-        name: metaflow-service
+        name: metaflow
         ports:
         - containerPort: 8080
           name: metadata-svc
           protocol: TCP
         - containerPort: 8080
-          name: migration-service
+          name: migration
           protocol: TCP
         resources:
           limits:
@@ -210,7 +210,7 @@ spec:
   selector:
     matchLabels:
       project: ml-training-pipelines
-      role: metaflow-service
+      role: metaflow
 ---
 apiVersion: v1
 kind: Service
@@ -232,7 +232,7 @@ metadata:
     role: hello-world
     team: ml-apac-trisolaris
     track: unknown
-  name: metaflow-service
+  name: metaflow
   namespace: ml-training-pipelines
 spec:
   ports:
@@ -241,7 +241,7 @@ spec:
     targetPort: metadata-svc
   selector:
     project: ml-training-pipelines
-    role: metaflow-service
+    role: metaflow
   type: ClusterIP
 ---
 apiVersion: networking.istio.io/v1beta1
@@ -261,13 +261,13 @@ metadata:
     role: hello-world
     team: ml-apac-trisolaris
     track: unknown
-  name: metaflow-service
+  name: metaflow
   namespace: ml-training-pipelines
 spec:
   gateways:
   - ml-experimentation-tracker/mlflow-write-access
   hosts:
-  - metaflow-service
+  - metaflow
   - ml-training-pipelines.internaltools-production-use1-chef.zdmesh.io
 ---
 apiVersion: networking.istio.io/v1beta1
@@ -287,10 +287,10 @@ metadata:
     role: hello-world
     team: ml-apac-trisolaris
     track: unknown
-  name: metaflow-service
+  name: metaflow
   namespace: ml-training-pipelines
 spec:
-  host: metaflow-service
+  host: metaflow
   trafficPolicy:
     connectionPool:
       tcp:

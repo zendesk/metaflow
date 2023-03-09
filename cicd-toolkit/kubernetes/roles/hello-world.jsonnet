@@ -7,7 +7,7 @@ function(params={}) (
 
   local p = libroleparams.v1 + params {};
 
-  local role_name = "metaflow-service";
+  local role_name = "metaflow";
   local project_name = "ml-training-pipelines";
   local hostname = p.roleVariables.hostname;
 
@@ -26,7 +26,7 @@ function(params={}) (
                             protocol: "TCP",
                           },
                           {
-                            name: "migration-service",
+                            name: "migration",
                             containerPort: 8080,
                             protocol: "TCP",
                           }
@@ -42,7 +42,7 @@ function(params={}) (
                      .withTemplateLabels({
                        'temp-auth': 'enabled',
                        'configuration-delivery': 'true',
-                       'app': 'metadata-service'
+                       'app': 'metaflow'
                      })
                      .withMatchLabelsSelector({
                        project: project_name,
