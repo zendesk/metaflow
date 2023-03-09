@@ -7,37 +7,82 @@ function(params={}) (
 
   local p = libroleparams.v1 + params {};
 
-  local role_name = "helow-world";
+  local role_name = "metaflow-service";
   local project_name = "ml-training-pipelines";
+  local hostname = p.roleVariables.hostname;
+
+  local istio_gateway = Istio.Gateway
+                        .withName(role_name)
+                        .withIstioSelector("ingressgateway")
+                        .withServers([{
+                          hosts: [hostname],
+                          port: {
+                            name: "http",
+                            number: 80,
+                            protocol: "HTTP",
+                          }
+                        }]);
 
   local container = K8s.Container
                         .withName(role_name)
-                        .withCommand(['echo', 'world'])
+                        .withCommand(['echo', 'hello'])
                         .withImage('');
 
-  local podTemplate = K8s.PodTemplate
-                         .withTemplateName(role_name)
-                         .withNamespace(project_name)
-                         .withContainers([
-                           container
-                         ])
-                         .withGracefulStop(120)
-                         .withRestartPolicy('Never')
-                         .withSecurityContext({
-                           runAsNonRoot: true,
-                           runAsUser: 1000
-                         });
+  local deployment = K8s.Deployment
+                     .withName(role_name)
+                     .withContainers([container])
+                       .withSecurityContext({
+                         runAsUser: 65534,
+                         runAsGroup:1000
+                       })
+                    ])
+                     .withTemplateLabels({
+                       'temp-auth': 'enabled',
+                       'configuration-delivery': 'true',
+                       'app': 'metadata-service'
+                     })
+                     .withMatchLabelsSelector({
+                       project: project_name,
+                       role: role_name,
+                     });
 
-  local job = K8s.Job
-                 .withNamespace(project_name)
-                 .withTTLSecondsAfterFinished(600)
-                 .withActiveDeadlineSeconds(600)
-                 .withBackoffLimit(0)
-                 .withPodTemplate(podTemplate){metadata+: { "generateName": p.name + "-", annotations+: {"storage.zende.sk/tempauth-no-sidecar": 'true'}} };
+  local service = K8s.Service
+                  .withName(role_name)
+                  .withPorts([{
+                    name: "http",
+                    port: 8080,
+                    targetPort: 'http-port',
+                  }])
+                  .withType("ClusterIP")
+                  .forDeployment(deployment);
 
+  local virtual_service = Istio.VirtualService
+                          .withName(role_name)
+                          .withHosts([role_name, hostname])
+                          .withGateways([p.namespace + "/" + istio_gateway.metadata.name]);
+
+  local auth_policy = Istio.AuthorizationPolicy
+                      .withName(p.name + "-auth-policy")
+                      .withWorkloadSelector({
+                        matchLabels: {
+                          project: project_name,
+                          role: role_name,
+                        }
+                      })
+                      .withRules([{
+                        from: [{
+                          source: {
+                            namespaces: ["istio-gateways", "ml-training-pipelines"]
+                          }
+                        }],
+                      }]);
 
   local manifests = [
-    job
+    deployment,
+    auth_policy,
+    service,
+    virtual_service,
+    istio_gateway
   ];
 
   librole.mutateRole(p, manifests)
