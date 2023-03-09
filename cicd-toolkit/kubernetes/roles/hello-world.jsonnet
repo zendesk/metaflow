@@ -17,10 +17,14 @@ function(params={}) (
                         .withServers([{
                           hosts: [hostname],
                           port: {
-                            name: "http",
-                            number: 80,
-                            protocol: "HTTP",
-                          }
+                            name: "https",
+                            number: 443,
+                            protocol: "HTTPS",
+                          },
+                          tls: {
+                            mode: "MUTUAL",
+                            credentialName: "ml-experimentation-tracker" # Istio assumes CA cert is secret under ml-experimentation-tracker-cacert
+                          },
                         }]);
 
   local container = K8s.Container
