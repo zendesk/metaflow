@@ -87,8 +87,8 @@ spec:
     spec:
       containers:
       - command:
-        - curl
-        - localhost:8080/ping
+        - sleep
+        - "10000000"
         env:
         - name: DD_ENV
           valueFrom:
