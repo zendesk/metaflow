@@ -11,6 +11,11 @@ function(params={}) (
   local project_name = "ml-training-pipelines";
   local hostname = p.roleVariables.hostname;
 
+  local secrets = {
+    '/secret/numbats/metaflow_service_db_user': 'secret/db_user',
+    '/secret/numbats/metaflow_service_db_user': 'secret/db_pass'
+  };
+
 
   local container = K8s.Container
                         .withName(role_name)
@@ -35,6 +40,15 @@ function(params={}) (
                           "STUFF": "GOES_HERE"
                         })
                         .withImage('');
+
+  local podTemplate = K.PodTemplate
+                        .withContainers([container])
+                        .withServiceAccountName(serviceAccountName)
+                        .withSecretSidecarWithDefaultsFromConfigmaps(
+                        secrets=secrets,
+                        roles={role},
+                        );
+
 
   local deployment = K8s.Deployment
                      .withName(role_name)
