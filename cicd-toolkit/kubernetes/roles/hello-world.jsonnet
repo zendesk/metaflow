@@ -29,16 +29,23 @@ function(params={}) (
 
   local container = K8s.Container
                         .withName(role_name)
-                        .withCommand(['echo', 'hello'])
+                        .withCommand(["curl", "localhost:8080/ping"])
                         .withSecurityContext({
                              runAsUser: 65534,
                              runAsGroup:1000
                          })
-                        .withPorts([{
-                          name: "http-port",
-                          containerPort: 8000,
-                          protocol: "TCP",
-                        }])
+                        .withPorts([
+                          {
+                            name: "metadata-service",
+                            containerPort: 8080,
+                            protocol: "TCP",
+                          },
+                          {
+                            name: "migration-service",
+                            containerPort: 8080,
+                            protocol: "TCP",
+                          }
+                        ])
                         .withEnvFromMap({
                           "STUFF": "GOES_HERE"
                         })
@@ -62,7 +69,7 @@ function(params={}) (
                   .withPorts([{
                     name: "http",
                     port: 8080,
-                    targetPort: 'http-port',
+                    targetPort: 'metadata-service',
                   }])
                   .withType("ClusterIP")
                   .forDeployment(deployment);
