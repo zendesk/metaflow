@@ -57,6 +57,8 @@ spec:
         moniker.spinnaker.io/cluster: internaltools-staging-use1-chef
         moniker.spinnaker.io/detail: unknown
         moniker.spinnaker.io/stack: ml-training-pipelines-hello-world
+        secret/metaflow_service_db_pass: secret/db_pass
+        secret/metaflow_service_db_user: secret/db_user
         sidecar.istio.io/inject: "true"
         sidecar.istio.io/proxyCPU: 150m
         sidecar.istio.io/proxyCPULimit: "4"
@@ -87,8 +89,7 @@ spec:
     spec:
       containers:
       - command:
-        - sleep
-        - "10000000"
+        - metadata_service
         env:
         - name: DD_ENV
           valueFrom:
@@ -168,15 +169,226 @@ spec:
           runAsGroup: 1000
           runAsUser: 65534
         volumeMounts:
+        - mountPath: /secrets
+          name: secrets-volume
+          readOnly: true
+        - mountPath: /var/run/datadog
+          name: dsdsocket
+          readOnly: true
+      - env:
+        - name: DD_ENV
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/env']
+        - name: DD_SERVICE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/service']
+        - name: DD_VERSION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/version']
+        - name: DEPLOY_ID
+          value: unknown
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: PROJECT
+          value: ml-training-pipelines
+        - name: REVISION
+          value: unknown
+        - name: ROLE
+          value: hello-world
+        - name: STATSD_ADDR
+          value: 169.254.1.1:8125
+        - name: STATSD_APM_PORT
+          value: "8126"
+        - name: STATSD_HOST
+          value: 169.254.1.1
+        - name: STATSD_PORT
+          value: "8125"
+        - name: TAG
+          value: unknown
+        - name: ZENDESK_POD_ID
+          value: NA
+        - name: ZENDESK_STATSD
+          value: "true"
+        - name: RUN_ONCE
+          value: "false"
+        - name: VAULT_ADDR
+          valueFrom:
+            configMapKeyRef:
+              key: vault_addr
+              name: credentials-sidecar
+        - name: VAULT_ROLE
+          valueFrom:
+            configMapKeyRef:
+              key: vault_role
+              name: credentials-sidecar
+        - name: JWT_TOKEN_PATH
+          value: /var/run/secrets/kubernetes.io/serviceaccount/token
+        - name: K8S_AUTH_BACKEND_PATH
+          valueFrom:
+            configMapKeyRef:
+              key: vault_auth_path
+              name: credentials-sidecar
+        - name: ISTIO_STATUS
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.annotations['sidecar.istio.io/status']
+        image: 713408432298.dkr.ecr.us-west-2.amazonaws.com/prod/zendesk/secret-sidecar:v1.3.28
+        imagePullPolicy: IfNotPresent
+        name: secret-sidecar
+        resources:
+          limits:
+            cpu: 20m
+            memory: 100Mi
+          requests:
+            cpu: 2m
+            memory: 20Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        volumeMounts:
+        - mountPath: /secrets
+          name: secrets-volume
+        - mountPath: /secrets-meta
+          name: secrets-meta
+        - mountPath: /podinfo
+          name: annotations
+        - mountPath: /vault
+          name: vault-data
         - mountPath: /var/run/datadog
           name: dsdsocket
           readOnly: true
       dnsConfig:
         options:
         - name: single-request-reopen
-      initContainers: []
+      initContainers:
+      - env:
+        - name: DD_ENV
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/env']
+        - name: DD_SERVICE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/service']
+        - name: DD_VERSION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/version']
+        - name: DEPLOY_ID
+          value: unknown
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: PROJECT
+          value: ml-training-pipelines
+        - name: REVISION
+          value: unknown
+        - name: ROLE
+          value: hello-world
+        - name: STATSD_ADDR
+          value: 169.254.1.1:8125
+        - name: STATSD_APM_PORT
+          value: "8126"
+        - name: STATSD_HOST
+          value: 169.254.1.1
+        - name: STATSD_PORT
+          value: "8125"
+        - name: TAG
+          value: unknown
+        - name: ZENDESK_POD_ID
+          value: NA
+        - name: ZENDESK_STATSD
+          value: "true"
+        - name: RUN_ONCE
+          value: "true"
+        - name: VAULT_ADDR
+          valueFrom:
+            configMapKeyRef:
+              key: vault_addr
+              name: credentials-sidecar
+        - name: VAULT_ROLE
+          valueFrom:
+            configMapKeyRef:
+              key: vault_role
+              name: credentials-sidecar
+        - name: JWT_TOKEN_PATH
+          value: /var/run/secrets/kubernetes.io/serviceaccount/token
+        - name: K8S_AUTH_BACKEND_PATH
+          valueFrom:
+            configMapKeyRef:
+              key: vault_auth_path
+              name: credentials-sidecar
+        image: 713408432298.dkr.ecr.us-west-2.amazonaws.com/prod/zendesk/secret-sidecar:v1.3.28
+        imagePullPolicy: IfNotPresent
+        name: secret-init
+        resources:
+          limits:
+            cpu: 20m
+            memory: 100Mi
+          requests:
+            cpu: 2m
+            memory: 20Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        volumeMounts:
+        - mountPath: /secrets
+          name: secrets-volume
+        - mountPath: /secrets-meta
+          name: secrets-meta
+        - mountPath: /podinfo
+          name: annotations
+        - mountPath: /vault
+          name: vault-data
       terminationGracePeriodSeconds: 30
       volumes:
+      - emptyDir: {}
+        name: secrets-volume
+      - emptyDir: {}
+        name: secrets-meta
+      - emptyDir: {}
+        name: vault-data
+      - downwardAPI:
+          items:
+          - fieldRef:
+              fieldPath: metadata.annotations
+            path: annotations
+        name: annotations
+      - name: vaultauth
+        secret:
+          secretName: vaultauth
       - hostPath:
           path: /var/run/datadog
         name: dsdsocket
