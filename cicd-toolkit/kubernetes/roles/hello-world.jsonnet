@@ -16,6 +16,12 @@ function(params={}) (
     'metaflow_service_db_user': 'secret/db_user'
   };
 
+  local labels = {
+      'app': 'metaflow',
+      'configuration-delivery': 'true',
+      'temp-auth': 'enabled',
+      'opa-gatekeeper.zendesk.com/run-as-non-root': 'false'
+  };
 
   local container = K8s.Container
                         .withName(role_name)
@@ -47,11 +53,7 @@ function(params={}) (
   local deployment = K8s.Deployment
                      .withName(role_name)
                      .withPodTemplate(podTemplate)
-                     .withTemplateLabels({
-                       'temp-auth': 'enabled',
-                       'configuration-delivery': 'true',
-                       'app': 'metaflow'
-                     })
+                     .withTemplateLabels(labels)
                      .withMatchLabelsSelector({
                        project: project_name,
                        role: role_name,
