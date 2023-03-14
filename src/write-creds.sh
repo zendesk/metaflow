@@ -1,11 +1,7 @@
 #!/bin/bash
 
-username=$(cat /secrets/MYSQL_mlflow_USERNAME)
-password=$(cat /secrets/MYSQL_mlflow_PASSWORD)
-database_name=$(cat /config/foundation/DATASTORE_AURORACLUSTER_mlflow_DATABASE_NAME)
-
-echo -e "[client]\nuser=${username}\npassword=${password}\n\ndatabase=${database_name}" > /mysql-config/my.cnf
-
+username=$(cat /secrets/db_user)
+password=$(cat /secrets/db_pass)
 
 aws_credentials_file=/aws-config/credentials
 

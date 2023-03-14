@@ -20,10 +20,6 @@ function(params={}) (
   local container = K8s.Container
                         .withName(role_name)
                         .withCommand(["metadata_service"])
-                        .withSecurityContext({
-                             runAsUser: 65534,
-                             runAsGroup:1000
-                         })
                         .withPorts([
                           {
                             name: "metadata-svc",
