@@ -163,9 +163,6 @@ spec:
         - containerPort: 8080
           name: metadata-svc
           protocol: TCP
-        - containerPort: 8080
-          name: migration
-          protocol: TCP
         resources:
           limits:
             cpu: "1.0"
