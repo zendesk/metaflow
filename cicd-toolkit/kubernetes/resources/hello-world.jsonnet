@@ -7,7 +7,6 @@
     roleVariables: {
       hostname: 'ml-training-pipelines.internaltools-staging-use1-chef.zdmesh.io',
     },
-    replicas: 1,
     requests: {
       cpu: '1.0',
       memory: '900Mi',
