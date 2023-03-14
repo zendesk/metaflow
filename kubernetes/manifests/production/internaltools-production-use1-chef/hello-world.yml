@@ -25,11 +25,15 @@ metadata:
     sidecar.istio.io/proxyMemoryLimit: 2Gi
     strategy.spinnaker.io/replace: "true"
   labels:
+    app: metaflow
     app.kubernetes.io/instance: hello-world
     app.kubernetes.io/name: ml-training-pipelines
     app.kubernetes.io/version: unknown-unknown
     branch: unknown
+    configuration-delivery: "true"
     deploy_id: unknown
+    opa-gatekeeper.zendesk.com/pdb-requires-readiness-probe: "false"
+    opa-gatekeeper.zendesk.com/run-as-non-root: "false"
     product: ml-training-pipelines
     project: ml-training-pipelines
     role: hello-world
@@ -38,6 +42,7 @@ metadata:
     tags.datadoghq.com/service: ml-training-pipelines-hello-world
     tags.datadoghq.com/version: unknown-unknown
     team: ml-apac-trisolaris
+    temp-auth: enabled
     track: unknown
   name: metaflow
   namespace: ml-training-pipelines
