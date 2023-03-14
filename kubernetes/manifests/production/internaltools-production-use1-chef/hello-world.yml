@@ -73,6 +73,7 @@ spec:
         configuration-delivery: "true"
         deploy_group: internaltools-production-use1-chef
         deploy_id: unknown
+        opa-gatekeeper.zendesk.com/run-as-non-root: "false"
         product: ml-training-pipelines
         project: ml-training-pipelines
         revision: unknown
