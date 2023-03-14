@@ -165,9 +165,6 @@ spec:
           requests:
             cpu: "1.0"
             memory: 900Mi
-        securityContext:
-          runAsGroup: 1000
-          runAsUser: 65534
         volumeMounts:
         - mountPath: /secrets
           name: secrets-volume
