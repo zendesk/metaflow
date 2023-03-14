@@ -67,6 +67,11 @@ function(params={}) (
                     name: "http",
                     port: 8080,
                     targetPort: 'metadata-svc',
+                  },
+                  {
+                    name: "migration",
+                    port: 8000,
+                    targetPort: 'migration
                   }])
                   .withType("ClusterIP")
                   .forDeployment(deployment);
