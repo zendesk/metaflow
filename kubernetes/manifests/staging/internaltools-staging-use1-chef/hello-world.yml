@@ -23,7 +23,6 @@ metadata:
     sidecar.istio.io/proxyCPULimit: "4"
     sidecar.istio.io/proxyMemory: 256Mi
     sidecar.istio.io/proxyMemoryLimit: 2Gi
-    strategy.spinnaker.io/replace: "true"
   labels:
     app.kubernetes.io/instance: hello-world
     app.kubernetes.io/name: ml-training-pipelines
@@ -44,12 +43,14 @@ metadata:
 spec:
   minReadySeconds: 10
   progressDeadlineSeconds: 600
-  replicas: 1
   revisionHistoryLimit: 1
   selector:
     matchLabels:
       project: ml-training-pipelines
       role: hello-world
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 20%
   template:
     metadata:
       annotations:
@@ -512,3 +513,36 @@ spec:
       consecutive5xxErrors: 3
       interval: 30s
       maxEjectionPercent: 35
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  annotations:
+    cicd-toolkit.zende.sk/environment: staging
+    cicd-toolkit.zende.sk/generated-by: jsonnet-kubernetes
+    cicd-toolkit.zende.sk/partition: internaltools-staging-use1-chef
+    cicd-toolkit.zende.sk/role: hello-world
+    cicd-toolkit.zende.sk/version: compare
+  labels:
+    app.kubernetes.io/instance: hello-world
+    app.kubernetes.io/name: ml-training-pipelines
+    app.kubernetes.io/version: unknown-unknown
+    branch: unknown
+    deploy_id: unknown
+    product: ml-training-pipelines
+    project: ml-training-pipelines
+    role: hello-world
+    sidecar.istio.io/inject: "true"
+    tags.datadoghq.com/env: staging
+    tags.datadoghq.com/service: ml-training-pipelines-hello-world
+    tags.datadoghq.com/version: unknown-unknown
+    team: ml-apac-trisolaris
+    track: unknown
+  name: metaflow
+  namespace: ml-training-pipelines
+spec:
+  maxUnavailable: 20%
+  selector:
+    matchLabels:
+      project: ml-training-pipelines
+      role: hello-world
