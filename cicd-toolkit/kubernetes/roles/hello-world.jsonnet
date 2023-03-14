@@ -20,7 +20,8 @@ function(params={}) (
       'app': 'metaflow',
       'configuration-delivery': 'true',
       'temp-auth': 'enabled',
-      'opa-gatekeeper.zendesk.com/run-as-non-root': 'false'
+      'opa-gatekeeper.zendesk.com/run-as-non-root': 'false',
+      'opa-gatekeeper.zendesk.com/pdb-requires-readiness-probe': "false"
   };
 
   local container = K8s.Container
