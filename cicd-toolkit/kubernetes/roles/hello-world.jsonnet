@@ -12,8 +12,7 @@ function(params={}) (
   local hostname = p.roleVariables.hostname;
 
   local secrets = {
-    'metaflow_service_db_pass': 'secret/db_pass',
-    'metaflow_service_db_user': 'secret/db_user'
+    'metaflow_service_db_pass': '/secrets/numbat/metaflow_service_db_pass'
   };
 
   local labels = {
