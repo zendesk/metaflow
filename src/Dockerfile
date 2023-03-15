@@ -1,4 +1,5 @@
 FROM 713408432298.dkr.ecr.us-west-2.amazonaws.com/base/zendesk/docker-images-base/python:3.7-focal
+RUN apt install git
 RUN git clone https://github.com/Netflix/metaflow-service /metaflow-service
 RUN mkdir /root/services
 RUN mv /metaflow-service/services/__init__.py /root/services/
