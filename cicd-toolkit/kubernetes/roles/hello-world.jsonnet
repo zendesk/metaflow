@@ -12,8 +12,13 @@ function(params={}) (
   local hostname = p.roleVariables.hostname;
 
   local secrets = {
-    'metaflow_service_db_pass': '/secrets/numbat/metaflow_service_db_pass'
+    'metaflow-service-db-password': '/secrets/numbat/db_password'
   };
+  
+  local serviceAccountName = 'test';
+
+  local serviceAccount = K8s.ServiceAccount
+                            .withName(serviceAccountName);
 
   local labels = {
       'app': 'metaflow',
@@ -33,14 +38,19 @@ function(params={}) (
                             protocol: "TCP",
                           }
                         ])
-                        .withEnvFromMap({
-                          "STUFF": "GOES_HERE"
-                        })
+                        .withEnvFromMap([
+                          { name: "MF_METADATA_DB_PORT", value: "5432"},
+                          { name: "MF_METADATA_DB_USER", value: "metaflow"},
+                          { name: "MF_METADATA_DB_PSWD", value: "/secrets/db_password"},
+                          { name: "MF_METADATA_DB_NAME", value: "metaflow"},
+                          { name: "MF_METADATA_DB_HOST", value: "terraform-20230314014245304300000001.cdswufymuxfo.us-east-1.rds.amazonaws.com"},
+                        ])
                         .withImage('');
 
   local podTemplate = K8s.PodTemplate
                         .withContainers([container])
                         .withSecretSidecarWithDefaultsFromConfigmaps(
+                          vaultAddr='https://secret.zdsystest.com:8200',
                           secrets=secrets,
                         );
 
