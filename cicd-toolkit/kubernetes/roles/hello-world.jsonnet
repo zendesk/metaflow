@@ -14,18 +14,16 @@ function(params={}) (
   local secrets = {
     'metaflow-service-db-password': '/secrets/numbat/db_password'
   };
-  
-  local serviceAccountName = 'test';
 
-  local serviceAccount = K8s.ServiceAccount
-                            .withName(serviceAccountName);
 
   local labels = {
       'app': 'metaflow',
       'configuration-delivery': 'true',
       'temp-auth': 'enabled',
+      'istio-injection': 'enabled',
       'opa-gatekeeper.zendesk.com/run-as-non-root': 'false',
-      'opa-gatekeeper.zendesk.com/pdb-requires-readiness-probe': 'false'
+      'opa-gatekeeper.zendesk.com/pdb-requires-readiness-probe': 'false',
+      'sidecar.istio.io/inject': 'true'
   };
 
   local container = K8s.Container
@@ -38,7 +36,7 @@ function(params={}) (
                             protocol: "TCP",
                           }
                         ])
-                        .withEnvFromMap([
+                        .withEnvFromArray([
                           { name: "MF_METADATA_DB_PORT", value: "5432"},
                           { name: "MF_METADATA_DB_USER", value: "metaflow"},
                           { name: "MF_METADATA_DB_PSWD", value: "/secrets/db_password"},
