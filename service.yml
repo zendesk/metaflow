@@ -6,5 +6,5 @@ team: ml-apac-trisolaris
 
 access:
   secret_paths:
-    - path: /secret/numbat/metaflow-service-db-password
+    - path: numbat/metaflow-service-db-password
 
