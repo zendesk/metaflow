@@ -98,7 +98,7 @@ spec:
     spec:
       containers:
       - command:
-        - metadata_service
+        - sleep 10000000
         env:
         - name: DD_ENV
           valueFrom:
