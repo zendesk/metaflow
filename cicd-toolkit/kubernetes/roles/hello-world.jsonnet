@@ -12,7 +12,7 @@ function(params={}) (
   local hostname = p.roleVariables.hostname;
 
   local secrets = {
-      'metadata-service-db-password': 'numbat/metadata-service-db-password'
+      'metadata-service-db-password': 'secret/numbat/metadata-service-db-password'
   };
 
 

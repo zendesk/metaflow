@@ -63,7 +63,7 @@ spec:
         moniker.spinnaker.io/cluster: internaltools-production-use1-chef
         moniker.spinnaker.io/detail: unknown
         moniker.spinnaker.io/stack: ml-training-pipelines-hello-world
-        secret/metadata-service-db-password: numbat/metadata-service-db-password
+        secret/metadata-service-db-password: secret/numbat/metadata-service-db-password
         sidecar.istio.io/inject: "true"
         sidecar.istio.io/proxyCPU: 150m
         sidecar.istio.io/proxyCPULimit: "4"
