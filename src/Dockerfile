@@ -9,6 +9,4 @@ RUN mv /metaflow-service/services/metadata_service /root/services/metadata_servi
 RUN mv /metaflow-service/setup.py  /root/
 WORKDIR /root
 RUN pip install --editable /root
-CMD metadata_service
-
 
