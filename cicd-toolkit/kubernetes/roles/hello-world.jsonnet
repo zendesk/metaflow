@@ -28,7 +28,7 @@ function(params={}) (
 
   local container = K8s.Container
                         .withName(role_name)
-                        .withCommand(["sleep 10000000"])
+                        .withCommand(["sleep", "1000000"])
                         .withPorts([
                           {
                             name: "metadata-svc",
