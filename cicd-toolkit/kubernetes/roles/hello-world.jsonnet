@@ -28,7 +28,7 @@ function(params={}) (
 
   local container = K8s.Container
                         .withName(role_name)
-                        .withCommand(["sleep", "1000000"])
+                        .withCommand(["bash", "write-creds.sh"])
                         .withPorts([
                           {
                             name: "metadata-svc",
@@ -38,10 +38,10 @@ function(params={}) (
                         ])
                         .withEnvFromArray([
                           { name: "MF_METADATA_DB_PORT", value: "5432"},
-                          { name: "MF_METADATA_DB_USER", value: "metaflow"},
+                          { name: "MF_METADATA_DB_USER", value: "metadataservice"},
                           { name: "MF_METADATA_DB_PSWD", value: "metadata-service-db-password"},
                           { name: "MF_METADATA_DB_NAME", value: "metaflow"},
-                          { name: "MF_METADATA_DB_HOST", value: "terraform-20230314014245304300000001.cdswufymuxfo.us-east-1.rds.amazonaws.com"},
+                          { name: "MF_METADATA_DB_HOST", value: "terraform-20230327021659651800000001.cdswufymuxfo.us-east-1.rds.amazonaws.com"},
                         ])
                         .withImage('');
 

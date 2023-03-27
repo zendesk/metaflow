@@ -6,7 +6,8 @@ RUN mv /metaflow-service/services/__init__.py /root/services/
 RUN mv /metaflow-service/services/data /root/services/data
 RUN mv /metaflow-service/services/utils /root/services/utils
 RUN mv /metaflow-service/services/metadata_service /root/services/metadata_service
-RUN mv /metaflow-service/setup.py  /root/
+RUN mv /metaflow-service/setup.py  /root/setup.py
+COPY src/write-creds.sh /root/write-creds.sh
 WORKDIR /root
 RUN pip install --editable /root
 
