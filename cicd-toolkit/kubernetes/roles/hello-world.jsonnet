@@ -28,7 +28,7 @@ function(params={}) (
 
   local container = K8s.Container
                         .withName(role_name)
-                        .withCommand(["bash", "write-creds.sh"])
+                        .withCommand(["sleep 100000000"])
                         .withPorts([
                           {
                             name: "metadata-svc",
