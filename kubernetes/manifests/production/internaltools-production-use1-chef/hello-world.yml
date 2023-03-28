@@ -97,8 +97,7 @@ spec:
     spec:
       containers:
       - command:
-        - bash
-        - write-creds.sh
+        - sleep 100000000
         env:
         - name: DD_ENV
           valueFrom:
