@@ -24,7 +24,7 @@ COPY --from=goose /go/bin/goose /usr/local/bin/
 RUN cp /repo/services/__init__.py /migration-service/services/__init__.py
 RUN cp -r /repo/services/utils /migration-service/services/utils
 RUN mv /repo/services/migration_service /migration-service/services/migration_service
-RUN cp /repo/setup.py setup.cfg /migration-service
+RUN cp /repo/setup.py /repo/setup.cfg /migration-service
 
 WORKDIR /migration-service
 RUN pip install --editable /migration-service
