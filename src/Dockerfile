@@ -5,28 +5,6 @@ FROM 713408432298.dkr.ecr.us-west-2.amazonaws.com/base/zendesk/docker-images-bas
 RUN apt update && apt install -y git && apt install -y postgresql && apt install -y gcc && apt install -y libpq-dev
 RUN git clone https://github.com/Netflix/metaflow-service /repo
 
-RUN mkdir -p /metadata-service/services/utils
-RUN mkdir -p /migration-service/services/utils
+COPY write-creds.sh /repo/write-creds.sh
+RUN pip install --editable /repo
 
-WORKDIR /metadata-service
-
-RUN cp /repo/services/__init__.py /metadata-service/services/
-RUN mv /repo/services/data /metadata-service/services/data
-RUN cp -r /repo/services/utils /metadata-service/services/utils
-RUN mv /repo/services/metadata_service /metadata-service/services/metadata_service
-RUN cp /repo/setup.py  /metadata-service/setup.py
-
-COPY src/write-creds.sh /metadata-service/write-creds.sh
-RUN pip install --editable /metadata-service
-
-COPY --from=goose /go/bin/goose /usr/local/bin/
-
-RUN cp /repo/services/__init__.py /migration-service/services/__init__.py
-RUN cp -r /repo/services/utils /migration-service/services/utils
-RUN mv /repo/services/migration_service /migration-service/services/migration_service
-RUN cp /repo/setup.py /repo/setup.cfg /migration-service
-
-WORKDIR /migration-service
-RUN pip install --editable /migration-service
-
-WORKDIR /metadata-service
