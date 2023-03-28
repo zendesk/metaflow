@@ -9,11 +9,11 @@ RUN git clone https://github.com/Netflix/metaflow-service /repo
 RUN mkdir -p /metadata-service/services
 RUN mkdir -p /migration-service/services
 
-RUN mv /repo/services/__init__.py /metadata-service/services/
+RUN cp /repo/services/__init__.py /metadata-service/services/
 RUN mv /repo/services/data /metadata-service/services/data
-RUN mv /repo/services/utils /metadata-service/services/utils
+RUN cp /repo/services/utils /metadata-service/services/utils
 RUN mv /repo/services/metadata_service /metadata-service/services/metadata_service
-RUN mv /repo/setup.py  /metadata-service/setup.py
+RUN cp /repo/setup.py  /metadata-service/setup.py
 
 COPY src/write-creds.sh /metadata-service/write-creds.sh
 
@@ -22,10 +22,12 @@ RUN pip install --editable /metadata-service
 
 COPY --from=goose /go/bin/goose /usr/local/bin/
 
-RUN mv /repo/__init__.py /migration-service/services/__init__.py
-RUN mv /repo/utils /migration-service/service/utils
-RUN mv /repo/migration_service /migration-service/services/migration_service
-RUN mv /repo/setup.py setup.cfg /migration-service
+RUN cp /repo/services/__init__.py /migration-service/services/__init__.py
+RUN mv /repo/services/utils /migration-service/service/utils
+RUN mv /repo/services/migration_service /migration-service/services/migration_service
+RUN cp /repo/setup.py setup.cfg /migration-service
 
 WORKDIR /migration-service
 RUN pip install --editable /migration-service
+
+WORKDIR /metadata-service
