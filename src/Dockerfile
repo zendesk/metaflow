@@ -17,14 +17,12 @@ RUN mv /repo/services/metadata_service /metadata-service/services/metadata_servi
 RUN cp /repo/setup.py  /metadata-service/setup.py
 
 COPY src/write-creds.sh /metadata-service/write-creds.sh
-
-WORKDIR /metadata-service
 RUN pip install --editable /metadata-service
 
 COPY --from=goose /go/bin/goose /usr/local/bin/
 
 RUN cp /repo/services/__init__.py /migration-service/services/__init__.py
-RUN cp -r /repo/services/utils /migration-service/service/utils
+RUN cp -r /repo/services/utils /migration-service/services/utils
 RUN mv /repo/services/migration_service /migration-service/services/migration_service
 RUN cp /repo/setup.py setup.cfg /migration-service
 
