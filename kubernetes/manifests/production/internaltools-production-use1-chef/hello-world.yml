@@ -97,7 +97,8 @@ spec:
     spec:
       containers:
       - command:
-        - sleep 100000000
+        - sleep
+        - "100000"
         env:
         - name: DD_ENV
           valueFrom:
