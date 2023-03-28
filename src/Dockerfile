@@ -6,8 +6,8 @@ FROM 713408432298.dkr.ecr.us-west-2.amazonaws.com/base/zendesk/docker-images-bas
 RUN apt update && apt install -y git && apt install -y postgresql && apt install -y gcc && apt install -y libpq-dev
 RUN git clone https://github.com/Netflix/metaflow-service /repo
 
-RUN mkdir -p /metadata-service/services
-RUN mkdir -p /migration-service/services
+RUN mkdir -p /metadata-service/services/utils
+RUN mkdir -p /migration-service/services/utils
 
 WORKDIR /metadata-service
 
