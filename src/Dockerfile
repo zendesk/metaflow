@@ -1,7 +1,6 @@
 FROM golang:1.16.3 AS goose
 RUN go get -u github.com/pressly/goose/cmd/goose
 
-
 FROM 713408432298.dkr.ecr.us-west-2.amazonaws.com/base/zendesk/docker-images-base/python:3.7-focal
 RUN apt update && apt install -y git && apt install -y postgresql && apt install -y gcc && apt install -y libpq-dev
 RUN git clone https://github.com/Netflix/metaflow-service /repo
@@ -13,7 +12,7 @@ WORKDIR /metadata-service
 
 RUN cp /repo/services/__init__.py /metadata-service/services/
 RUN mv /repo/services/data /metadata-service/services/data
-RUN cp -R /repo/services/utils /metadata-service/services/utils
+RUN cp -r /repo/services/utils /metadata-service/services/utils
 RUN mv /repo/services/metadata_service /metadata-service/services/metadata_service
 RUN cp /repo/setup.py  /metadata-service/setup.py
 
@@ -25,7 +24,7 @@ RUN pip install --editable /metadata-service
 COPY --from=goose /go/bin/goose /usr/local/bin/
 
 RUN cp /repo/services/__init__.py /migration-service/services/__init__.py
-RUN cp -R /repo/services/utils /migration-service/service/utils
+RUN cp -r /repo/services/utils /migration-service/service/utils
 RUN mv /repo/services/migration_service /migration-service/services/migration_service
 RUN cp /repo/setup.py setup.cfg /migration-service
 
