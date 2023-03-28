@@ -9,9 +9,11 @@ RUN git clone https://github.com/Netflix/metaflow-service /repo
 RUN mkdir -p /metadata-service/services
 RUN mkdir -p /migration-service/services
 
+WORKDIR /metadata-service
+
 RUN cp /repo/services/__init__.py /metadata-service/services/
 RUN mv /repo/services/data /metadata-service/services/data
-RUN cp /repo/services/utils /metadata-service/services/utils
+RUN cp -R /repo/services/utils /metadata-service/services/utils
 RUN mv /repo/services/metadata_service /metadata-service/services/metadata_service
 RUN cp /repo/setup.py  /metadata-service/setup.py
 
@@ -23,7 +25,7 @@ RUN pip install --editable /metadata-service
 COPY --from=goose /go/bin/goose /usr/local/bin/
 
 RUN cp /repo/services/__init__.py /migration-service/services/__init__.py
-RUN mv /repo/services/utils /migration-service/service/utils
+RUN cp -R /repo/services/utils /migration-service/service/utils
 RUN mv /repo/services/migration_service /migration-service/services/migration_service
 RUN cp /repo/setup.py setup.cfg /migration-service
 
