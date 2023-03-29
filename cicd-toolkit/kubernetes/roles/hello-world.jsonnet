@@ -73,10 +73,36 @@ function(params={}) (
                   .withType("ClusterIP")
                   .forDeployment(deployment);
 
+  local httpsServer = {
+    hosts: [p.roleVariables.hostname],
+    port: {
+      name: "https",
+      number: 443,
+      protocol: "HTTPS",
+    },
+    tls: {
+      mode: "MUTUAL",
+      credentialName: "ml-experimentation-tracker" # Borrow this key since it is already setup. See ml-istio-manager
+    },
+  };
+
+  local istio_gateway = Istio.Gateway
+                        .withName(role_name)
+                        .withIstioSelector("ingressgateway")
+                        .withServers([httpsServer]);
+
   local virtual_service = Istio.VirtualService
                           .withName(role_name)
                           .withHosts([role_name, hostname])
-                          .withGateways(["ml-experimentation-tracker/mlflow-write-access"]);
+                          .withGateways([p.namespace + "/" + istio_gateway.metadata.name])
+                          .withHTTP([{
+                            route: [{
+                              destination: {
+                                host: role_name + "." + p.namespace + ".svc.cluster.local",
+                                port: {
+                                  number: 8080
+                                }
+                              }}]}]);
 
   local auth_policy = Istio.AuthorizationPolicy
                       .withName(p.name + "-auth-policy")
