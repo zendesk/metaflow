@@ -1,4 +1,6 @@
 FROM 713408432298.dkr.ecr.us-west-2.amazonaws.com/base/zendesk/dockerhub-images/golang:1.16-alpine AS goose
+RUN apk add --no-cache gcc
+RUN apk add --no-cache musl-dev
 RUN go get -u github.com/pressly/goose/cmd/goose
 
 FROM 713408432298.dkr.ecr.us-west-2.amazonaws.com/base/zendesk/docker-images-base/python:3.7-focal
