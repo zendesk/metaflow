@@ -483,10 +483,16 @@ metadata:
   namespace: ml-training-pipelines
 spec:
   gateways:
-  - ml-experimentation-tracker/mlflow-write-access
+  - ml-training-pipelines/metaflow
   hosts:
   - metaflow
   - ml-training-pipelines.internaltools-staging-use1-chef.zdmesh.io
+  http:
+  - route:
+    - destination:
+        host: metaflow.ml-training-pipelines.svc.cluster.local
+        port:
+          number: 8080
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
