@@ -124,7 +124,8 @@ function(params={}) (
     deployment,
     auth_policy,
     service,
-    virtual_service
+    virtual_service,
+    istio_gateway
   ];
 
   librole.mutateRole(p, manifests)

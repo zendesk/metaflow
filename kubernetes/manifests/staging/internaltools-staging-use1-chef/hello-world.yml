@@ -495,6 +495,39 @@ spec:
           number: 8080
 ---
 apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  annotations:
+    cicd-toolkit.zende.sk/environment: staging
+    cicd-toolkit.zende.sk/partition: internaltools-staging-use1-chef
+    cicd-toolkit.zende.sk/role: hello-world
+    cicd-toolkit.zende.sk/version: compare
+    strategy.spinnaker.io/replace: "true"
+  labels:
+    branch: unknown
+    deploy_id: unknown
+    product: ml-training-pipelines
+    project: ml-training-pipelines
+    role: hello-world
+    team: ml-apac-trisolaris
+    track: unknown
+  name: metaflow
+  namespace: ml-training-pipelines
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - ml-training-pipelines.internaltools-staging-use1-chef.zdmesh.io
+    port:
+      name: https
+      number: 443
+      protocol: HTTPS
+    tls:
+      credentialName: ml-experimentation-tracker
+      mode: MUTUAL
+---
+apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   annotations:
