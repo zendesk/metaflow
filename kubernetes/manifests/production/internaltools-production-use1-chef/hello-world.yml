@@ -98,7 +98,7 @@ spec:
       containers:
       - command:
         - bash
-        - /repo/write-creds.sh
+        - /root/write-creds.sh
         env:
         - name: DD_ENV
           valueFrom:
