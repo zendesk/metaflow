@@ -98,8 +98,8 @@ spec:
     spec:
       containers:
       - command:
-        - sleep
-        - "100000"
+        - bash
+        - /repo/write-creds.sh
         env:
         - name: DD_ENV
           valueFrom:
