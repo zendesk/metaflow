@@ -4,11 +4,13 @@ RUN apt-get update && \
     apt-get install -y git postgresql gcc libpq-dev wget curl
 
 # Install Go
-RUN wget https://go.dev/dl/go1.20.2.linux-amd64.tar.gz && \
-    tar -C /usr/local -xzf go1.20.2.linux-amd64.tar.gz && \
-    echo "export PATH=$PATH:/usr/local/go/bin" >> "~/.bashrc" && \
-    go get -u github.com/pressly/goose/cmd/goose && \
-    export "export PATH=$PATH:/root/go/bin" >> "~/.bashrc" && \
+RUN wget https://go.dev/dl/go1.20.2.linux-amd64.tar.gz
+RUN tar -C /usr/local -xzf go1.20.2.linux-amd64.tar.gz
+RUN touch /root/.bashrc
+RUN echo "export PATH=$PATH:/root/go/bin" >> "/root/.bashrc"
+RUN echo "export PATH=$PATH:/usr/local/go/bin" > "/root/.bashrc"
+RUN PATH=$PATH:/usr/local/go/bin GO111MODULE=on go install -mod=mod github.com/pressly/goose/cmd/goose@latest
+
 
 # Clone the metaflow-service repository
 RUN git clone https://github.com/Netflix/metaflow-service /repo
