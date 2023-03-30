@@ -1,45 +1,20 @@
-FROM golang:1.20.2-buster
 
-ARG BUILD_TIMESTAMP
-ARG BUILD_COMMIT_HASH
-ENV BUILD_TIMESTAMP=$BUILD_TIMESTAMP
-ENV BUILD_COMMIT_HASH=$BUILD_COMMIT_HASH
+FROM 713408432298.dkr.ecr.us-west-2.amazonaws.com/base/zendesk/docker-images-base/python:3.7-focal
+RUN apt-get update && \
+    apt-get install -y git postgresql gcc libpq-dev wget curl
 
-ARG UI_ENABLED="1"
-ARG UI_VERSION="v1.2.5"
-ENV UI_ENABLED=$UI_ENABLED
-ENV UI_VERSION=$UI_VERSION
+# Install Go
+RUN wget https://go.dev/dl/go1.20.3.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go1.20.3.linux-amd64.tar.gz && \
+    echo "export PATH=$PATH:/usr/local/go/bin" >> "~/.bashrc" && \
+    go get -u github.com/pressly/goose/cmd/goose && \
+    export "export PATH=$PATH:/root/go/bin" >> "~/.bashrc" && \
 
-ENV FEATURE_RUN_GROUPS=0
-ENV FEATURE_DEBUG_VIEW=1
+# Clone the metaflow-service repository
+RUN git clone https://github.com/Netflix/metaflow-service /repo
 
-RUN go install github.com/pressly/goose/v3/cmd/goose@v3.9.0
+# Copy script for injecting db creds and starting the metaflow_service
+COPY src/write-creds.sh /repo/write-creds.sh
 
-RUN apt-get update -y \
-    && apt-get -y install python3.7 python3-pip libpq-dev unzip
+RUN pip install --editable /repo
 
-RUN pip3 install virtualenv requests
-
-RUN virtualenv /opt/v_1_0_1 -p python3
-RUN virtualenv /opt/latest -p python3
-
-RUN /opt/v_1_0_1/bin/pip install https://github.com/Netflix/metaflow-service/archive/1.0.1.zip
-
-ADD services/__init__.py /root/services/
-ADD services/data/service_configs.py /root/services/
-ADD services/data /root/services/data
-ADD services/metadata_service /root/services/metadata_service
-ADD services/ui_backend_service /root/services/ui_backend_service
-ADD services/utils /root/services/utils
-ADD setup.py setup.cfg run_goose.py /root/
-WORKDIR /root
-RUN /opt/latest/bin/pip install .
-
-# Install Netflix/metaflow-ui release artifact
-RUN /root/services/ui_backend_service/download_ui.sh
-
-# Migration Service
-ADD services/migration_service /root/services/migration_service
-RUN pip3 install -r /root/services/migration_service/requirements.txt
-
-RUN chmod 777 /root/services/migration_service/run_script.py
