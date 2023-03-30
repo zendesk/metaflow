@@ -4,8 +4,8 @@ RUN apt-get update && \
     apt-get install -y git postgresql gcc libpq-dev wget curl
 
 # Install Go
-RUN wget https://go.dev/dl/go1.20.3.linux-amd64.tar.gz && \
-    tar -C /usr/local -xzf go1.20.3.linux-amd64.tar.gz && \
+RUN wget https://go.dev/dl/go1.20.2.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go1.20.2.linux-amd64.tar.gz && \
     echo "export PATH=$PATH:/usr/local/go/bin" >> "~/.bashrc" && \
     go get -u github.com/pressly/goose/cmd/goose && \
     export "export PATH=$PATH:/root/go/bin" >> "~/.bashrc" && \
