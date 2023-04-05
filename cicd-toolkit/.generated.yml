@@ -14,8 +14,8 @@ target:
     - Path: ../.github/workflows/cicd-trigger-branch-deploy.yml
     - Path: ../.github/workflows/cicd-trigger-release-deploy.yml
     - Path: ../kubernetes/manifests/.gitattributes
-    - Path: ../kubernetes/manifests/production/internaltools-production-use1-chef/hello-world.yml
-    - Path: ../kubernetes/manifests/staging/internaltools-staging-use1-chef/hello-world.yml
+    - Path: ../kubernetes/manifests/production/internaltools-production-use1-chef/metaflow.yml
+    - Path: ../kubernetes/manifests/staging/internaltools-staging-use1-chef/metaflow.yml
     - Path: ../spinnaker/.gitattributes
     - Path: ../spinnaker/applications/ml-training-pipelines.json
     - Path: ../spinnaker/pipelines/internaltools-production-chef-rollback.json
