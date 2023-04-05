@@ -10,22 +10,23 @@ kind: Deployment
 metadata:
   annotations:
     ad.datadoghq.com/tags: '{"git.commit.sha":"unknown","git.repository_url":"github.com/zendesk/ml-training-pipelines"}'
-    cicd-toolkit.zende.sk/environment: staging
+    cicd-toolkit.zende.sk/environment: production
     cicd-toolkit.zende.sk/generated-by: jsonnet-kubernetes
-    cicd-toolkit.zende.sk/partition: internaltools-staging-use1-chef
-    cicd-toolkit.zende.sk/role: hello-world
+    cicd-toolkit.zende.sk/partition: internaltools-production-use1-chef
+    cicd-toolkit.zende.sk/role: metaflow
     cicd-toolkit.zende.sk/version: compare
-    moniker.spinnaker.io/cluster: internaltools-staging-use1-chef
+    moniker.spinnaker.io/cluster: internaltools-production-use1-chef
     moniker.spinnaker.io/detail: unknown
-    moniker.spinnaker.io/stack: ml-training-pipelines-hello-world
+    moniker.spinnaker.io/stack: ml-training-pipelines-metaflow
     sidecar.istio.io/inject: "true"
     sidecar.istio.io/proxyCPU: 150m
     sidecar.istio.io/proxyCPULimit: "4"
     sidecar.istio.io/proxyMemory: 256Mi
     sidecar.istio.io/proxyMemoryLimit: 2Gi
+    strategy.spinnaker.io/replace: "true"
   labels:
     app: metaflow
-    app.kubernetes.io/instance: hello-world
+    app.kubernetes.io/instance: metaflow
     app.kubernetes.io/name: ml-training-pipelines
     app.kubernetes.io/version: unknown-unknown
     branch: unknown
@@ -36,10 +37,10 @@ metadata:
     opa-gatekeeper.zendesk.com/run-as-non-root: "false"
     product: ml-training-pipelines
     project: ml-training-pipelines
-    role: hello-world
+    role: metaflow
     sidecar.istio.io/inject: "true"
-    tags.datadoghq.com/env: staging
-    tags.datadoghq.com/service: ml-training-pipelines-hello-world
+    tags.datadoghq.com/env: production
+    tags.datadoghq.com/service: ml-training-pipelines-metaflow
     tags.datadoghq.com/version: unknown-unknown
     team: ml-apac-trisolaris
     temp-auth: enabled
@@ -49,21 +50,19 @@ metadata:
 spec:
   minReadySeconds: 10
   progressDeadlineSeconds: 600
+  replicas: 1
   revisionHistoryLimit: 1
   selector:
     matchLabels:
       project: ml-training-pipelines
-      role: hello-world
-  strategy:
-    rollingUpdate:
-      maxUnavailable: 20%
+      role: metaflow
   template:
     metadata:
       annotations:
         ad.datadoghq.com/tags: '{"git.commit.sha":"unknown","git.repository_url":"github.com/zendesk/ml-training-pipelines"}'
-        moniker.spinnaker.io/cluster: internaltools-staging-use1-chef
+        moniker.spinnaker.io/cluster: internaltools-production-use1-chef
         moniker.spinnaker.io/detail: unknown
-        moniker.spinnaker.io/stack: ml-training-pipelines-hello-world
+        moniker.spinnaker.io/stack: ml-training-pipelines-metaflow
         secret/metadata-service-db-password: secret/numbat/metadata-service-db-password
         sidecar.istio.io/inject: "true"
         sidecar.istio.io/proxyCPU: 150m
@@ -72,12 +71,12 @@ spec:
         sidecar.istio.io/proxyMemoryLimit: 2Gi
       labels:
         app: metaflow
-        app.kubernetes.io/instance: hello-world
+        app.kubernetes.io/instance: metaflow
         app.kubernetes.io/name: ml-training-pipelines
         app.kubernetes.io/version: unknown-unknown
         branch: unknown
         configuration-delivery: "true"
-        deploy_group: internaltools-staging-use1-chef
+        deploy_group: internaltools-production-use1-chef
         deploy_id: unknown
         istio-injection: enabled
         opa-gatekeeper.zendesk.com/pdb-requires-readiness-probe: "false"
@@ -85,11 +84,11 @@ spec:
         product: ml-training-pipelines
         project: ml-training-pipelines
         revision: unknown
-        role: hello-world
+        role: metaflow
         sidecar.istio.io/inject: "true"
         tag: unknown
-        tags.datadoghq.com/env: staging
-        tags.datadoghq.com/service: ml-training-pipelines-hello-world
+        tags.datadoghq.com/env: production
+        tags.datadoghq.com/service: ml-training-pipelines-metaflow
         tags.datadoghq.com/version: unknown-unknown
         team: ml-apac-trisolaris
         temp-auth: enabled
@@ -132,7 +131,7 @@ spec:
         - name: REVISION
           value: unknown
         - name: ROLE
-          value: hello-world
+          value: metaflow
         - name: STATSD_ADDR
           value: 169.254.1.1:8125
         - name: STATSD_APM_PORT
@@ -219,7 +218,7 @@ spec:
         - name: REVISION
           value: unknown
         - name: ROLE
-          value: hello-world
+          value: metaflow
         - name: STATSD_ADDR
           value: 169.254.1.1:8125
         - name: STATSD_APM_PORT
@@ -320,7 +319,7 @@ spec:
         - name: REVISION
           value: unknown
         - name: ROLE
-          value: hello-world
+          value: metaflow
         - name: STATSD_ADDR
           value: 169.254.1.1:8125
         - name: STATSD_APM_PORT
@@ -403,9 +402,9 @@ apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
   annotations:
-    cicd-toolkit.zende.sk/environment: staging
-    cicd-toolkit.zende.sk/partition: internaltools-staging-use1-chef
-    cicd-toolkit.zende.sk/role: hello-world
+    cicd-toolkit.zende.sk/environment: production
+    cicd-toolkit.zende.sk/partition: internaltools-production-use1-chef
+    cicd-toolkit.zende.sk/role: metaflow
     cicd-toolkit.zende.sk/version: compare
     strategy.spinnaker.io/replace: "true"
   labels:
@@ -413,10 +412,10 @@ metadata:
     deploy_id: unknown
     product: ml-training-pipelines
     project: ml-training-pipelines
-    role: hello-world
+    role: metaflow
     team: ml-apac-trisolaris
     track: unknown
-  name: hello-world-auth-policy
+  name: metaflow-auth-policy
   namespace: ml-training-pipelines
 spec:
   rules:
@@ -434,20 +433,20 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    cicd-toolkit.zende.sk/environment: staging
+    cicd-toolkit.zende.sk/environment: production
     cicd-toolkit.zende.sk/generated-by: jsonnet-kubernetes
-    cicd-toolkit.zende.sk/partition: internaltools-staging-use1-chef
-    cicd-toolkit.zende.sk/role: hello-world
+    cicd-toolkit.zende.sk/partition: internaltools-production-use1-chef
+    cicd-toolkit.zende.sk/role: metaflow
     cicd-toolkit.zende.sk/version: compare
   labels:
-    app.kubernetes.io/instance: hello-world
+    app.kubernetes.io/instance: metaflow
     app.kubernetes.io/name: ml-training-pipelines
     app.kubernetes.io/version: unknown-unknown
     branch: unknown
     deploy_id: unknown
     product: ml-training-pipelines
     project: ml-training-pipelines
-    role: hello-world
+    role: metaflow
     team: ml-apac-trisolaris
     track: unknown
   name: metaflow
@@ -466,9 +465,9 @@ apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
   annotations:
-    cicd-toolkit.zende.sk/environment: staging
-    cicd-toolkit.zende.sk/partition: internaltools-staging-use1-chef
-    cicd-toolkit.zende.sk/role: hello-world
+    cicd-toolkit.zende.sk/environment: production
+    cicd-toolkit.zende.sk/partition: internaltools-production-use1-chef
+    cicd-toolkit.zende.sk/role: metaflow
     cicd-toolkit.zende.sk/version: compare
     strategy.spinnaker.io/replace: "true"
   labels:
@@ -476,7 +475,7 @@ metadata:
     deploy_id: unknown
     product: ml-training-pipelines
     project: ml-training-pipelines
-    role: hello-world
+    role: metaflow
     team: ml-apac-trisolaris
     track: unknown
   name: metaflow
@@ -486,7 +485,7 @@ spec:
   - ml-training-pipelines/metaflow
   hosts:
   - metaflow
-  - ml-training-pipelines.internaltools-staging-use1-chef.zdmesh.io
+  - ml-training-pipelines.internaltools-production-use1-chef.zdmesh.io
   http:
   - route:
     - destination:
@@ -498,9 +497,9 @@ apiVersion: networking.istio.io/v1beta1
 kind: Gateway
 metadata:
   annotations:
-    cicd-toolkit.zende.sk/environment: staging
-    cicd-toolkit.zende.sk/partition: internaltools-staging-use1-chef
-    cicd-toolkit.zende.sk/role: hello-world
+    cicd-toolkit.zende.sk/environment: production
+    cicd-toolkit.zende.sk/partition: internaltools-production-use1-chef
+    cicd-toolkit.zende.sk/role: metaflow
     cicd-toolkit.zende.sk/version: compare
     strategy.spinnaker.io/replace: "true"
   labels:
@@ -508,7 +507,7 @@ metadata:
     deploy_id: unknown
     product: ml-training-pipelines
     project: ml-training-pipelines
-    role: hello-world
+    role: metaflow
     team: ml-apac-trisolaris
     track: unknown
   name: metaflow
@@ -518,7 +517,7 @@ spec:
     istio: ingressgateway
   servers:
   - hosts:
-    - ml-training-pipelines.internaltools-staging-use1-chef.zdmesh.io
+    - ml-training-pipelines.internaltools-production-use1-chef.zdmesh.io
     port:
       name: https
       number: 443
@@ -531,9 +530,9 @@ apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   annotations:
-    cicd-toolkit.zende.sk/environment: staging
-    cicd-toolkit.zende.sk/partition: internaltools-staging-use1-chef
-    cicd-toolkit.zende.sk/role: hello-world
+    cicd-toolkit.zende.sk/environment: production
+    cicd-toolkit.zende.sk/partition: internaltools-production-use1-chef
+    cicd-toolkit.zende.sk/role: metaflow
     cicd-toolkit.zende.sk/version: compare
     strategy.spinnaker.io/replace: "true"
   labels:
@@ -541,7 +540,7 @@ metadata:
     deploy_id: unknown
     product: ml-training-pipelines
     project: ml-training-pipelines
-    role: hello-world
+    role: metaflow
     team: ml-apac-trisolaris
     track: unknown
   name: metaflow
@@ -559,42 +558,3 @@ spec:
       consecutive5xxErrors: 3
       interval: 30s
       maxEjectionPercent: 35
----
-apiVersion: policy/v1
-kind: PodDisruptionBudget
-metadata:
-  annotations:
-    cicd-toolkit.zende.sk/environment: staging
-    cicd-toolkit.zende.sk/generated-by: jsonnet-kubernetes
-    cicd-toolkit.zende.sk/partition: internaltools-staging-use1-chef
-    cicd-toolkit.zende.sk/role: hello-world
-    cicd-toolkit.zende.sk/version: compare
-  labels:
-    app: metaflow
-    app.kubernetes.io/instance: hello-world
-    app.kubernetes.io/name: ml-training-pipelines
-    app.kubernetes.io/version: unknown-unknown
-    branch: unknown
-    configuration-delivery: "true"
-    deploy_id: unknown
-    istio-injection: enabled
-    opa-gatekeeper.zendesk.com/pdb-requires-readiness-probe: "false"
-    opa-gatekeeper.zendesk.com/run-as-non-root: "false"
-    product: ml-training-pipelines
-    project: ml-training-pipelines
-    role: hello-world
-    sidecar.istio.io/inject: "true"
-    tags.datadoghq.com/env: staging
-    tags.datadoghq.com/service: ml-training-pipelines-hello-world
-    tags.datadoghq.com/version: unknown-unknown
-    team: ml-apac-trisolaris
-    temp-auth: enabled
-    track: unknown
-  name: metaflow
-  namespace: ml-training-pipelines
-spec:
-  maxUnavailable: 20%
-  selector:
-    matchLabels:
-      project: ml-training-pipelines
-      role: hello-world

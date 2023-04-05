@@ -183,15 +183,15 @@
     {
       "account": "internaltools-production-use1-chef",
       "cloudProvider": "kubernetes",
-      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eLogs\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/logs/livetail?query=service%3Aml-training-pipelines+%40kubernetes.labels.track%3A${execution.id}+%40kubernetes.labels.role%3Ahello-world\"\u003eDatadog hello-world Logs\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eLogs\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/logs/livetail?query=service%3Aml-training-pipelines+%40kubernetes.labels.track%3A${execution.id}+%40kubernetes.labels.role%3Ametaflow\"\u003eDatadog metaflow Logs\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,
       "manifestArtifact": {
-        "artifactAccount": "github_spin_acct1",
-        "id": "hello-world.yml",
-        "name": "hello-world.yml",
-        "reference": "https://api.github.com/repos/zendesk/ml-training-pipelines/contents/kubernetes/manifests/production/internaltools-production-use1-chef/hello-world.yml",
+        "artifactAccount": "github_spin_acct2",
+        "id": "metaflow.yml",
+        "name": "metaflow.yml",
+        "reference": "https://api.github.com/repos/zendesk/ml-training-pipelines/contents/kubernetes/manifests/production/internaltools-production-use1-chef/metaflow.yml",
         "type": "github/file",
         "version": "${ parameters.gitRef + \"-deploy\" }"
       },
@@ -199,8 +199,8 @@
         "app": "ml-training-pipelines",
         "detail": "/#/applications/${execution['application']}/executions/${execution['id']}"
       },
-      "name": "Deploy hello-world.yml",
-      "refId": "deploy-hello-world.yml",
+      "name": "Deploy metaflow.yml",
+      "refId": "deploy-metaflow.yml",
       "requisiteStageRefIds": [
         "set-deployment-in-progress"
       ],
@@ -228,7 +228,7 @@
       "preconditions": [
         {
           "context": {
-            "expression": "${ #stageByRefId(\"deploy-hello-world.yml\").status == \"SUCCEEDED\" }",
+            "expression": "${ #stageByRefId(\"deploy-metaflow.yml\").status == \"SUCCEEDED\" }",
             "failureMessage": "One of the previous steps failed"
           },
           "failPipeline": true,
@@ -237,7 +237,7 @@
       ],
       "refId": "deploy-succeeded",
       "requisiteStageRefIds": [
-        "deploy-hello-world.yml"
+        "deploy-metaflow.yml"
       ],
       "type": "checkPreconditions"
     },
@@ -249,7 +249,7 @@
       "preconditions": [
         {
           "context": {
-            "expression": "${ #stageByRefId(\"deploy-hello-world.yml\").status == \"FAILED_CONTINUE\" }",
+            "expression": "${ #stageByRefId(\"deploy-metaflow.yml\").status == \"FAILED_CONTINUE\" }",
             "failureMessage": "One of the previous steps failed"
           },
           "failPipeline": false,
@@ -258,22 +258,22 @@
       ],
       "refId": "deploy-failed",
       "requisiteStageRefIds": [
-        "deploy-hello-world.yml"
+        "deploy-metaflow.yml"
       ],
       "type": "checkPreconditions"
     },
     {
       "account": "internaltools-production-use1-chef",
       "cloudProvider": "kubernetes",
-      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eLogs\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/logs/livetail?query=service%3Aml-training-pipelines+%40kubernetes.labels.track%3A${execution.id}+%40kubernetes.labels.role%3Ahello-world\"\u003eDatadog hello-world Logs\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
+      "comments": "\u003cdiv style=\"padding: 15px; margin-bottom: 5px;\"\u003e\n    \u003cdiv class=\"row\"\u003e\n        \u003cdiv class=\"col-md-12\"\u003e\n            \u003cdl class=\"dl-horizontal\"\u003e\n                \u003cdiv\u003e\n                    \u003cdt\u003eLogs\u003c/dt\u003e\n                    \u003cdd\u003e\n                        \u003ca href=\"https://zendesk.datadoghq.com/logs/livetail?query=service%3Aml-training-pipelines+%40kubernetes.labels.track%3A${execution.id}+%40kubernetes.labels.role%3Ametaflow\"\u003eDatadog metaflow Logs\u003c/a\u003e\n                    \u003c/dd\u003e\n                \u003c/div\u003e\n            \u003c/dl\u003e\n        \u003c/div\u003e\n    \u003c/div\u003e\n\u003c/div\u003e\n",
       "completeOtherBranchesThenFail": false,
       "continuePipeline": true,
       "failPipeline": false,
       "manifestArtifact": {
-        "artifactAccount": "github_spin_acct1",
-        "id": "previous-hello-world.yml",
-        "name": "Previous hello-world.yml",
-        "reference": "https://api.github.com/repos/zendesk/ml-training-pipelines/contents/kubernetes/manifests/production/internaltools-production-use1-chef/hello-world.yml",
+        "artifactAccount": "github_spin_acct2",
+        "id": "previous-metaflow.yml",
+        "name": "Previous metaflow.yml",
+        "reference": "https://api.github.com/repos/zendesk/ml-training-pipelines/contents/kubernetes/manifests/production/internaltools-production-use1-chef/metaflow.yml",
         "type": "github/file",
         "version": "${ #stage('Read version').context.manifest.data.gitRef }"
       },
@@ -281,8 +281,8 @@
         "app": "ml-training-pipelines",
         "detail": "/#/applications/${execution['application']}/executions/${execution['id']}"
       },
-      "name": "Deploy previous hello-world.yml",
-      "refId": "deploy-previous-hello-world.yml",
+      "name": "Deploy previous metaflow.yml",
+      "refId": "deploy-previous-metaflow.yml",
       "requisiteStageRefIds": [
         "deploy-failed"
       ],
@@ -403,7 +403,7 @@
       ],
       "refId": "signal-execution-failure",
       "requisiteStageRefIds": [
-        "deploy-previous-hello-world.yml",
+        "deploy-previous-metaflow.yml",
         "github-deployment-failure"
       ],
       "stageEnabled": {
