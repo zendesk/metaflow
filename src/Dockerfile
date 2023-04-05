@@ -13,7 +13,7 @@ RUN PATH=$PATH:/usr/local/go/bin GO111MODULE=on go install -mod=mod github.com/p
 
 
 # Clone the metaflow-service repository
-RUN git clone https://github.com/Netflix/metaflow-service /repo
+RUN git clone --depth 1 https://github.com/Netflix/metaflow-service /repo
 
 # Copy script for injecting db creds and starting the metaflow_service
 COPY src/write-creds.sh /repo/write-creds.sh
