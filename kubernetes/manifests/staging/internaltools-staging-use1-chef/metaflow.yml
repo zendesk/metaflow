@@ -1,0 +1,600 @@
+# ------------------------------------------------------------------------------------------------------------
+# NOTE: THIS FILE IS AUTO GENERATED AND MANAGED BY https://github.com/zendesk/cicd-toolkit
+#
+# You can regenerate the content by running `make` in the 'cicd-toolkit' directory.
+#
+# MANUAL CHANGES TO THIS FILE MAY RESULT IN INCORRECT BEHAVIOUR, AND WILL BE LOST IF THE CODE IS REGENERATED.
+# ------------------------------------------------------------------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    ad.datadoghq.com/tags: '{"git.commit.sha":"unknown","git.repository_url":"github.com/zendesk/ml-training-pipelines"}'
+    cicd-toolkit.zende.sk/environment: staging
+    cicd-toolkit.zende.sk/generated-by: jsonnet-kubernetes
+    cicd-toolkit.zende.sk/partition: internaltools-staging-use1-chef
+    cicd-toolkit.zende.sk/role: metaflow
+    cicd-toolkit.zende.sk/version: compare
+    moniker.spinnaker.io/cluster: internaltools-staging-use1-chef
+    moniker.spinnaker.io/detail: unknown
+    moniker.spinnaker.io/stack: ml-training-pipelines-metaflow
+    sidecar.istio.io/inject: "true"
+    sidecar.istio.io/proxyCPU: 150m
+    sidecar.istio.io/proxyCPULimit: "4"
+    sidecar.istio.io/proxyMemory: 256Mi
+    sidecar.istio.io/proxyMemoryLimit: 2Gi
+  labels:
+    app: metaflow
+    app.kubernetes.io/instance: metaflow
+    app.kubernetes.io/name: ml-training-pipelines
+    app.kubernetes.io/version: unknown-unknown
+    branch: unknown
+    configuration-delivery: "true"
+    deploy_id: unknown
+    istio-injection: enabled
+    opa-gatekeeper.zendesk.com/pdb-requires-readiness-probe: "false"
+    opa-gatekeeper.zendesk.com/run-as-non-root: "false"
+    product: ml-training-pipelines
+    project: ml-training-pipelines
+    role: metaflow
+    sidecar.istio.io/inject: "true"
+    tags.datadoghq.com/env: staging
+    tags.datadoghq.com/service: ml-training-pipelines-metaflow
+    tags.datadoghq.com/version: unknown-unknown
+    team: ml-apac-trisolaris
+    temp-auth: enabled
+    track: unknown
+  name: metaflow
+  namespace: ml-training-pipelines
+spec:
+  minReadySeconds: 10
+  progressDeadlineSeconds: 600
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      project: ml-training-pipelines
+      role: metaflow
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 20%
+  template:
+    metadata:
+      annotations:
+        ad.datadoghq.com/tags: '{"git.commit.sha":"unknown","git.repository_url":"github.com/zendesk/ml-training-pipelines"}'
+        moniker.spinnaker.io/cluster: internaltools-staging-use1-chef
+        moniker.spinnaker.io/detail: unknown
+        moniker.spinnaker.io/stack: ml-training-pipelines-metaflow
+        secret/metadata-service-db-password: secret/numbat/metadata-service-db-password
+        sidecar.istio.io/inject: "true"
+        sidecar.istio.io/proxyCPU: 150m
+        sidecar.istio.io/proxyCPULimit: "4"
+        sidecar.istio.io/proxyMemory: 256Mi
+        sidecar.istio.io/proxyMemoryLimit: 2Gi
+      labels:
+        app: metaflow
+        app.kubernetes.io/instance: metaflow
+        app.kubernetes.io/name: ml-training-pipelines
+        app.kubernetes.io/version: unknown-unknown
+        branch: unknown
+        configuration-delivery: "true"
+        deploy_group: internaltools-staging-use1-chef
+        deploy_id: unknown
+        istio-injection: enabled
+        opa-gatekeeper.zendesk.com/pdb-requires-readiness-probe: "false"
+        opa-gatekeeper.zendesk.com/run-as-non-root: "false"
+        product: ml-training-pipelines
+        project: ml-training-pipelines
+        revision: unknown
+        role: metaflow
+        sidecar.istio.io/inject: "true"
+        tag: unknown
+        tags.datadoghq.com/env: staging
+        tags.datadoghq.com/service: ml-training-pipelines-metaflow
+        tags.datadoghq.com/version: unknown-unknown
+        team: ml-apac-trisolaris
+        temp-auth: enabled
+        track: unknown
+        workload-rebalancing.compute.zende.sk/enabled: "false"
+    spec:
+      containers:
+      - command:
+        - bash
+        - /repo/write-creds.sh
+        env:
+        - name: DD_ENV
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/env']
+        - name: DD_SERVICE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/service']
+        - name: DD_VERSION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/version']
+        - name: DEPLOY_ID
+          value: unknown
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: PROJECT
+          value: ml-training-pipelines
+        - name: REVISION
+          value: unknown
+        - name: ROLE
+          value: metaflow
+        - name: STATSD_ADDR
+          value: 169.254.1.1:8125
+        - name: STATSD_APM_PORT
+          value: "8126"
+        - name: STATSD_HOST
+          value: 169.254.1.1
+        - name: STATSD_PORT
+          value: "8125"
+        - name: TAG
+          value: unknown
+        - name: ZENDESK_POD_ID
+          value: NA
+        - name: ZENDESK_STATSD
+          value: "true"
+        - name: MF_METADATA_DB_PORT
+          value: "5432"
+        - name: MF_METADATA_DB_USER
+          value: metadataservice
+        - name: MF_METADATA_DB_PSWD
+          value: metadata-service-db-password
+        - name: MF_METADATA_DB_NAME
+          value: metaflow
+        - name: MF_METADATA_DB_HOST
+          value: terraform-20230327021659651800000001.cdswufymuxfo.us-east-1.rds.amazonaws.com
+        - name: ISTIO_STATUS
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.annotations['sidecar.istio.io/status']
+        image: 713408432298.dkr.ecr.us-west-2.amazonaws.com/dev/zendesk/ml-training-pipelines:unknown
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - /bin/sleep
+              - "31"
+        name: metaflow
+        ports:
+        - containerPort: 8080
+          name: metadata-svc
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "1.0"
+            memory: 900Mi
+          requests:
+            cpu: "1.0"
+            memory: 900Mi
+        volumeMounts:
+        - mountPath: /secrets
+          name: secrets-volume
+          readOnly: true
+        - mountPath: /var/run/datadog
+          name: dsdsocket
+          readOnly: true
+      - env:
+        - name: DD_ENV
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/env']
+        - name: DD_SERVICE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/service']
+        - name: DD_VERSION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/version']
+        - name: DEPLOY_ID
+          value: unknown
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: PROJECT
+          value: ml-training-pipelines
+        - name: REVISION
+          value: unknown
+        - name: ROLE
+          value: metaflow
+        - name: STATSD_ADDR
+          value: 169.254.1.1:8125
+        - name: STATSD_APM_PORT
+          value: "8126"
+        - name: STATSD_HOST
+          value: 169.254.1.1
+        - name: STATSD_PORT
+          value: "8125"
+        - name: TAG
+          value: unknown
+        - name: ZENDESK_POD_ID
+          value: NA
+        - name: ZENDESK_STATSD
+          value: "true"
+        - name: RUN_ONCE
+          value: "false"
+        - name: VAULT_ADDR
+          value: https://secret.zdsystest.com:8200
+        - name: VAULT_ROLE
+          valueFrom:
+            configMapKeyRef:
+              key: vault_role
+              name: credentials-sidecar
+        - name: JWT_TOKEN_PATH
+          value: /var/run/secrets/kubernetes.io/serviceaccount/token
+        - name: K8S_AUTH_BACKEND_PATH
+          valueFrom:
+            configMapKeyRef:
+              key: vault_auth_path
+              name: credentials-sidecar
+        - name: ISTIO_STATUS
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.annotations['sidecar.istio.io/status']
+        image: 713408432298.dkr.ecr.us-west-2.amazonaws.com/prod/zendesk/secret-sidecar:v1.3.28
+        imagePullPolicy: IfNotPresent
+        name: secret-sidecar
+        resources:
+          limits:
+            cpu: 20m
+            memory: 100Mi
+          requests:
+            cpu: 2m
+            memory: 20Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        volumeMounts:
+        - mountPath: /secrets
+          name: secrets-volume
+        - mountPath: /secrets-meta
+          name: secrets-meta
+        - mountPath: /podinfo
+          name: annotations
+        - mountPath: /vault
+          name: vault-data
+        - mountPath: /var/run/datadog
+          name: dsdsocket
+          readOnly: true
+      dnsConfig:
+        options:
+        - name: single-request-reopen
+      initContainers:
+      - env:
+        - name: DD_ENV
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/env']
+        - name: DD_SERVICE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/service']
+        - name: DD_VERSION
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.labels['tags.datadoghq.com/version']
+        - name: DEPLOY_ID
+          value: unknown
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: PROJECT
+          value: ml-training-pipelines
+        - name: REVISION
+          value: unknown
+        - name: ROLE
+          value: metaflow
+        - name: STATSD_ADDR
+          value: 169.254.1.1:8125
+        - name: STATSD_APM_PORT
+          value: "8126"
+        - name: STATSD_HOST
+          value: 169.254.1.1
+        - name: STATSD_PORT
+          value: "8125"
+        - name: TAG
+          value: unknown
+        - name: ZENDESK_POD_ID
+          value: NA
+        - name: ZENDESK_STATSD
+          value: "true"
+        - name: RUN_ONCE
+          value: "true"
+        - name: VAULT_ADDR
+          value: https://secret.zdsystest.com:8200
+        - name: VAULT_ROLE
+          valueFrom:
+            configMapKeyRef:
+              key: vault_role
+              name: credentials-sidecar
+        - name: JWT_TOKEN_PATH
+          value: /var/run/secrets/kubernetes.io/serviceaccount/token
+        - name: K8S_AUTH_BACKEND_PATH
+          valueFrom:
+            configMapKeyRef:
+              key: vault_auth_path
+              name: credentials-sidecar
+        image: 713408432298.dkr.ecr.us-west-2.amazonaws.com/prod/zendesk/secret-sidecar:v1.3.28
+        imagePullPolicy: IfNotPresent
+        name: secret-init
+        resources:
+          limits:
+            cpu: 20m
+            memory: 100Mi
+          requests:
+            cpu: 2m
+            memory: 20Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        volumeMounts:
+        - mountPath: /secrets
+          name: secrets-volume
+        - mountPath: /secrets-meta
+          name: secrets-meta
+        - mountPath: /podinfo
+          name: annotations
+        - mountPath: /vault
+          name: vault-data
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - emptyDir: {}
+        name: secrets-volume
+      - emptyDir: {}
+        name: secrets-meta
+      - emptyDir: {}
+        name: vault-data
+      - downwardAPI:
+          items:
+          - fieldRef:
+              fieldPath: metadata.annotations
+            path: annotations
+        name: annotations
+      - name: vaultauth
+        secret:
+          secretName: vaultauth
+      - hostPath:
+          path: /var/run/datadog
+        name: dsdsocket
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  annotations:
+    cicd-toolkit.zende.sk/environment: staging
+    cicd-toolkit.zende.sk/partition: internaltools-staging-use1-chef
+    cicd-toolkit.zende.sk/role: metaflow
+    cicd-toolkit.zende.sk/version: compare
+    strategy.spinnaker.io/replace: "true"
+  labels:
+    branch: unknown
+    deploy_id: unknown
+    product: ml-training-pipelines
+    project: ml-training-pipelines
+    role: metaflow
+    team: ml-apac-trisolaris
+    track: unknown
+  name: metaflow-auth-policy
+  namespace: ml-training-pipelines
+spec:
+  rules:
+  - from:
+    - source:
+        namespaces:
+        - istio-gateways
+        - ml-training-pipelines
+  selector:
+    matchLabels:
+      project: ml-training-pipelines
+      role: metaflow
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cicd-toolkit.zende.sk/environment: staging
+    cicd-toolkit.zende.sk/generated-by: jsonnet-kubernetes
+    cicd-toolkit.zende.sk/partition: internaltools-staging-use1-chef
+    cicd-toolkit.zende.sk/role: metaflow
+    cicd-toolkit.zende.sk/version: compare
+  labels:
+    app.kubernetes.io/instance: metaflow
+    app.kubernetes.io/name: ml-training-pipelines
+    app.kubernetes.io/version: unknown-unknown
+    branch: unknown
+    deploy_id: unknown
+    product: ml-training-pipelines
+    project: ml-training-pipelines
+    role: metaflow
+    team: ml-apac-trisolaris
+    track: unknown
+  name: metaflow
+  namespace: ml-training-pipelines
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: metadata-svc
+  selector:
+    project: ml-training-pipelines
+    role: metaflow
+  type: ClusterIP
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  annotations:
+    cicd-toolkit.zende.sk/environment: staging
+    cicd-toolkit.zende.sk/partition: internaltools-staging-use1-chef
+    cicd-toolkit.zende.sk/role: metaflow
+    cicd-toolkit.zende.sk/version: compare
+    strategy.spinnaker.io/replace: "true"
+  labels:
+    branch: unknown
+    deploy_id: unknown
+    product: ml-training-pipelines
+    project: ml-training-pipelines
+    role: metaflow
+    team: ml-apac-trisolaris
+    track: unknown
+  name: metaflow
+  namespace: ml-training-pipelines
+spec:
+  gateways:
+  - ml-training-pipelines/metaflow
+  hosts:
+  - metaflow
+  - ml-training-pipelines.internaltools-staging-use1-chef.zdmesh.io
+  http:
+  - route:
+    - destination:
+        host: metaflow.ml-training-pipelines.svc.cluster.local
+        port:
+          number: 8080
+---
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  annotations:
+    cicd-toolkit.zende.sk/environment: staging
+    cicd-toolkit.zende.sk/partition: internaltools-staging-use1-chef
+    cicd-toolkit.zende.sk/role: metaflow
+    cicd-toolkit.zende.sk/version: compare
+    strategy.spinnaker.io/replace: "true"
+  labels:
+    branch: unknown
+    deploy_id: unknown
+    product: ml-training-pipelines
+    project: ml-training-pipelines
+    role: metaflow
+    team: ml-apac-trisolaris
+    track: unknown
+  name: metaflow
+  namespace: ml-training-pipelines
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - ml-training-pipelines.internaltools-staging-use1-chef.zdmesh.io
+    port:
+      name: https
+      number: 443
+      protocol: HTTPS
+    tls:
+      credentialName: ml-experimentation-tracker
+      mode: MUTUAL
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  annotations:
+    cicd-toolkit.zende.sk/environment: staging
+    cicd-toolkit.zende.sk/partition: internaltools-staging-use1-chef
+    cicd-toolkit.zende.sk/role: metaflow
+    cicd-toolkit.zende.sk/version: compare
+    strategy.spinnaker.io/replace: "true"
+  labels:
+    branch: unknown
+    deploy_id: unknown
+    product: ml-training-pipelines
+    project: ml-training-pipelines
+    role: metaflow
+    team: ml-apac-trisolaris
+    track: unknown
+  name: metaflow
+  namespace: ml-training-pipelines
+spec:
+  host: metaflow
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        connectTimeout: 1s
+    loadBalancer:
+      simple: LEAST_REQUEST
+    outlierDetection:
+      baseEjectionTime: 30s
+      consecutive5xxErrors: 3
+      interval: 30s
+      maxEjectionPercent: 35
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  annotations:
+    cicd-toolkit.zende.sk/environment: staging
+    cicd-toolkit.zende.sk/generated-by: jsonnet-kubernetes
+    cicd-toolkit.zende.sk/partition: internaltools-staging-use1-chef
+    cicd-toolkit.zende.sk/role: metaflow
+    cicd-toolkit.zende.sk/version: compare
+  labels:
+    app: metaflow
+    app.kubernetes.io/instance: metaflow
+    app.kubernetes.io/name: ml-training-pipelines
+    app.kubernetes.io/version: unknown-unknown
+    branch: unknown
+    configuration-delivery: "true"
+    deploy_id: unknown
+    istio-injection: enabled
+    opa-gatekeeper.zendesk.com/pdb-requires-readiness-probe: "false"
+    opa-gatekeeper.zendesk.com/run-as-non-root: "false"
+    product: ml-training-pipelines
+    project: ml-training-pipelines
+    role: metaflow
+    sidecar.istio.io/inject: "true"
+    tags.datadoghq.com/env: staging
+    tags.datadoghq.com/service: ml-training-pipelines-metaflow
+    tags.datadoghq.com/version: unknown-unknown
+    team: ml-apac-trisolaris
+    temp-auth: enabled
+    track: unknown
+  name: metaflow
+  namespace: ml-training-pipelines
+spec:
+  maxUnavailable: 20%
+  selector:
+    matchLabels:
+      project: ml-training-pipelines
+      role: metaflow

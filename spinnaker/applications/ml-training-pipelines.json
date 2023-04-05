@@ -10,7 +10,7 @@
       "serverGroups"
     ]
   },
-  "description": "ml-training-pipelines",
+  "description": "metaflow",
   "email": "ml-apac-trisolaris@zendesk.com",
   "enableRerunActiveExecutions": false,
   "enableRestartRunningExecutions": false,

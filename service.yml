@@ -1,0 +1,10 @@
+version: 'experimental'
+name: ml-training-pipelines
+description: metaflow 
+product: machine-learning
+team: ml-apac-trisolaris
+
+access:
+  secret_paths:
+    - path: numbat/metadata-service-db-password
+
