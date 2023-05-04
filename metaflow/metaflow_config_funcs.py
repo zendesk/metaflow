@@ -49,7 +49,7 @@ def config_values(include=0):
             yield name, config_value.serializer(config_value.value)
 
 
-def from_conf(name, default=None, validate_fn=None, prefix=False):
+def from_conf(name, default=None, validate_fn=None):
     """
     First try to pull value from environment, then from metaflow config JSON
 
@@ -61,21 +61,7 @@ def from_conf(name, default=None, validate_fn=None, prefix=False):
     """
     is_default = True
     env_name = "METAFLOW_%s" % name
-    if prefix:
-        len_prefix = len(env_name)
-        env_vars = {
-            k[len_prefix:None]: v
-            for k, v in os.environ.items()
-            if k.startswith(env_name)
-        }
-        config_vars = {
-            k[len_prefix:None]: v
-            for k, v in METAFLOW_CONFIG.items()
-            if k.startswith(env_name)
-        }
-        value = {**config_vars, **env_vars}
-    else:
-        value = os.environ.get(env_name, METAFLOW_CONFIG.get(env_name, default))
+    value = os.environ.get(env_name, METAFLOW_CONFIG.get(env_name, default))
     if validate_fn and value is not None:
         validate_fn(env_name, value)
     if default is not None:
@@ -117,6 +103,28 @@ def from_conf(name, default=None, validate_fn=None, prefix=False):
         serializer=str,
         is_default=is_default,
     )
+    return value
+
+
+def from_conf_dict(prefix, validate_fn=None):
+    """
+    Parse variables with a common prefix into a dictionary.
+    """
+    env_prefix = "METAFLOW_%s" % prefix
+    len_prefix = len(env_prefix)
+    env_vars = {
+        k[len_prefix:None]: v
+        for k, v in os.environ.items()
+        if k.startswith(env_prefix)
+    }
+    config_vars = {
+        k[len_prefix:None]: v
+        for k, v in METAFLOW_CONFIG.items()
+        if k.startswith(env_prefix)
+    }
+    value = {**config_vars, **env_vars}
+    if validate_fn and value is not None:
+        validate_fn(env_prefix, value)
     return value
 
 

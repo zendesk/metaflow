@@ -6,7 +6,7 @@ import types
 import pkg_resources
 
 from metaflow.exception import MetaflowException
-from metaflow.metaflow_config_funcs import from_conf, get_validate_choice_fn
+from metaflow.metaflow_config_funcs import from_conf, from_conf_dict, get_validate_choice_fn
 
 # Disable multithreading security on MacOS
 if sys.platform == "darwin":
@@ -72,7 +72,7 @@ S3_VERIFY_CERTIFICATE = from_conf("S3_VERIFY_CERTIFICATE")
 # Dictionary containing configurable S3 upload settings
 # e.g. ServerSideEncryption, Tagging, StorageClass, etc.
 # List these parameters out using the prefix "METAFLOW_UPLOAD_ARGS_S3_[Key]".
-S3_UPLOAD_ARGS = from_conf("S3_UPLOAD_ARGS_", prefix=True)
+S3_UPLOAD_ARGS = from_conf_dict("S3_UPLOAD_ARGS_")
 
 # S3 retry configuration
 # This is useful if you want to "fail fast" on S3 operations; use with caution
