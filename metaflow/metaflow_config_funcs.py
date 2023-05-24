@@ -106,28 +106,6 @@ def from_conf(name, default=None, validate_fn=None):
     return value
 
 
-def from_conf_dict(prefix, validate_fn=None):
-    """
-    Parse variables with a common prefix into a dictionary.
-    """
-    env_prefix = "METAFLOW_%s" % prefix
-    len_prefix = len(env_prefix)
-    env_vars = {
-        k[len_prefix:None]: v
-        for k, v in os.environ.items()
-        if k.startswith(env_prefix)
-    }
-    config_vars = {
-        k[len_prefix:None]: v
-        for k, v in METAFLOW_CONFIG.items()
-        if k.startswith(env_prefix)
-    }
-    value = {**config_vars, **env_vars}
-    if validate_fn and value is not None:
-        validate_fn(env_prefix, value)
-    return value
-
-
 def get_validate_choice_fn(choices):
     """Returns a validate_fn for use with from_conf().
     The validate_fn will check a value against a list of allowed choices.

@@ -17,7 +17,7 @@ from metaflow.metaflow_config import (
     DATATOOLS_S3ROOT,
     S3_RETRY_COUNT,
     S3_TRANSIENT_RETRY_COUNT,
-    S3_UPLOAD_ARGS,
+    S3_SERVER_SIDE_ENCRYPTION,
     TEMPDIR,
 )
 from metaflow.util import (
@@ -362,7 +362,7 @@ class S3Object(object):
         Returns
         -------
         str
-            Server-side-encryption type or None if server side encryption is not specified through s3 upload args.
+            Server-side-encryption type or None if parameter is not set.
         """
         return self._encryption
 
@@ -504,7 +504,7 @@ class S3(object):
         prefix: Optional[str] = None,
         run: Optional[Union[FlowSpec, "Run"]] = None,
         s3root: Optional[str] = None,
-        upload_args: Optional[dict] = S3_UPLOAD_ARGS,
+        encryption: Optional[str] = S3_SERVER_SIDE_ENCRYPTION,
         **kwargs
     ):
         if not boto_found:
@@ -558,7 +558,7 @@ class S3(object):
             "inject_failure_rate", TEST_INJECT_RETRYABLE_FAILURES
         )
         self._tmpdir = mkdtemp(dir=tmproot, prefix="metaflow.s3.")
-        self._upload_args = upload_args
+        self._encryption = encryption
 
     def __enter__(self) -> "S3":
         return self
@@ -1150,7 +1150,7 @@ class S3(object):
         url = self._url(key)
         src = urlparse(url)
         extra_args = None
-        if content_type or metadata or self._upload_args:
+        if content_type or metadata or self._encryption:
             extra_args = {}
             if content_type:
                 extra_args["ContentType"] = content_type
@@ -1158,9 +1158,8 @@ class S3(object):
                 extra_args["Metadata"] = {
                     "metaflow-user-attributes": json.dumps(metadata)
                 }
-            if self._upload_args:
-                upload_args = self._upload_args
-                extra_args.update(upload_args)
+            if self._encryption:
+                extra_args["ServerSideEncryption"] = self._encryption
 
         def _upload(s3, _):
             # We make sure we are at the beginning in case we are retrying
@@ -1233,9 +1232,8 @@ class S3(object):
                     store_info["metadata"] = {
                         "metaflow-user-attributes": json.dumps(metadata)
                     }
-                if self._upload_args:
-                    upload_args = self._upload_args
-                    store_info.update(upload_args)
+                if self._encryption:
+                    store_info["encryption"] = self._encryption
                 if isinstance(obj, (RawIOBase, BufferedIOBase)):
                     if not obj.readable() or not obj.seekable():
                         raise MetaflowS3InvalidObject(
@@ -1308,9 +1306,8 @@ class S3(object):
                     store_info["metadata"] = {
                         "metaflow-user-attributes": json.dumps(metadata)
                     }
-                if self._upload_args:
-                    upload_args = self._upload_args
-                    store_info.update(upload_args)
+                if self._encryption:
+                    store_info["encryption"] = self._encryption
                 if not os.path.exists(path):
                     raise MetaflowS3NotFound("Local file not found: %s" % path)
                 yield path, self._url(key), store_info

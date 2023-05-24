@@ -37,7 +37,7 @@ from metaflow.metaflow_config import (
     S3_ENDPOINT_URL,
     SERVICE_HEADERS,
     SERVICE_INTERNAL_URL,
-    S3_UPLOAD_ARGS,
+    S3_SERVER_SIDE_ENCRYPTION,
 )
 from metaflow.mflog import BASH_SAVE_LOGS, bash_capture_logs, export_mflog_env_vars
 from metaflow.parameters import deploy_time_eval
@@ -1034,9 +1034,8 @@ class ArgoWorkflows(object):
                     ] = ("{{workflow.parameters.%s}}" % event["sanitized_name"])
             
             # Map S3 upload headers to environment variables
-            if S3_UPLOAD_ARGS is not None:
-                for key, value in S3_UPLOAD_ARGS.items():
-                    env["METAFLOW_S3_UPLOAD_ARGS_" + key] = value
+            if S3_SERVER_SIDE_ENCRYPTION is not None:
+                env["METAFLOW_S3_SERVERSIDE_ENCRYPTION"] = S3_SERVER_SIDE_ENCRYPTION
 
             metaflow_version = self.environment.get_environment_info()
             metaflow_version["flow_name"] = self.graph.name
