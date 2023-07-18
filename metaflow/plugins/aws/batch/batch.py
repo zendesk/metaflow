@@ -64,6 +64,8 @@ class Batch(object):
         )
         init_cmds = environment.get_package_commands(code_package_url, "s3")
         init_expr = " && ".join(init_cmds)
+        activate_venv = ". /home/nonroot/app/pipeline_venv/bin/activate"
+        deactivate_venv = "deactivate"
         step_expr = bash_capture_logs(
             " && ".join(environment.bootstrap_commands(step_name, "s3") + step_cmds)
         )
@@ -76,11 +78,13 @@ class Batch(object):
         # the `true` command is to make sure that the generated command
         # plays well with docker containers which have entrypoint set as
         # eval $@
-        cmd_str = "true && mkdir -p %s && %s && %s && %s; " % (
+        cmd_str = "true && mkdir -p %s && %s && %s && %s && %s && %s; " % (
             LOGS_DIR,
             mflog_expr,
             init_expr,
+            activate_venv,
             step_expr,
+            deactivate_venv
         )
         # after the task has finished, we save its exit code (fail/success)
         # and persist the final logs. The whole entrypoint should exit

@@ -783,7 +783,7 @@ class StepFunctions(object):
             )
             params = (
                 entrypoint
-                + top_level
+                + top_level 
                 + [
                     "init",
                     "--run-id sfn-$METAFLOW_RUN_ID",
@@ -840,6 +840,7 @@ class StepFunctions(object):
             step.extend("--tag %s" % tag for tag in self.tags)
         if self.namespace is not None:
             step.append("--namespace=%s" % self.namespace)
+
         cmds.append(" ".join(entrypoint + top_level + step))
         return " && ".join(cmds)
 
