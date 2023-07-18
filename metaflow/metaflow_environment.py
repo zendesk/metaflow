@@ -158,7 +158,7 @@ class MetaflowEnvironment(object):
             "after 6 tries. Exiting...' && exit 1; "
             "fi" % code_package_url,
             "TAR_OPTIONS='--warning=no-timestamp' tar xf job.tar",
-            #". /home/nonroot/app/pipeline_venv/bin/activate",
+            ". /home/nonroot/app/pipeline_venv/bin/activate",
             "mflog 'Task is starting.'",
         ]
         return cmds
