@@ -76,17 +76,11 @@ class Batch(object):
         # the `true` command is to make sure that the generated command
         # plays well with docker containers which have entrypoint set as
         # eval $@
-
-        activate_venv = ". /home/nonroot/app/pipeline_venv/bin/activate"
-        #deactivate_venv = "deactivate" --> this isnt working, needs to be done inside batch job itself?
-
         cmd_str = "true && mkdir -p %s && %s && %s && %s; " % (
             LOGS_DIR,
             mflog_expr,
             init_expr,
-            #activate_venv,
-            step_expr
-            #deactivate_venv
+            step_expr,
         )
         # after the task has finished, we save its exit code (fail/success)
         # and persist the final logs. The whole entrypoint should exit
