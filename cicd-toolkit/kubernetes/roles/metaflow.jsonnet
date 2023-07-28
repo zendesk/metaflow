@@ -34,6 +34,11 @@ function(params={}) (
                             name: "metadata-svc",
                             containerPort: 8080,
                             protocol: "TCP",
+                          },
+                          {
+                            name: "metaflow-ui",
+                            containerPort: 8083,
+                            protocol: "TCP",
                           }
                         ])
                         .withEnvFromArray([
@@ -65,11 +70,18 @@ function(params={}) (
 
   local service = K8s.Service
                   .withName(role_name)
-                  .withPorts([{
-                    name: "http",
-                    port: 8080,
-                    targetPort: 'metadata-svc',
-                  }])
+                  .withPorts([
+                    {
+                      name: "http-metadata",
+                      port: 8080,
+                      targetPort: 'metadata-svc',
+                    },
+                    {
+                      name: "http-ui",
+                      port: 8083,
+                      protocol: "metaflow-ui",
+                    }
+                  ])
                   .withType("ClusterIP")
                   .forDeployment(deployment);
 
@@ -95,14 +107,28 @@ function(params={}) (
                           .withName(role_name)
                           .withHosts([role_name, hostname])
                           .withGateways([p.namespace + "/" + istio_gateway.metadata.name])
-                          .withHTTP([{
-                            route: [{
-                              destination: {
-                                host: role_name + "." + p.namespace + ".svc.cluster.local",
-                                port: {
-                                  number: 8080
+                          .withHTTP([
+                            {
+                              route: [{
+                                destination: {
+                                  host: role_name + "." + p.namespace + ".svc.cluster.local",
+                                  port: {
+                                    number: 8080
+                                  }
                                 }
-                              }}]}]);
+                              }]
+                            },
+                            {
+                              route: [{
+                                destination: {
+                                  host: role_name + "." + p.namespace + ".svc.cluster.local",
+                                  port: {
+                                    number: 8083
+                                  }
+                                }
+                              }]
+                            }
+                          ]);
 
   local auth_policy = Istio.AuthorizationPolicy
                       .withName(p.name + "-auth-policy")

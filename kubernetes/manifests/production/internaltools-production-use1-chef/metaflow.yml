@@ -172,6 +172,9 @@ spec:
         - containerPort: 8080
           name: metadata-svc
           protocol: TCP
+        - containerPort: 8083
+          name: metaflow-ui
+          protocol: TCP
         resources:
           limits:
             cpu: "1.0"
@@ -453,9 +456,12 @@ metadata:
   namespace: ml-training-pipelines
 spec:
   ports:
-  - name: http
+  - name: http-metadata
     port: 8080
     targetPort: metadata-svc
+  - name: http-ui
+    port: 8083
+    protocol: metaflow-ui
   selector:
     project: ml-training-pipelines
     role: metaflow
@@ -492,6 +498,11 @@ spec:
         host: metaflow.ml-training-pipelines.svc.cluster.local
         port:
           number: 8080
+  - route:
+    - destination:
+        host: metaflow.ml-training-pipelines.svc.cluster.local
+        port:
+          number: 8083
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: Gateway
