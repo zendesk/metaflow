@@ -7,8 +7,10 @@ import requests
 
 from metaflow import R, current
 from metaflow.decorators import StepDecorator
-from metaflow.metadata import MetaDatum
-from metaflow.metadata.util import sync_local_metadata_to_datastore
+from metaflow.plugins.resources_decorator import ResourcesDecorator
+from metaflow.plugins.timeout_decorator import get_run_time_limit_for_task
+from metaflow.metadata_provider import MetaDatum
+from metaflow.metadata_provider.util import sync_local_metadata_to_datastore
 from metaflow.metaflow_config import (
     BATCH_CONTAINER_IMAGE,
     BATCH_CONTAINER_REGISTRY,
