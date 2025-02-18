@@ -10,9 +10,9 @@ from metaflow.exception import CommandException, METAFLOW_EXIT_DISALLOW_RETRY
 from metaflow.metadata_provider.util import sync_local_metadata_from_datastore
 from metaflow.metaflow_config import DATASTORE_LOCAL_DIR
 from metaflow.mflog import TASK_LOG_SOURCE
+from metaflow.parameters import JSONTypeClass
 from metaflow.unbounded_foreach import UBF_CONTROL, UBF_TASK
 from .batch import Batch, BatchKilledException
-from metaflow.tagging_util import validate_tags, validate_aws_tag
 
 
 @click.group()
@@ -46,6 +46,7 @@ def _execute_cmd(func, flow_name, run_id, user, my_runs, echo):
             raise CommandException("A previous run id was not found. Specify --run-id.")
 
     func(flow_name, run_id, user, echo)
+
 
 @batch.command(help="List unfinished AWS Batch tasks of this flow")
 @click.option(
@@ -146,7 +147,9 @@ def kill(ctx, run_id, user, my_runs):
     help="Activate designated number of elastic fabric adapter devices. "
     "EFA driver must be installed and instance type compatible with EFA",
 )
-@click.option("--aws-batch-tags", multiple=True, default=None, help="AWS tags. Format: key=value, multiple allowed")
+@click.option(
+    "--aws-batch-tags", type=JSONTypeClass(), default=None, help="AWS Batch tags."
+)
 @click.option("--use-tmpfs", is_flag=True, help="tmpfs requirement for AWS Batch.")
 @click.option("--tmpfs-tempdir", is_flag=True, help="tmpfs requirement for AWS Batch.")
 @click.option("--tmpfs-size", help="tmpfs requirement for AWS Batch.")
@@ -274,19 +277,6 @@ def step(
     attrs["metaflow.version"] = ctx.obj.environment.get_environment_info()[
         "metaflow_version"
     ]
-
-
-
-    if aws_batch_tags is not None:
-        if not isinstance(aws_batch_tags, list[str]):
-            raise CommandException("aws_tags must be list[str]")
-        aws_tags_list = [
-            {'key': item.split('=')[0],
-                'value': item.split('=')[1]} for item in aws_batch_tags.items()
-        ]
-        for tag in aws_tags_list:
-            validate_aws_tag(tag)
-                
 
     env_deco = [deco for deco in node.decorators if deco.name == "environment"]
     if env_deco:

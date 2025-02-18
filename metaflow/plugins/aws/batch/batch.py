@@ -189,7 +189,6 @@ class Batch(object):
         efs_volumes=None,
         use_tmpfs=None,
         aws_batch_tags=None,
-        cli_aws_batch_tags=None,
         tmpfs_tempdir=None,
         tmpfs_size=None,
         tmpfs_path=None,
@@ -329,14 +328,10 @@ class Batch(object):
                 if key in attrs:
                     k, v = sanitize_batch_tag(key, attrs.get(key))
                     job.tag(k, v)
- 
-            if cli_aws_batch_tags is not None:
-                for tag in cli_aws_batch_tags:
-                    job.tag(tag['key'], tag['value'])
 
             if aws_batch_tags is not None:
                 for tag in aws_batch_tags:
-                    job.tag(tag['key'], tag['value'])
+                    job.tag(tag["key"], tag["value"])
 
         return job
 
