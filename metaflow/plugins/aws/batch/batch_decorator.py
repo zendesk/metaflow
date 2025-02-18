@@ -185,21 +185,31 @@ class BatchDecorator(StepDecorator):
         if self.attributes["trainium"] is not None:
             self.attributes["inferentia"] = self.attributes["trainium"]
 
-        if not isinstance(BATCH_DEFAULT_TAGS, dict) and not all(instance(k, str) and isinstance(v, str) for k, v in BATCH_DEFAULT_TAGS.items()):
-            raise BatchException("BATCH_DEFAULT_TAGS environment variable must be Dict[str, str]")
+        if not isinstance(BATCH_DEFAULT_TAGS, dict) and not all(
+            instance(k, str) and isinstance(v, str)
+            for k, v in BATCH_DEFAULT_TAGS.items()
+        ):
+            raise BatchException(
+                "BATCH_DEFAULT_TAGS environment variable must be Dict[str, str]"
+            )
         if self.attributes["aws_batch_tags"] is None:
             self.attributes["aws_batch_tags"] = BATCH_DEFAULT_TAGS
 
         if self.attributes["aws_batch_tags"] is not None:
-            if not isinstance(self.attributes["aws_tags"], dict) and not all(isinstance(k, str) and isinstance(v, str) for k, v in self.attributes["aws_batch_tags"].items()):
+            if not isinstance(self.attributes["aws_batch_tags"], dict) and not all(
+                isinstance(k, str) and isinstance(v, str)
+                for k, v in self.attributes["aws_batch_tags"].items()
+            ):
                 raise BatchException("aws_batch_tags must be Dict[str, str]")
-            
+
             batch_default_tags_copy = BATCH_DEFAULT_TAGS.copy()
-            self.attributes["aws_batch_tags"] = batch_default_tags_copy.update(self.attributes["aws_batch_tags"]) 
+            self.attributes["aws_batch_tags"] = batch_default_tags_copy.update(
+                self.attributes["aws_batch_tags"]
+            )
 
             decorator_aws_tags_list = [
-                {'key': key,
-                    'value': val} for key, val in self.attributes["aws_batch_tags"].items()
+                {"key": key, "value": val}
+                for key, val in self.attributes["aws_batch_tags"].items()
             ]
             for tag in decorator_aws_tags_list:
                 validate_aws_tag(tag)
