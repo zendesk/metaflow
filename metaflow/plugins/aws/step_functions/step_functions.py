@@ -48,7 +48,6 @@ class StepFunctions(object):
         event_logger,
         monitor,
         tags=None,
-        aws_batch_tags=None,
         namespace=None,
         username=None,
         max_workers=None,
@@ -68,7 +67,6 @@ class StepFunctions(object):
         self.event_logger = event_logger
         self.monitor = monitor
         self.tags = tags
-        self.aws_batch_tags = aws_batch_tags
         self.namespace = namespace
         self.username = username
         self.max_workers = max_workers
@@ -835,7 +833,6 @@ class StepFunctions(object):
                 efa=resources["efa"],
                 use_tmpfs=resources["use_tmpfs"],
                 aws_batch_tags=resources["aws_batch_tags"],
-                cli_aws_batch_tags=self.aws_batch_tags,
                 tmpfs_tempdir=resources["tmpfs_tempdir"],
                 tmpfs_size=resources["tmpfs_size"],
                 tmpfs_path=resources["tmpfs_path"],
