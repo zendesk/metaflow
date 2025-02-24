@@ -3,10 +3,12 @@ import os
 import platform
 import sys
 import time
+import json
 
 import requests
 
 from metaflow import R, current
+from metaflow import metaflow_config
 from metaflow.decorators import StepDecorator
 from metaflow.plugins.resources_decorator import ResourcesDecorator
 from metaflow.plugins.timeout_decorator import get_run_time_limit_for_task
@@ -185,7 +187,7 @@ class BatchDecorator(StepDecorator):
 
         if self.attributes["trainium"] is not None:
             self.attributes["inferentia"] = self.attributes["trainium"]
-
+            
         if not isinstance(BATCH_DEFAULT_TAGS, dict) and not all(
             isinstance(k, str) and isinstance(v, str)
             for k, v in BATCH_DEFAULT_TAGS.items()

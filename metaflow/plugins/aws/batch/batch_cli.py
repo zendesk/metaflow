@@ -278,6 +278,18 @@ def step(
         "metaflow_version"
     ]
 
+
+
+    if aws_batch_tags is not None:
+        if not isinstance(aws_batch_tags, list[str]):
+            raise CommandException("aws_batch_tags must be list[str]")
+        aws_batch_tags_list = [
+            {'key': item.split('=')[0],
+                'value': item.split('=')[1]} for item in aws_batch_tags.items()
+        ]
+        for tag in aws_batch_tags_list:
+            validate_aws_tag(tag)
+                
     env_deco = [deco for deco in node.decorators if deco.name == "environment"]
     if env_deco:
         env = env_deco[0].attributes["vars"]
